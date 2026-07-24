@@ -59,3 +59,19 @@ python3 n6/approach_A_fourvar/dittert_n6_certificates.py
 - **No** assertion that every lemma has been independently refereed.
 - **Final** manuscript layout, single proof tree, and submission package will be prepared separately.
 - Comments welcome; please treat claims as provisional until the unified version appears.
+
+## Unified draft: dimensions 7–15 (submission zip)
+
+Also uploaded as a **draft** package (not final formatting):
+
+| Path | Description |
+|------|-------------|
+| `dittert_7_15_submission/` | Unpacked: `main.tex`, `main.pdf`, `dittert_n7_n15_certificates.py`, cover letter template |
+| `Dittert_Conjecture_7_15_submission.zip` | Same package as zip |
+
+This is the ChatGPT “整理成论文” bundle for **7 ≤ n ≤ 15**. Still a **draft**; not independently refereed.
+
+```bash
+python3 dittert_7_15_submission/dittert_n7_n15_certificates.py
+```
+
