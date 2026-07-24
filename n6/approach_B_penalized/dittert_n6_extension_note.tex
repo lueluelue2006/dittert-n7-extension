@@ -1,0 +1,879 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1.02in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,array}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\allowdisplaybreaks
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{0.15em}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\per}{\operatorname{per}}
+\newcommand{\pcap}{\operatorname{Cap}}
+\newcommand{\e}{\mathrm e}
+\newcommand{\Rge}{\mathbb R_{\ge0}}
+
+\title{A Penalized Core--Entropy Proof of Dittert's Conjecture in Dimension Six}
+\author{Extension note to the dimensions $7$--$15$ argument}
+\date{24 July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note gives a proposed completion of the Hall-deficit proof of Dittert's
+conjecture in dimension six.  Two losses that are harmless in dimension seven
+become decisive in dimension six.  First, the sharp zero-rectangle permanent
+bound is stabilized by the nonuniformity of the critical-core marginals.  For
+general codimension, differentiating one zero-block column with its exact
+entropy factor gives
+\[
+ \per(B)\ge L^{\sharp}_{n,a,b}
+ \exp\!\left\{\frac{s_I+s_J}{2(a^2+b^2)}\right\}.
+\]
+In codimension one, the exact cofactor entropy from the dimension-seven note
+has stronger dimension-specific quadratic moduli.  Second, in the critical
+core stationarity equation we retain both terms discarded by the earlier
+scalar reduction: the linear conditional-product loss and the exponential
+core-entropy loss.  Eliminating the two auxiliary energy variables yields the
+penalized algebraic criterion
+\[
+ 4\lambda\theta(\mathcal B+hR)(A_0\mathcal B+qR)>R^2.
+\]
+All two-sided Hall configurations, including both mixed-sign quadrants, are
+then covered by exact bivariate Bernstein subdivision.  The one-sided cuts are
+excluded by the existing entropy dichotomy with an improved exact row-energy
+coefficient.  The accompanying standard-library Python script uses rational
+arithmetic only.
+\end{abstract}
+
+\section{Statement and inherited facts}
+
+For a nonnegative $n\times n$ matrix $A=(a_{ij})$ whose entries sum to $n$,
+write $r_i$ and $c_j$ for its row and column sums and put
+\[
+ \Phi(A)=\prod_i r_i+\prod_jc_j-\per(A),
+ \qquad
+ \gamma_n=\frac{n!}{n^n}.
+\]
+We use the arbitrary-dimensional parts of the accompanying manuscripts:
+
+\begin{enumerate}
+\item every entrywise positive global maximizer is $J_n/n$;
+\item a hypothetical boundary maximizer has deficits
+\[
+ P:=\prod_i r_i=1-\rho,
+ \qquad Q:=\prod_jc_j=1-\sigma,
+ \qquad H:=\per(A)=\gamma_n-\delta
+\]
+with
+\[
+ 0\le\rho,\sigma,
+ \qquad \rho+\sigma\le\delta\le\gamma_n;
+ \tag{1.1}\label{eq:budget}
+\]
+\item a critical Hall pair gives a dilation $S=A/(1-\tau)$ dominating a
+doubly stochastic matrix $B$ with a forced zero rectangle;
+\item if $B$ has an $a\times b$ zero rectangle and
+$p=n-a-b\ge1$, then
+\[
+ \per(B)\ge L^{\sharp}_{n,a,b}
+ :=\frac{v_{n-a}v_{n-b}}{v_p},
+ \qquad v_k=\frac{k!}{k^k},\quad v_0=1.
+ \tag{1.2}\label{eq:sharp}
+\]
+\end{enumerate}
+
+The result proved below is the missing dimension.
+
+\begin{theorem}\label{thm:n6}
+For every nonnegative $6\times6$ matrix $A$ whose entries sum to $6$,
+\[
+ \Phi(A)\le 2-\frac{6!}{6^6}=2-\frac5{324}.
+\]
+Equality holds only at $A=J_6/6$.
+\end{theorem}
+
+It remains only to exclude a boundary global maximizer.
+
+\section{Entropy stability of a sharp zero rectangle}
+
+\subsection{A one-column refinement in arbitrary codimension}
+
+Let a doubly stochastic $B$ have a zero block $B[R,C]=0$, where
+$|R|=a$, $|C|=b$, and $p=n-a-b\ge1$.  Put
+\[
+ I=R^c,
+ \quad J=C^c,
+ \quad m=|I|=n-a,
+ \quad \ell=|J|=n-b.
+\]
+The core $X=B[I,J]$ has total mass $p$.  Let
+\[
+ \xi_i=\sum_{j\in J}x_{ij},
+ \qquad
+ \eta_j=\sum_{i\in I}x_{ij},
+\]
+and define
+\[
+ s_I=\sum_{i\in I}\left(\xi_i-\frac pm\right)^2,
+ \qquad
+ s_J=\sum_{j\in J}\left(\eta_j-\frac p\ell\right)^2.
+ \tag{2.1}\label{eq:sIJ}
+\]
+
+\begin{theorem}[One-column stability of the sharp block bound]
+\label{thm:one-column-stability}
+Under the preceding assumptions,
+\[
+ \per(B)\ge L^{\sharp}_{n,a,b}
+ \exp\!\left\{
+ \frac12\max\left(\frac{s_I}{b^2},\frac{s_J}{a^2}\right)
+ \right\}.
+ \tag{2.2}\label{eq:max-entropy}
+\]
+Consequently,
+\[
+ \per(B)\ge L^{\sharp}_{n,a,b}
+ \exp\!\left\{\frac{s_I+s_J}{2(a^2+b^2)}\right\}.
+ \tag{2.3}\label{eq:general-block-entropy}
+\]
+\end{theorem}
+
+\begin{proof}
+Choose a column $c\in C$ and write its nonzero part as the probability vector
+$y=(y_i)_{i\in I}$.  Let
+\[
+ P_B(x)=\prod_{r=1}^n\left(\sum_{j=1}^n b_{rj}x_j\right),
+ \qquad
+ q=\left.\frac{\partial P_B}{\partial x_c}\right|_{x_c=0}.
+\]
+The exact first step in the column-entropy argument gives
+\[
+ \pcap(q)\ge F(y),
+ \qquad
+ F(y):=\prod_{i\in I}(1-y_i)^{1-y_i}.
+ \tag{2.4}\label{eq:first-column-cap}
+\]
+Differentiate next in the remaining $b-1$ variables indexed by $C$.  Their
+successive degrees are at most
+$m-1,m-2,\ldots,p+1$.  The derivative-capacity inequality supplies
+\[
+ \frac{v_{m-1}}{v_p}.
+\]
+After these differentiations, square-free coefficient extraction in the
+remaining $\ell$ variables supplies $v_\ell$.  Therefore
+\[
+ \per(B)\ge F(y)\frac{v_{m-1}v_\ell}{v_p}
+ =L^{\sharp}_{n,a,b}\frac{F(y)}{G(m)},
+ \tag{2.5}\label{eq:selected-column-bound}
+\]
+where $G(m)=((m-1)/m)^{m-1}$.
+
+For $h(t)=(1-t)\log(1-t)$, one has $h''(t)=1/(1-t)\ge1$.  Since
+$\sum_i y_i=1$,
+\[
+ \log\frac{F(y)}{G(m)}
+ =\sum_{i\in I}h(y_i)-m h(1/m)
+ \ge\frac12\sum_{i\in I}\left(y_i-\frac1m\right)^2.
+ \tag{2.6}\label{eq:column-strong-convexity}
+\]
+
+Average the $b$ columns in $C$.  Their average on $I$ is
+\[
+ \bar y_i=\frac{1-\xi_i}{b},
+ \qquad
+ \bar y_i-\frac1m=-\frac1b\left(\xi_i-\frac pm\right).
+\]
+By convexity of squared Euclidean distance, at least one column satisfies
+\[
+ \sum_i\left(y_i-\frac1m\right)^2\ge\frac{s_I}{b^2}.
+\]
+Equations \eqref{eq:selected-column-bound} and
+\eqref{eq:column-strong-convexity} give the first term inside the maximum in
+\eqref{eq:max-entropy}.  Apply the same argument to $B^{\mathsf T}$ for the
+second term.  Finally,
+\[
+ \max\left(\frac{x}{b^2},\frac{y}{a^2}\right)
+ \ge\frac{x+y}{a^2+b^2}
+ \qquad(x,y\ge0),
+\]
+which proves \eqref{eq:general-block-entropy}.
+\end{proof}
+
+\subsection{Stronger codimension-one moduli}
+
+When $p=1$, the cofactor argument from the dimension-seven note gives more
+than \eqref{eq:general-block-entropy}.  If $m=b+1$ and $\ell=a+1$, it gives the
+exact inequality
+\[
+ \per(B)\ge L^{\sharp}_{n,a,b}
+ \exp\{\mathcal E_m(\xi)+\mathcal E_\ell(\eta)\},
+ \tag{2.7}\label{eq:exact-p1-entropy}
+\]
+where, for a probability vector $z\in\mathbb R^k$,
+\[
+ \mathcal E_k(z)=
+ \sum_{i=1}^k(1-z_i)\log(1-z_i)
+ -k\left(1-\frac1k\right)\log\left(1-\frac1k\right).
+ \tag{2.8}\label{eq:Ek}
+\]
+The following small-dimensional constants are the useful improvement over the
+uniform coefficient $1/2$.
+
+\begin{lemma}[Pointwise entropy moduli]\label{lem:small-entropy-moduli}
+For every probability vector $z$,
+\[
+ \mathcal E_k(z)\ge c_k
+ \sum_i\left(z_i-\frac1k\right)^2,
+ \tag{2.9}\label{eq:entropy-modulus}
+\]
+where one may take
+\[
+ c_2=c_5=\frac{23}{40},
+ \qquad
+ c_3=c_4=\frac{301}{500}.
+ \tag{2.10}\label{eq:ck}
+\]
+\end{lemma}
+
+\begin{proof}
+Put $h(t)=(1-t)\log(1-t)$, $u=1/k$, and
+\[
+ g_{k,c}(t)=h(t)-h(u)-h'(u)(t-u)-c(t-u)^2.
+\]
+It is enough to prove $g_{k,c}(t)\ge0$ on $[0,1]$, because the linear terms
+cancel after summation.  Now
+\[
+ g_{k,c}''(t)=\frac1{1-t}-2c.
+\]
+For every pair $(k,c)$ in \eqref{eq:ck}, the unique sign change of
+$g''$ occurs strictly before $u$.  Thus $g$ is concave first and then convex;
+using $g(u)=g'(u)=0$, its only possible additional minimum is the endpoint
+$t=0$.  At that endpoint,
+\[
+ g_{k,c}(0)=\log\frac{k}{k-1}-\frac1k-\frac{c}{k^2}.
+ \tag{2.11}\label{eq:g0}
+\]
+The required four inequalities are
+\[
+ \log\frac54>\frac{223}{1000},
+ \quad
+ \log2>\frac{103}{160},
+ \quad
+ \log\frac43>\frac{2301}{8000},
+ \quad
+ \log\frac32>\frac{1801}{4500}.
+\]
+They follow, respectively, from the even alternating partial sums
+\[
+ \frac{27419}{122880},
+ \qquad \frac23,
+ \qquad \frac{12581}{43740},
+ \qquad \frac{77}{192}.
+\]
+This proves the pointwise inequality and hence \eqref{eq:entropy-modulus}.
+\end{proof}
+
+For the two codimension-one pairs in dimension six, Lemma
+\ref{lem:small-entropy-moduli} and \eqref{eq:exact-p1-entropy} give
+\[
+ \per(B)\ge L^{\sharp}_{6,1,4}\e^{(23/40)(s_I+s_J)},
+ \tag{2.12}\label{eq:lambda14}
+\]
+and
+\[
+ \per(B)\ge L^{\sharp}_{6,2,3}\e^{(301/500)(s_I+s_J)}.
+ \tag{2.13}\label{eq:lambda23}
+\]
+
+\section{Dimension-six localization and inverse energy}
+
+For the rest of the proof,
+\[
+ n=6,
+ \qquad
+ \gamma=\gamma_6=\frac5{324},
+ \qquad
+ \eta=\frac1{27}.
+\]
+Define $\alpha_0=0$ and
+\[
+ \alpha_k=
+ \begin{cases}
+ 12\left(\dfrac{k}{6}+\eta\right)
+       \left(1-\dfrac{k}{6}-\eta\right),&2k<6,\\[2mm]
+ \dfrac{2k(6-k)}6,&2k\ge6.
+ \end{cases}
+ \tag{3.1}\label{eq:alpha6}
+\]
+The exact values are
+\[
+ (\alpha_0,\ldots,\alpha_5)
+ =\left(0,\frac{473}{243},\frac{680}{243},3,\frac83,\frac53\right).
+ \tag{3.2}\label{eq:alpha-values}
+\]
+The relative-entropy subset proof applies because
+\[
+ \eta^2-\frac{\gamma}{12(1-\gamma)}
+ =\frac{61}{930204}>0,
+ \qquad
+ \frac13+\eta<\frac12.
+ \tag{3.3}\label{eq:localization6}
+\]
+In particular, $\alpha_k\le3$.
+
+Let $E$ be any row subset and write its sum as $|E|+e$.  Applying the subset
+bound either to $E$ or to its complement gives
+\[
+ |e|^2\le\frac{3\rho}{1-\delta}
+ \le\frac{3\gamma}{1-\gamma}=\frac{15}{319}.
+\]
+The same is true for column subsets.  Hence every signed Hall excess below
+satisfies
+\[
+ |e|,|f|<T_0,
+ \qquad
+ T_0=\frac{217}{1000},
+ \tag{3.4}\label{eq:signed-box}
+\]
+because
+\[
+ T_0^2-\frac{15}{319}=\frac{21391}{319000000}>0.
+\]
+
+The dimension-six argument needs a stronger conditional inverse-energy
+coefficient than the coarse global estimate.  The following finite ladder
+will be used only for the pair $(a,b)=(2,3)$.
+
+\begin{center}
+\begin{tabular}{c|c|c}
+\toprule
+$A_*$&$r_*$&$\theta_*$\\
+\midrule
+$0$&$169/200$&$7/20$\\
+$3/800$&$86533/100000$&$37/100$\\
+$7/1250$&$8761/10000$&$19/50$\\
+$73/10000$&$8869/10000$&$39/100$\\
+$161/20000$&$17843/20000$&$79/200$\\
+$17/2000$&$4477/5000$&$199/500$\\
+$4383/500000$&$35897/40000$&$2/5$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{lemma}[Energy ladder]\label{lem:energy-ladder}
+Suppose a permanent lower bound gives $H\ge A_*$, where $(A_*,r_*,\theta_*)$
+is one row of the table.  Then every row and column sum is larger than $r_*$.
+Moreover, for every row group $I$ with groupwise AM--GM envelope $P_a(e)$,
+\[
+ V_I:=\sum_{i\in I}\left(
+ \frac1{r_i}-\frac1{|I|}\sum_{h\in I}\frac1{r_h}
+ \right)^2
+ \le\frac{P_a(e)-P}{\theta_*}.
+ \tag{3.5}\label{eq:conditional-energy-tier}
+\]
+The column analogue is identical.
+\end{lemma}
+
+\begin{proof}
+The budget and $H=\gamma-\delta\ge A_*$ give
+\[
+ P,Q\ge1-\delta\ge1-\gamma+A_*=:P_*.
+ \tag{3.6}\label{eq:Pstar}
+\]
+If one row sum were at most $r_*<1$, AM--GM on the other five rows would give
+\[
+ P\le r_*\left(\frac{6-r_*}{5}\right)^5<P_*.
+\]
+For every table row, this last strict rational inequality and
+\[
+ \frac{P_*r_*^2}{2}>\theta_*
+ \tag{3.7}\label{eq:energy-table-check}
+\]
+are verified exactly in the accompanying script.
+
+Let $q$ be the mean row sum on $I$.  Since all row sums and $q$ are at least
+$r_*$,
+\[
+ \frac rq-1-\log\frac rq
+ \ge\frac{r_*^2}{2}\left(\frac1r-\frac1q\right)^2.
+ \tag{3.8}\label{eq:scalar-energy}
+\]
+The groupwise linear terms cancel, so
+\[
+ \log\frac{P_a(e)}P\ge\frac{r_*^2}{2}V_I.
+\]
+Finally,
+\[
+ P_a(e)-P\ge P\log\frac{P_a(e)}P
+ \ge\frac{P_*r_*^2}{2}V_I>\theta_*V_I.
+\]
+\end{proof}
+
+The first row of the table is unconditional.  In particular, throughout the
+proof one may use
+\[
+ V_I\le\frac{20}{7}\bigl(P_a(e)-P\bigr).
+ \tag{3.9}\label{eq:global-conditional-energy}
+\]
+
+\section{The penalized critical-core criterion}
+
+Let $I,J$ be a two-sided critical Hall pair.  Put
+\[
+ R=I^c,
+ \quad C=J^c,
+ \quad a=|R|,
+ \quad b=|C|,
+ \quad p=6-a-b\ge1,
+\]
+and, after transposition, assume $1\le a\le b$.  Define the signed excesses
+\[
+ e=\sum_{i\in R}r_i-a,
+ \qquad
+ f=\sum_{j\in C}c_j-b,
+ \qquad
+ x=s_A(R,C).
+ \tag{4.1}\label{eq:efx}
+\]
+Then
+\[
+ p\tau=e+f-x.
+ \tag{4.2}\label{eq:tau-signed}
+\]
+Set
+\[
+ e_+=\max(e,0),
+ \qquad f_+=\max(f,0),
+ \qquad T=e_++f_+,
+ \qquad \omega=1-\frac Tp.
+ \tag{4.3}\label{eq:Tomega}
+\]
+Thus $p\tau\le T$ and $1-\tau\ge\omega$.
+
+\subsection{Core saturation and general stationarity}
+
+The doubly stochastic cut identity gives $s_B(I,J)=p$, while criticality gives
+$s_S(I,J)=p$.  Since $B\le S$, the core saturates entrywise:
+\[
+ B[I,J]=S[I,J]=\frac{A[I,J]}{1-\tau}.
+ \tag{4.4}\label{eq:core-saturation-general}
+\]
+Let $\xi,\eta$ be the core marginals and let $s=s_I+s_J$ as in
+\eqref{eq:sIJ}.
+
+For a permutation, the number of selected entries in $I\times J$ exceeds the
+number selected in $R\times C$ by exactly $p$.  Let $H_k$ be the permanent
+weight of permutations using exactly $k$ entries of $R\times C$; then they use
+$p+k$ core entries and $0\le k\le d:=\min(a,b)$.
+
+\begin{lemma}[General critical-core stationarity]\label{lem:general-core-stationarity}
+One has
+\[
+ P\left(\sum_{i\in I}\frac{\xi_i}{r_i}-p\right)
+ +Q\left(\sum_{j\in J}\frac{\eta_j}{c_j}-p\right)
+ =\frac{p\tau H+\sum_{k\ge1}kH_k}{1-\tau}.
+ \tag{4.5}\label{eq:general-stationarity}
+\]
+\end{lemma}
+
+\begin{proof}
+Scale $A[I,J]$ by a parameter and globally renormalize.  The core has total
+mass $p(1-\tau)$.  Differentiation of the row product, column product, and
+permanent gives, before simplification,
+\[
+ (1-\tau)P\sum_{i\in I}\frac{\xi_i}{r_i}
+ +(1-\tau)Q\sum_{j\in J}\frac{\eta_j}{c_j}
+ -\sum_k(p+k)H_k-p(1-\tau)\Phi(A)=0.
+\]
+Use $\Phi(A)=P+Q-H$ and divide by $1-\tau$.
+\end{proof}
+
+Let $H_0$ be the contribution of permutations avoiding $R\times C$.  Every
+matching of $B$ is of this type, and $A\ge(1-\tau)B$ entrywise on its support.
+Sections 2.1 and 2.2 therefore give
+\[
+ H_0\ge A_0\e^{\lambda s},
+ \qquad
+ A_0=L\omega^6,
+ \qquad
+ L=L^{\sharp}_{6,a,b},
+ \tag{4.6}\label{eq:H0-general}
+\]
+where
+\[
+ \lambda=
+ \begin{cases}
+ \dfrac{23}{40},&(a,b)=(1,4),\\[1mm]
+ \dfrac{301}{500},&(a,b)=(2,3),\\[1mm]
+ \dfrac1{2(a^2+b^2)},&p\ge2.
+ \end{cases}
+ \tag{4.7}\label{eq:lambda-pairs}
+\]
+Since $\sum kH_k\le d(H-H_0)$, the right side of
+\eqref{eq:general-stationarity} is at most
+\[
+ \frac{(T+d)H-dH_0}{\omega}.
+ \tag{4.8}\label{eq:stationarity-upper-general}
+\]
+
+\subsection{Signed product envelopes}
+
+Put
+\[
+ P_a(e)=\left(1+\frac ea\right)^a
+        \left(1-\frac e{6-a}\right)^{6-a},
+ \qquad
+ P_b(f)=\left(1+\frac fb\right)^b
+        \left(1-\frac f{6-b}\right)^{6-b}.
+ \tag{4.9}\label{eq:signed-envelopes}
+\]
+These formulas are valid for either sign in the box \eqref{eq:signed-box}, and
+AM--GM gives $P\le P_a(e)$ and $Q\le P_b(f)$.  Define
+\[
+ u_r=P_a(e)-P,
+ \qquad
+ u_c=P_b(f)-Q,
+\]
+\[
+ D=2-P_a(e)-P_b(f),
+ \qquad
+ K=\gamma-D,
+ \qquad
+ u=\delta-D.
+ \tag{4.10}\label{eq:DKu}
+\]
+The joint budget implies
+\[
+ u\ge u_r+u_c\ge0,
+ \qquad
+ H=K-u.
+ \tag{4.11}\label{eq:u-general}
+\]
+Write
+\[
+ m=6-a,
+ \qquad \ell=6-b,
+ \qquad
+ E=\frac e{m-e},
+ \qquad F=\frac f{\ell-f}.
+ \tag{4.12}\label{eq:EF-general}
+\]
+We use $E_+=\max(E,0)$ and $F_+=\max(F,0)$ below.
+The harmonic-mean inequality and Lemma \ref{lem:energy-ladder} give
+\[
+ \sum_{i\in I}\frac{\xi_i}{r_i}-p
+ \ge pE-\sqrt{s_I V_I},
+ \tag{4.13}\label{eq:harmonic-core-row}
+\]
+and the analogous column inequality.  If a coefficient $E$ or $F$ is
+negative, its product-loss term has the favorable sign.  Thus, with any valid
+energy coefficient $\theta$,
+\[
+ \begin{aligned}
+ &P\left(\sum_{i\in I}\frac{\xi_i}{r_i}-p\right)
+ +Q\left(\sum_{j\in J}\frac{\eta_j}{c_j}-p\right)\\
+ &\qquad\ge
+ pP_a(e)E+pP_b(f)F
+ -pE_+u_r-pF_+u_c
+ -\sqrt{\frac{s(u_r+u_c)}{\theta}}.
+ \end{aligned}
+ \tag{4.14}\label{eq:stationarity-lower-penalized}
+\]
+
+Set
+\[
+ \mathcal B=
+ pP_a(e)E+pP_b(f)F
+ -\frac{(T+d)K-dA_0}{\omega},
+ \tag{4.15}\label{eq:B-general}
+\]
+\[
+ C_0=\frac{T+d}{\omega},
+ \qquad
+ h=C_0-p(E_++F_+),
+ \qquad
+ q=\frac{dA_0}{\omega},
+ \qquad
+ R_0=K-A_0.
+ \tag{4.16}\label{eq:hqR}
+\]
+On the full box \eqref{eq:signed-box}, $h>0$ for all six unordered Hall pairs.
+A simple uniform check is
+\[
+ h\ge d-\frac{2pT_0}{\ell-T_0}>0.
+ \tag{4.17}\label{eq:h-positive}
+\]
+
+Put
+\[
+ v=u_r+u_c,
+ \qquad
+ w=\e^{\lambda s}-1.
+\]
+Combining \eqref{eq:stationarity-upper-general} and
+\eqref{eq:stationarity-lower-penalized}, while retaining rather than discarding
+the two coercive terms, gives
+\[
+ \mathcal B+qw+hv\le\sqrt{\frac{sv}{\theta}}.
+ \tag{4.18}\label{eq:penalized-energy}
+\]
+The permanent budget gives
+\[
+ v+A_0w\le u+A_0w\le R_0.
+ \tag{4.19}\label{eq:triangle-budget}
+\]
+Since $s=\lambda^{-1}\log(1+w)\le w/\lambda$, a necessary condition is
+\[
+ \lambda\theta(\mathcal B+qw+hv)^2\le wv.
+ \tag{4.20}\label{eq:quadratic-triangle}
+\]
+
+\subsection{Eliminating the two energy variables}
+
+\begin{lemma}[Penalized energy triangle]\label{lem:penalized-triangle}
+Let
+$A_0,R_0,\mathcal B,q,h,\lambda,\theta$ be nonnegative, with
+$A_0,\mathcal B,h,\lambda,\theta>0$.  There do not exist $w,v\ge0$ satisfying
+\eqref{eq:triangle-budget} and \eqref{eq:quadratic-triangle} whenever
+\[
+ 4\lambda\theta
+ (\mathcal B+hR_0)(A_0\mathcal B+qR_0)>R_0^2.
+ \tag{4.21}\label{eq:enhanced-master}
+\]
+\end{lemma}
+
+\begin{proof}
+Put $c=\lambda\theta$ and
+\[
+ F(w,v)=wv-c(\mathcal B+qw+hv)^2.
+\]
+The axes have $F<0$.  At a positive interior stationary point, with
+$Z=\mathcal B+qw+hv$, one has
+\[
+ v=2cqZ,
+ \qquad w=2chZ,
+ \qquad Z(1-4cqh)=\mathcal B>0.
+\]
+Consequently,
+\[
+ F=cZ^2(4cqh-1)<0.
+\]
+Thus a nonnegative maximum over the triangle
+$A_0w+v\le R_0$ must lie on its sloping edge.  Substituting
+$v=R_0-A_0w$ gives the concave quadratic
+\[
+ \begin{aligned}
+ F(w,R_0-A_0w)
+ &=-c(\mathcal B+hR_0)^2\\
+ &\quad+\bigl[R_0-2c(\mathcal B+hR_0)(q-hA_0)\bigr]w\\
+ &\quad-\bigl[A_0+c(q-hA_0)^2\bigr]w^2.
+ \end{aligned}
+\]
+Its maximum over the whole real line is negative precisely under
+\eqref{eq:enhanced-master}; the cancellation is
+\[
+ A_0(\mathcal B+hR_0)+R_0(q-hA_0)=A_0\mathcal B+qR_0.
+\]
+\end{proof}
+
+This is the central dimension-six refinement.  The dimension-seven reduction
+kept only the square-root term in \eqref{eq:penalized-energy}.  In dimension
+six, the terms $hv$ and $qw$ supply exactly the missing coercivity.
+
+\section{Exact two-sided Hall certificates}
+
+Up to transposition, the six pairs are
+\[
+ (a,b)=(1,1),(1,2),(1,3),(1,4),(2,2),(2,3).
+ \tag{5.1}\label{eq:six-pairs}
+\]
+Both excesses cannot be nonpositive, because then
+$p\tau=e+f-x\le0$.  It remains to cover the three sign quadrants
+\[
+ (++),\qquad(-+),\qquad(+-)
+\]
+on the rational square $[0,T_0]^2$ after replacing a negative excess by the
+negative of its square variable.
+
+All quantities in the alternatives below are rational functions.  Put
+\[
+ Q_0=(m-e)(\ell-f)\omega,
+ \qquad
+ \widetilde{\mathcal B}=Q_0\mathcal B,
+ \tag{5.2}\label{eq:Btilde}
+\]
+and
+\[
+ \widetilde h=Q_0h
+ =(T+d)(m-e)(\ell-f)
+ -p\omega\bigl(e_+(\ell-f)+f_+(m-e)\bigr).
+ \tag{5.3}\label{eq:htilde}
+\]
+The positive-denominator cleared master polynomial is
+\[
+ \begin{aligned}
+ \mathcal M_{\lambda,\theta}
+ &=4\lambda\theta
+ \bigl(\widetilde{\mathcal B}+\widetilde hR_0\bigr)
+ \bigl(A_0\widetilde{\mathcal B}+qR_0Q_0\bigr)\\
+ &\qquad-R_0^2Q_0^2.
+ \end{aligned}
+ \tag{5.4}\label{eq:Mpoly}
+\]
+
+Exact Bernstein subdivision proves that every relevant point satisfies one of
+\[
+ K<0,
+ \qquad A_0-K>0,
+ \qquad
+ \widetilde{\mathcal B}>0\ \text{ and }\
+ \mathcal M_{\lambda,\theta}>0.
+ \tag{5.5}\label{eq:alternatives}
+\]
+In a mixed-sign quadrant, boxes on which $e+f\le0$ are discarded as
+noncritical.  The first alternative in \eqref{eq:alternatives} contradicts
+$H=K-u\ge0$; the second contradicts the permanent budget; and the third is
+Lemma \ref{lem:penalized-triangle}.
+
+For all pairs except $(2,3)$, the global coefficient $\theta=7/20$ is enough.
+For $(2,3)$, a box uses the largest energy-ladder coefficient whose threshold
+$A_*$ is certified by a Bernstein lower bound for $A_0$.
+
+The exact subdivision audit is as follows.  The last three columns record
+direct, stationarity, and noncritical leaves.
+
+\begin{center}
+\small
+\begin{tabular}{c|c|r|r|r|r|r}
+\toprule
+$(a,b)$&quadrant&nodes&depth&direct&stationarity&noncritical\\
+\midrule
+$(1,1)$&$++$&21&10&5&6&0\\
+       &$-+$&13&6&7&0&0\\
+       &$+-$&11&5&4&0&2\\
+\midrule
+$(1,2)$&$++$&21&9&5&6&0\\
+       &$-+$&9&4&5&0&0\\
+       &$+-$&3&1&2&0&0\\
+\midrule
+$(1,3)$&$++$&39&8&11&9&0\\
+       &$-+$&11&5&5&1&0\\
+       &$+-$&3&1&2&0&0\\
+\midrule
+$(1,4)$&$++$&57&11&13&16&0\\
+       &$-+$&29&8&9&5&1\\
+       &$+-$&65&14&18&14&1\\
+\midrule
+$(2,2)$&$++$&23&8&6&6&0\\
+       &$-+$&5&2&3&0&0\\
+       &$+-$&3&1&2&0&0\\
+\midrule
+$(2,3)$&$++$&131&15&16&50&0\\
+       &$-+$&23&8&7&5&0\\
+       &$+-$&47&10&12&11&1\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Every subdivision is the exact rational de Casteljau transformation.  Thus the
+audit proves positivity on continua, not on a numerical mesh.  This excludes
+all two-sided critical Hall pairs.
+
+\section{One-sided Hall cuts}
+
+It remains to exclude a one-sided critical pair.  The stationarity identity,
+column-entropy permanent bound, and entropy dichotomy from the dimensions
+$7$--$10$ argument apply without change.  Only the exact constants improve.
+
+The first row of the energy ladder gives, for
+$y_i=1-1/r_i$,
+\[
+ \rho>\frac7{20}\sum_i y_i^2.
+ \tag{6.1}\label{eq:row-energy6}
+\]
+For a one-sided pair, the subset estimate gives
+\[
+ \tau^2\le\frac{3\gamma}{1-\gamma}
+ =\frac{15}{319}<T_0^2.
+ \tag{6.2}\label{eq:one-sided-tau6}
+\]
+Let
+\[
+ \kappa_6=v_5G(5)=\frac{6144}{390625},
+ \qquad
+ s_0=2\log\frac{\kappa_6}{\gamma}.
+\]
+
+In the small-entropy regime, the exact sufficient certificate is
+\[
+ \frac7{20}(1-\gamma)^2\gamma-\frac{36}{2}\kappa_6^2
+ =\frac{16250344917716167}
+ {20759414062500000000}>0.
+ \tag{6.3}\label{eq:small6}
+\]
+
+In the large-entropy regime, the exact inequality before squaring is
+\[
+ (1-\gamma)\sqrt{\frac{7\gamma}{10}}
+ (1-\tau)^2
+ >
+ \gamma\frac{1-(1-\tau)^6}{\tau}.
+ \tag{6.4}\label{eq:large-before-square}
+\]
+It is enough to prove, for $0\le t\le217/1000$,
+\[
+ \begin{aligned}
+ &\frac7{10}(1-\gamma)^2(1-t)^4\\
+ &\quad-\gamma
+ (6-15t+20t^2-15t^3+6t^4-t^5)^2>0.
+ \end{aligned}
+ \tag{6.5}\label{eq:large6-poly}
+\]
+Every Bernstein coefficient of \eqref{eq:large6-poly} on this interval is
+positive; the minimum is
+\[
+ \frac{3951217684118237014875556869551}
+ {64800000000000000000000000000000}>0.
+ \tag{6.6}\label{eq:large6-min}
+\]
+The existing small/large entropy argument therefore excludes every one-sided
+critical pair.
+
+\section{Completion}
+
+If $\tau=0$, Hall domination makes a boundary maximizer itself doubly
+stochastic.  The one-zero permanent bound gives
+\[
+ \per(A)\ge\kappa_6>\gamma_6,
+ \qquad
+ \kappa_6-\gamma_6=\frac{37531}{126562500}>0,
+\]
+contradicting the deficit budget.
+
+If $\tau>0$, Section 5 excludes all two-sided critical pairs and Section 6
+excludes all one-sided pairs.  Hence a global maximizer cannot lie on the
+boundary.  The arbitrary-dimensional positive-maximizer theorem then gives
+$A=J_6/6$, proving Theorem \ref{thm:n6}.
+
+\begin{remark}
+The essential new point is not a larger scalar constant.  The critical core
+has two independent resources: marginal entropy raises $H_0$, while departure
+from the groupwise AM--GM envelopes costs row/column product.  In the earlier
+reduction both resources were collapsed into the single estimate
+$\mathcal B\le\sqrt{su/\theta}$.  Keeping the terms $qw$ and $hv$ converts the
+feasible region into a two-variable triangle whose exact quadratic maximum can
+be eliminated.  That is the additional precision required at $n=6$.
+\end{remark}
+
+\end{document}

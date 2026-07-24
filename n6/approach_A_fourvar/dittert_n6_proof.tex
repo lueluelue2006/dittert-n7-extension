@@ -1,0 +1,847 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,array,longtable}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\DeclareMathOperator{\permop}{per}
+\DeclareMathOperator{\capop}{Cap}
+\newcommand{\R}{\mathbb R}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\g}{\gamma}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cU}{\mathcal U}
+\newcommand{\cD}{\mathcal D}
+
+\title{The Dittert Conjecture in Dimension Six\\
+\large Core-Marginal Entropy, Hall Stationarity, and Exact Bernstein Certificates}
+\author{}
+\date{July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We prove Dittert's conjecture for $6\times6$ nonnegative matrices.  The
+interior classification, joint-deficit budget, Hall dilation, and basic
+stable-polynomial capacity inequalities are inherited from the accompanying
+proof in dimensions $8$ through $15$.  Dimension six requires a new boundary
+argument.  Its principal ingredient is an entropy refinement of the sharp
+rectangular-zero-block permanent bound that records the two marginal
+probability vectors of the critical Hall core.  An exact core-scaling
+stationarity identity couples this entropy with row and column product loss.
+A pairwise smoothing lemma reduces every two-sided Hall configuration to a
+finite family of four-variable rational polynomials.  Their strict positivity
+is certified by exact tensor-product Bernstein subdivision.  One-sided Hall
+configurations are excluded by retaining the exact complementary
+column-product deficit.  All finite computations use rational arithmetic.
+\end{abstract}
+
+\section{Statement and inherited infrastructure}
+
+For a nonnegative $6\times6$ matrix $A=(a_{ij})$ with
+\(
+ \sum_{i,j}a_{ij}=6,
+\)
+write
+\[
+ r_i=\sum_j a_{ij},\qquad c_j=\sum_i a_{ij},
+\]
+and define
+\[
+ \Phi(A)=\prod_{i=1}^6r_i+\prod_{j=1}^6c_j-\permop A.
+\]
+Put
+\[
+ \g=\g_6=\frac{6!}{6^6}=\frac5{324}.
+\]
+
+\begin{theorem}[Dittert's conjecture for $n=6$]\label{thm:main}
+For every such $A$,
+\[
+ \Phi(A)\le 2-\frac5{324}.
+\]
+Equality holds if and only if $A=J_6/6$.
+\end{theorem}
+
+We use the following dimension-free results established in the accompanying
+manuscript.
+
+\begin{enumerate}[label=\textup{(I\arabic*)},leftmargin=2.6em]
+\item Every entrywise positive global maximizer of $\Phi$ on the simplex is
+      the uniform matrix.
+\item If $A$ is a global maximizer and
+\[
+ R=\prod_i r_i=1-\rho,\qquad
+ C=\prod_j c_j=1-\sigma,\qquad
+ H=\permop A=\g-\delta,
+\]
+then
+\begin{equation}\label{eq:budget}
+ 0\le\delta\le\g,\qquad \rho,\sigma\ge0,
+ \qquad \rho+\sigma\le\delta.
+\end{equation}
+\item If the Hall deficit is $\tau>0$ and $(I,J)$ is a critical pair, then
+      $S=A/(1-\tau)$ dominates a doubly stochastic matrix $B$, and
+      $B[I^c,J^c]=0$.  If $\tau=0$ and $A$ is a boundary matrix, then $A$ is
+      doubly stochastic and has a zero.
+\item If a doubly stochastic $6\times6$ matrix has a zero, then
+\begin{equation}\label{eq:kappa}
+ \permop B\ge\kappa:=v_5G(5)=\frac{6144}{390625}>\frac5{324}=\g,
+\end{equation}
+where $v_k=k!/k^k$ and $G(k)=((k-1)/k)^{k-1}$.
+\item If a doubly stochastic matrix contains an $a\times b$ zero block and
+      $p=6-a-b\ge1$, then
+\begin{equation}\label{eq:sharp}
+ \permop B\ge L_{a,b}:=\frac{v_{6-a}v_{6-b}}{v_p}.
+\end{equation}
+\item For any column $q$ of a doubly stochastic $6\times6$ matrix,
+\begin{equation}\label{eq:column-entropy-inherited}
+ \permop B\ge\g\exp\left(\frac12
+ \sum_i(q_i-1/6)^2\right).
+\end{equation}
+\end{enumerate}
+
+The purpose of this note is to exclude boundary global maximizers in
+$6\times6$.  Item (I1) then proves Theorem~\ref{thm:main}.
+
+\section{Uniform localization of subset sums}
+
+The first estimate is deliberately symmetric: it controls positive and
+negative subset deviations with one constant.
+
+\begin{lemma}[Dimension-six localization]\label{lem:localization}
+Let $E$ be any nonempty proper set of rows and write
+\[
+ \sum_{i\in E}r_i=|E|+e.
+\]
+Then
+\begin{equation}\label{eq:localization}
+ |e|^2\le\frac{15}{319}<\left(\frac{11}{50}\right)^2.
+\end{equation}
+The same conclusion holds for every column subset.  In particular,
+\begin{equation}\label{eq:singleton-lower}
+ r_i,c_j>\frac{39}{50}
+ \qquad(1\le i,j\le6).
+\end{equation}
+Moreover $15/319<(7/32)^2$, so in fact $r_i,c_j>25/32$.
+\end{lemma}
+
+\begin{proof}
+Assume first that $e>0$.  Separate AM--GM on $E$ and $E^c$, followed by the
+binary Pinsker inequality, gives
+\[
+ \frac{2e^2}{6}
+ \le -\log(1-\rho)
+ \le\frac{\rho}{1-\rho}
+ \le\frac{\g}{1-\g}.
+\]
+Thus
+\[
+ e^2\le\frac{6\g}{2(1-\g)}=\frac{15}{319}.
+\]
+If $e<0$, the complementary row set has positive excess $-e$, so the same
+argument applies.  The column assertion is identical.  The rational
+comparisons in the statement are immediate.
+\end{proof}
+
+Set from now on
+\begin{equation}\label{eq:E}
+ E_0:=\frac{11}{50}.
+\end{equation}
+
+\section{Entropy refinements of a rectangular zero block}
+
+The sharp bound \eqref{eq:sharp} remembers only the dimensions of the zero
+block.  The next lemmas retain the deviation of a distinguished supported
+column, and then the marginal distributions of the whole Hall core.
+
+For a probability vector $q=(q_1,\ldots,q_m)$ define
+\begin{equation}\label{eq:Psi}
+ \Psi_m(q):=
+ \sum_{i=1}^m(1-q_i)\log(1-q_i)
+ -m\left(1-\frac1m\right)\log\left(1-\frac1m\right),
+\end{equation}
+with the continuous convention $0\log0=0$.
+
+\begin{lemma}[Two quadratic lower bounds for $\Psi_m$]\label{lem:Psi}
+For every probability vector $q$ of length $m\ge2$,
+\begin{align}
+ \Psi_m(q)&\ge\frac12\sum_i\left(q_i-\frac1m\right)^2,
+ \label{eq:Psi-half}\\
+ \Psi_m(q)&\ge\left(\frac12+\frac1{3m}\right)
+ \sum_i\left(q_i-\frac1m\right)^2.
+ \label{eq:Psi-strong}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+Let $h(x)=(1-x)\log(1-x)$.  Since $h''(x)=1/(1-x)\ge1$,
+the tangent quadratic at $1/m$, summed over the coordinates, gives
+\eqref{eq:Psi-half}.
+
+For the stronger bound use $h''(x)\ge1+x$.  If $d_i=q_i-1/m$, integration of
+this lower bound twice gives
+\[
+ h(q_i)\ge h(1/m)+h'(1/m)d_i
+ +\frac{1+1/m}{2}d_i^2+\frac16d_i^3.
+\]
+Now $d_i\ge-1/m$, hence $d_i^3\ge-(1/m)d_i^2$.  Summation, using
+$\sum_i d_i=0$, proves \eqref{eq:Psi-strong}.
+\end{proof}
+
+\begin{lemma}[A distinguished-column refinement]\label{lem:distinguished-column}
+Let $B$ be an $n\times n$ doubly stochastic matrix containing an
+$a\times b$ zero block, with $p=n-a-b\ge1$.  Select one of the $b$ columns
+in the zero block, and let $q$ be its probability vector on the
+$m=n-a$ rows outside the zero-block rows.  Then
+\begin{equation}\label{eq:distinguished-column}
+ \permop B\ge
+ \frac{v_{n-a}v_{n-b}}{v_p}\exp\bigl(\Psi_m(q)\bigr).
+\end{equation}
+The transposed assertion holds for a selected zero-block row.
+\end{lemma}
+
+\begin{proof}
+Let $P_B$ be the stable product polynomial used in the capacity proof of the
+permanent bounds.  Differentiate first in the selected column.  The exact
+weighted AM--GM step from the column-entropy proof shows that the resulting
+polynomial has capacity at least
+\[
+ \prod_{i=1}^m(1-q_i)^{1-q_i}.
+\]
+Differentiate next in the remaining $b-1$ zero-block columns.  Their degrees
+are at most
+\[
+ m-1,m-2,\ldots,p+1,
+\]
+so the derivative-capacity inequality supplies $v_{m-1}/v_p$.  Square-free
+coefficient extraction in the remaining $n-b$ variables supplies
+$v_{n-b}$.  Therefore
+\[
+ \permop B\ge
+ \frac{v_{m-1}v_{n-b}}{v_p}
+ \prod_i(1-q_i)^{1-q_i}.
+\]
+At the uniform vector, the product is $G(m)$ and
+$v_{m-1}G(m)=v_m=v_{n-a}$.  Division by this uniform value gives exactly
+\eqref{eq:distinguished-column}.
+\end{proof}
+
+We also need a geometric-mean version of the same capacity argument.
+
+\begin{lemma}[Geometric mean of cofactors]\label{lem:cofactor-geometric}
+Let $M$ be an $m\times m$ doubly stochastic matrix, let
+$q=(q_i)$ be one selected column, and let $d_i$ be the permanent of the
+minor obtained by deleting row $i$ and the selected column.  Then
+\begin{equation}\label{eq:cofactor-geometric}
+ \prod_i d_i^{q_i}\ge v_m\exp\bigl(\Psi_m(q)\bigr).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Write the remaining row forms as
+\[
+ L_i(x)=\sum_{j<m}m_{ij}x_j.
+\]
+For arbitrary $t_i>0$, the homogeneous polynomial
+\[
+ Q_t(x)=\sum_iq_it_i\prod_{k\ne i}L_k(x)
+ =\left.\frac{\partial}{\partial z}
+ \prod_i\bigl(L_i(x)+q_it_i z\bigr)\right|_{z=0}
+\]
+is real stable and has nonnegative coefficients.  Two weighted AM--GM
+inequalities give
+\[
+ \capop(Q_t)\ge
+ \left(\prod_i t_i^{q_i}\right)
+ \prod_i(1-q_i)^{1-q_i}.
+\]
+Square-free coefficient extraction yields
+\[
+ \sum_iq_it_id_i\ge
+ v_{m-1}\left(\prod_i t_i^{q_i}\right)
+ \prod_i(1-q_i)^{1-q_i}.
+\]
+Choose $t_i=d_i^{-1}$ on the support of $q$ and pass to the boundary by
+continuity if necessary.  The left side becomes one, so
+\[
+ \prod_i d_i^{q_i}\ge
+ v_{m-1}\prod_i(1-q_i)^{1-q_i}
+ =v_m\exp\bigl(\Psi_m(q)\bigr).
+\]
+\end{proof}
+
+We now specialize to the Hall geometry.  Let a doubly stochastic $B$ have
+zero block $R_0\times C_0$, where
+\[
+ |R_0|=a,\quad |C_0|=b,\quad p=6-a-b,
+\]
+and put
+\[
+ I=R_0^c,\quad J=C_0^c,\quad m=|I|=6-a,
+ \quad \ell=|J|=6-b.
+\]
+The core $B[I,J]$ has total mass $p$.  Write its normalized row and column
+marginals as
+\[
+ \xi_i=\frac1p\sum_{j\in J}b_{ij}\quad(i\in I),
+ \qquad
+ \eta_j=\frac1p\sum_{i\in I}b_{ij}\quad(j\in J),
+\]
+and set
+\begin{equation}\label{eq:Sxi}
+ S_\xi=\sum_{i\in I}\left(\xi_i-\frac1m\right)^2,
+ \qquad
+ S_\eta=\sum_{j\in J}\left(\eta_j-\frac1\ell\right)^2.
+\end{equation}
+
+\begin{proposition}[Core-marginal entropy]\label{prop:core-entropy}
+With $L=L_{a,b}$, the following estimates hold.
+
+If $p\ge2$, then
+\begin{equation}\label{eq:core-entropy-general}
+ \permop B\ge L\left(1+c_{a,b}(S_\xi+S_\eta)\right),
+ \qquad
+ c_{a,b}=\frac{p^2}{2(a^2+b^2)}.
+\end{equation}
+If $p=1$, then
+\begin{equation}\label{eq:core-entropy-p1}
+ \permop B\ge L\left(1+c_mS_\xi+c_\ell S_\eta\right),
+ \qquad
+ c_q=\frac12+\frac1{3q}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Average the $b$ columns indexed by $C_0$.  Their average distribution on $I$
+is
+\[
+ q_i=\frac{1-p\xi_i}{b},
+\]
+so
+\[
+ \sum_i(q_i-1/m)^2=\frac{p^2}{b^2}S_\xi.
+\]
+Convexity of $\Psi_m$ and Lemma~\ref{lem:distinguished-column} show that
+\[
+ \permop B\ge L\exp\left(\frac{p^2}{2b^2}S_\xi\right).
+\]
+Transposition similarly gives
+\[
+ \permop B\ge L\exp\left(\frac{p^2}{2a^2}S_\eta\right).
+\]
+The maximum of the two exponents is at least their weighted mean with weights
+$b^2/(a^2+b^2)$ and $a^2/(a^2+b^2)$.  Using $e^x\ge1+x$ proves
+\eqref{eq:core-entropy-general}.
+
+Assume now $p=1$.  Every nonzero perfect matching of $B$ uses exactly one
+core entry.  If $W=B[I,J]$ and $d_i,e_j$ denote the two complementary
+cross-block cofactors, then
+\[
+ \permop B=\sum_{i,j}w_{ij}d_ie_j
+ \ge\prod_i d_i^{\xi_i}\prod_j e_j^{\eta_j}.
+\]
+The rectangular cross-block augmented by the column $\xi$ is an
+$m\times m$ doubly stochastic matrix; similarly the transposed other
+cross-block augmented by $\eta$ is $\ell\times\ell$ doubly stochastic.
+Lemma~\ref{lem:cofactor-geometric} therefore gives
+\[
+ \permop B\ge v_mv_\ell
+ \exp\bigl(\Psi_m(\xi)+\Psi_\ell(\eta)\bigr).
+\]
+Here $v_mv_\ell=L$ because $v_1=1$.  Apply
+Lemma~\ref{lem:Psi} and $e^x\ge1+x$ to obtain
+\eqref{eq:core-entropy-p1}.
+\end{proof}
+
+\section{Two-sided critical Hall pairs}
+
+Assume for contradiction that a boundary global maximizer has a critical
+pair with $a,b\ge1$.  Transpose if necessary so that $a\le b$.  The six
+possibilities are
+\begin{equation}\label{eq:types}
+ (a,b,p)=(1,1,4),(1,2,3),(1,3,2),(2,2,2),(1,4,1),(2,3,1).
+\end{equation}
+
+Define
+\begin{equation}\label{eq:eftx}
+ e=\sum_{i\in I^c}r_i-a,
+ \qquad
+ f=\sum_{j\in J^c}c_j-b,
+ \qquad
+ x=A[I^c,J^c],
+ \qquad t=e+f.
+\end{equation}
+Criticality gives
+\begin{equation}\label{eq:tau-eft}
+ p\tau=e+f-x=t-x.
+\end{equation}
+Consequently
+\begin{equation}\label{eq:two-sided-domain}
+ -E_0\le e,f\le E_0,
+ \qquad 0<t\le2E_0=\frac{11}{25}<p,
+ \qquad \tau\le\frac tp.
+\end{equation}
+The saturation argument at the critical cut gives
+\[
+ B[I,J]=\frac{A[I,J]}{1-\tau},
+\]
+so the normalized core marginals $\xi,\eta$ introduced above are also the
+normalized core marginals of $A$.
+
+\subsection{Exact core-scaling stationarity}
+
+Decompose the permanent as
+\[
+ H=H_0+H_1+\cdots+H_d,
+ \qquad d=\min(a,b)=a,
+\]
+where $H_k$ is the contribution of permutations using exactly $k$ entries
+of $I^c\times J^c$.  Such a permutation uses exactly $p+k$ core entries.
+
+\begin{lemma}[Core-scaling identity]\label{lem:core-stationarity}
+At the global maximizer,
+\begin{equation}\label{eq:core-stationarity}
+ R\left(\sum_{i\in I}\frac{\xi_i}{r_i}-1\right)
+ +C\left(\sum_{j\in J}\frac{\eta_j}{c_j}-1\right)
+ =\frac{\tau H+p^{-1}\sum_{k\ge1}kH_k}{1-\tau}.
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:stationarity-upper}
+ R\left(\sum_{i\in I}\frac{\xi_i}{r_i}-1\right)
+ +C\left(\sum_{j\in J}\frac{\eta_j}{c_j}-1\right)
+ \le\frac{(t+d)H-dH_0}{p-t}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Multiply the core $A[I,J]$ by a parameter and globally renormalize to keep
+the total entry sum equal to six.  The core mass is $p(1-\tau)$.  The
+logarithmic derivative of the row-product term, divided by this mass, is
+\[
+ R\left(\sum_{i\in I}\frac{\xi_i}{r_i}-1\right),
+\]
+and the column derivative is analogous.  A permanent monomial in $H_k$
+uses $p+k$ core entries.  After subtracting the global normalization, its
+normalized derivative is
+\[
+ \frac{p\tau+k}{p(1-\tau)}.
+\]
+Stationarity proves \eqref{eq:core-stationarity}.
+
+Since $k\le d$,
+\[
+ \sum_{k\ge1}kH_k\le d(H-H_0).
+\]
+The resulting upper bound is increasing in $p\tau$; use
+$p\tau\le t$ from \eqref{eq:tau-eft} to obtain
+\eqref{eq:stationarity-upper}.
+\end{proof}
+
+Let $c_\xi,c_\eta$ denote the coefficients in
+Proposition~\ref{prop:core-entropy}: they are both $c_{a,b}$ when $p\ge2$,
+and they are $c_m,c_\ell$ when $p=1$.  Put
+\begin{equation}\label{eq:A0}
+ A_0=L_{a,b}\left(1-\frac tp\right)^6.
+\end{equation}
+Because $A\ge(1-\tau)B$ and all nonzero matchings of $B$ avoid the zero
+block,
+\begin{equation}\label{eq:H0-lower}
+ H_0\ge A_0(1+c_\xi S_\xi+c_\eta S_\eta).
+\end{equation}
+Also \eqref{eq:budget} gives
+\begin{equation}\label{eq:Hbar}
+ H\le\overline H:=R+C-2+\g.
+\end{equation}
+Therefore the following two quantities are necessarily nonnegative:
+\begin{align}
+ F={}&
+ \frac{(t+d)\overline H-dA_0(1+c_\xi S_\xi+c_\eta S_\eta)}{p-t}
+ \nonumber\\[-1mm]
+ &-R\left(\sum_{i\in I}\frac{\xi_i}{r_i}-1\right)
+ -C\left(\sum_{j\in J}\frac{\eta_j}{c_j}-1\right),
+ \label{eq:F}\\
+ G={}&\overline H-A_0(1+c_\xi S_\xi+c_\eta S_\eta).
+ \label{eq:G}
+\end{align}
+Hence $F+\zeta G\ge0$ for every $\zeta\ge0$.
+
+\subsection{A two-level extremal reduction}
+
+For a group of $q$ positive numbers $z_i$ of total $s$, a probability
+vector $w$, and constants $K,B,\lambda>0$, define
+\begin{equation}\label{eq:side-functional}
+ \mathcal T(z,w)=
+ K\prod_{i=1}^qz_i
+ \left(B-\sum_{i=1}^q\frac{w_i}{z_i}\right)
+ -\lambda\sum_{i=1}^q\left(w_i-\frac1q\right)^2.
+\end{equation}
+The expression is understood polynomially on the closed simplex, since
+$(\prod z_i)/z_i=\prod_{h\ne i}z_h$.
+
+\begin{lemma}[Two-level side maximizer]\label{lem:two-level}
+Suppose $s/q>25/32$ and $B>32/25$.  The maximum of
+\eqref{eq:side-functional} is attained in one of the following forms.  For some $k\in\{1,\ldots,q\}$,
+\[
+ w_i=\frac1k\quad(1\le i\le k),
+ \qquad w_i=0\quad(i>k),
+\]
+and the $z_i$ have two levels,
+\[
+ z_i=h\quad(i\le k),
+ \qquad z_i=\ell_0\quad(i>k),
+ \qquad h\ge\ell_0.
+\]
+For $k<q$ these may be parametrized by $0\le u\le1$ as
+\begin{equation}\label{eq:two-level-param}
+ h=\frac{s}{q}\left(1+u\frac{q-k}{k}\right),
+ \qquad
+ \ell_0=\frac{s}{q}(1-u).
+\end{equation}
+For $k=q$, $h=s/q$.
+\end{lemma}
+
+\begin{proof}
+The maximum exists on the closed product of simplices.  If a $z_i$ vanishes,
+then the polynomial form of \eqref{eq:side-functional} is nonpositive.  At
+the uniform choice $z_i=s/q$, $w_i=1/q$, the value is
+\[
+ K(s/q)^q(B-q/s)>0,
+\]
+so a maximizer has positive value and all $z_i>0$.  At such a maximizer,
+writing $P=K\prod_i z_i$ and $S=\sum_iw_i/z_i$, we also have
+$P(B-S)>0$, hence $B-S>0$.
+
+Fix two indices and preserve their two sums.  Write
+\[
+ z_i=h+x,\quad z_j=h-x,
+ \qquad
+ w_i=q_0+y,\quad w_j=q_0-y.
+\]
+With all other coordinates fixed, the part depending on $(x,y)$ is
+\begin{equation}\label{eq:pair-quadratic}
+ -P_0A x^2+2P_0xy-2\lambda y^2,
+\end{equation}
+where $P_0>0$ and
+\[
+ A=B-\sum_{r\ne i,j}\frac{w_r}{z_r}>0.
+\]
+Indeed, $A=(B-S)+w_i/z_i+w_j/z_j$, and $B-S>0$ by the
+preceding paragraph.  At an interior maximum of the pair problem, either
+$x=y=0$, or the quadratic has a flat direction joining the point to the pair
+average.  Choosing among all maximizers one with minimal pairwise variance
+therefore makes every two active coordinates equal.  Thus the positive
+coordinates of $w$ are all $1/k$, and their associated $z_i$ are all equal.
+For two inactive coordinates, $y=0$ in \eqref{eq:pair-quadratic}, so their
+$z_i$ are equal as well.
+
+Finally, the one-sided derivative condition for moving mass of $w$ from an
+active coordinate to an inactive coordinate gives
+\[
+ P\left(\frac1h-\frac1{\ell_0}\right)+\frac{2\lambda}{k}\le0,
+\]
+so $h>\ell_0$.  The parametrization \eqref{eq:two-level-param} follows from
+the fixed total.
+\end{proof}
+
+\begin{remark}\label{rem:two-level-rigour}
+The pairwise argument can equivalently be phrased without the reference to a
+variance-minimizing maximizer: cyclically average all active pairs whenever
+\eqref{eq:pair-quadratic} is flat, and pass to the limit.  Every step preserves
+the maximum.  This is the same compactness mechanism used in the positive
+maximizer theorem.
+\end{remark}
+
+We now apply the lemma.  Set
+\begin{equation}\label{eq:zeta}
+ \zeta=
+ \begin{cases}
+ 14,&p\ge2,\\
+ 8,&p=1.
+ \end{cases}
+\end{equation}
+Define
+\begin{equation}\label{eq:Bstar}
+ B_*:=\frac{p+d}{p-t}+\zeta,
+ \qquad
+ \lambda_\xi:=c_\xi A_0\left(\frac d{p-t}+\zeta\right),
+ \qquad
+ \lambda_\eta:=c_\eta A_0\left(\frac d{p-t}+\zeta\right).
+\end{equation}
+By \eqref{eq:singleton-lower},
+\(
+ \sum_i\xi_i/r_i<50/39<B_*
+\)
+and similarly for columns.  AM--GM on the complementary groups therefore
+increases the upper bound $F+\zeta G$ when $R$ and $C$ are replaced by
+\[
+ \widehat R=\left(1+\frac ea\right)^a\prod_{i\in I}r_i,
+ \qquad
+ \widehat C=\left(1+\frac fb\right)^b\prod_{j\in J}c_j.
+\]
+Consequently
+\begin{equation}\label{eq:dual-upper}
+ F+\zeta G\le \cU
+ :=C_0(t)+T_a(e,r,\xi)+T_b(f,c,\eta),
+\end{equation}
+where
+\begin{align}
+ C_0(t)&=
+ \frac{(t+d)(\g-2)-dA_0}{p-t}
+ +\zeta(\g-2-A_0),
+ \label{eq:C0}\\
+ T_a&=
+ \left(1+\frac ea\right)^a\prod_{i\in I}r_i
+ \left(B_*-\sum_{i\in I}\frac{\xi_i}{r_i}\right)
+ -\lambda_\xi S_\xi,
+ \label{eq:Ta}
+\end{align}
+and $T_b$ is the analogous column expression.
+
+For a side of complement size $a$, group size $m=6-a$, support size $k$,
+and excess $e$, Lemma~\ref{lem:two-level} makes
+\begin{equation}\label{eq:Tcandidate}
+ T_a\le
+ \left(1+\frac ea\right)^a h^{k-1}\ell_0^{m-k}(B_*h-1)
+ -\lambda_\xi\left(\frac1k-\frac1m\right),
+\end{equation}
+where $h,\ell_0$ are given by \eqref{eq:two-level-param} with
+$s=m-e$.  The formula for $k=m$ is obtained by omitting the low level and
+the entropy term.  An identical formula holds on the column side.
+
+\subsection{Exact finite certificate}
+
+The remaining verification is polynomial.  Map the triangular domain
+\eqref{eq:two-sided-domain} to the unit square by
+\begin{equation}\label{eq:triangle-map}
+ t=2E_0x,
+ \qquad
+ e=t-E_0+z(2E_0-t),
+ \qquad
+ f=E_0-z(2E_0-t),
+ \qquad 0\le x,z\le1.
+\end{equation}
+For each block type $(a,b)$, each support size
+\[
+ 1\le k\le6-a,\qquad 1\le k'\le6-b,
+\]
+and the two spread parameters $u,v\in[0,1]$, substitute
+\eqref{eq:two-level-param}, \eqref{eq:triangle-map}, and
+\eqref{eq:zeta} into \eqref{eq:dual-upper}.  Define
+\begin{equation}\label{eq:certificate-poly}
+ P_{a,b,k,k'}(x,z,u,v):=-(p-t)\cU.
+\end{equation}
+It is a rational polynomial.  Exact tensor-product Bernstein subdivision
+proves
+\begin{equation}\label{eq:certificate-positive}
+ P_{a,b,k,k'}>0\qquad\text{on }[0,1]^4
+\end{equation}
+for all $98$ cases.  The certificate summary is:
+\[
+\begin{array}{c@{\qquad}r@{\qquad}r@{\qquad}r}
+\toprule
+(a,b)&\text{polynomials}&\text{Bernstein nodes}&\text{maximum depth}\\
+\midrule
+(1,1)&25&165&6\\
+(1,2)&20&276&7\\
+(1,3)&15&483&14\\
+(2,2)&16&416&13\\
+(1,4)&10&352&14\\
+(2,3)&12&558&15\\
+\bottomrule
+\end{array}
+\]
+Every terminal Bernstein coefficient is a strictly positive rational number.
+The smallest terminal coefficient recorded for the tightest type $(2,3)$ is
+\[
+ \frac{206812176444269171}
+ {2388787200000000000000}>0.
+\]
+The accompanying script constructs every polynomial from
+\eqref{eq:certificate-poly}, performs exact power-to-Bernstein conversion,
+and executes exact de Casteljau subdivision at $1/2$.
+
+Since $p-t>0$, \eqref{eq:certificate-positive} gives $\cU<0$.  This
+contradicts
+\[
+ 0\le F+\zeta G\le\cU.
+\]
+Thus no two-sided critical Hall pair can occur.
+
+\section{One-sided critical Hall pairs}
+
+After transposition, assume $I=[6]$ and $|J|=p=6-b$.  Then
+\begin{equation}\label{eq:one-sided-mass}
+ \sum_{j\in J}c_j=p(1-\tau),
+ \qquad
+ 0<\tau<\frac{E_0}{p}.
+\end{equation}
+The corresponding columns of $B$ saturate $A/(1-\tau)$.  Put
+\[
+ m_i=\sum_{j\in J}b_{ij},
+ \qquad \beta_i=\frac{m_i}{p},
+ \qquad
+ s=\sum_i(\beta_i-1/6)^2.
+\]
+The one-sided stationarity identity from the accompanying manuscript gives
+\begin{equation}\label{eq:D}
+ D:=1-\sum_i\frac{\beta_i}{r_i}
+ \ge\frac{(1-\g)\tau}{1-\tau}>0.
+\end{equation}
+
+\begin{lemma}[Dimension-six row energy]\label{lem:row-energy6}
+With $y_i=1-r_i^{-1}$,
+\begin{equation}\label{eq:row-energy6}
+ \rho>\frac3{10}\sum_i y_i^2.
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:rho-D6}
+ \rho>\frac3{10}
+ \frac{(1-\g)^2\tau^2}{(1-\tau)^2s}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Lemma~\ref{lem:localization} gives $r_i>25/32$.  As in the standard
+row-energy argument,
+\[
+ r-1-\log r\ge\frac{(25/32)^2}{2}
+ \left(1-\frac1r\right)^2.
+\]
+Since $1-\rho\ge1-\g$,
+\[
+ \rho\ge(1-\rho)(-\log(1-\rho))
+ \ge\frac{(1-\g)(25/32)^2}{2}\sum_i y_i^2.
+\]
+The exact gap is
+\[
+ \frac{(1-\g)(25/32)^2}{2}-\frac3{10}
+ =\frac{1547}{3317760}>0,
+\]
+which proves \eqref{eq:row-energy6}.  Harmonic mean gives
+$\sum_i y_i\le0$, so Cauchy--Schwarz yields
+\[
+ D=\sum_i\beta_i y_i
+ \le\sqrt{s}\left(\sum_i y_i^2\right)^{1/2}.
+\]
+Combine this with \eqref{eq:D}.
+\end{proof}
+
+Unlike the coarser low-dimensional argument, we retain the exact loss in the
+column product.  From \eqref{eq:one-sided-mass} and two-group AM--GM,
+\begin{equation}\label{eq:sigma-exact}
+ \sigma\ge1-Q_b(\tau),
+ \qquad
+ Q_b(\tau)=
+ \left(1+\frac{p\tau}{b}\right)^b(1-\tau)^p.
+\end{equation}
+The average of the $p$ saturated columns of $B$ is $\beta$, so convexity and
+\eqref{eq:column-entropy-inherited}, together with \eqref{eq:kappa}, give
+\begin{equation}\label{eq:one-sided-per-lower}
+ H\ge(1-\tau)^6
+ \max\{\kappa,\g e^{s/2}\}.
+\end{equation}
+On the other hand, \eqref{eq:budget} and \eqref{eq:sigma-exact} give
+\begin{equation}\label{eq:one-sided-per-upper}
+ H\le\g-\rho-\sigma.
+\end{equation}
+
+Set $s_0=2\log(\kappa/\g)$.
+
+\subsection{Small entropy}
+
+If $s\le s_0$, then
+\[
+ s_0\le\frac{2(\kappa-\g)}{\g}
+\]
+and \eqref{eq:rho-D6} implies
+\begin{equation}\label{eq:Aenergy}
+ \rho>A\frac{\tau^2}{(1-\tau)^2},
+ \qquad
+ A=\frac{39750390625}{5253139008}.
+\end{equation}
+Thus it is enough to prove
+\begin{equation}\label{eq:small-poly}
+ (1-\tau)^2
+ \left[1-Q_b(\tau)+\kappa(1-\tau)^6-\g\right]
+ +A\tau^2>0.
+\end{equation}
+For every $b=1,\ldots,5$, exact univariate Bernstein subdivision proves
+\eqref{eq:small-poly} on
+\[
+ 0\le\tau\le\frac{11}{50p}.
+\]
+The required subdivision depths are respectively $1,2,3,4,5$.
+Equations \eqref{eq:one-sided-per-lower} and
+\eqref{eq:one-sided-per-upper} are therefore incompatible.
+
+\subsection{Large entropy}
+
+If $s\ge s_0$, use $e^{s/2}\ge1+s/2$ and AM--GM in
+\eqref{eq:rho-D6} to obtain, with $q=1-\tau$,
+\[
+ \rho+\g q^6e^{s/2}-\g
+ > (1-\g)\tau q^2\sqrt{\frac{3\g}{5}}
+   +\g(q^6-1).
+\]
+Here $3\g/5=1/108$, and the exact comparison
+\[
+ \frac{(1-\g)^2}{108}-\frac9{1024}
+ =\frac{33853}{181398528}>0
+\]
+shows that the right side is at least
+\[
+ \frac3{32}\tau q^2+\g(q^6-1).
+\]
+After adding \eqref{eq:sigma-exact}, it remains to prove
+\begin{equation}\label{eq:large-poly}
+ 1-Q_b(\tau)+\frac3{32}\tau(1-\tau)^2
+ +\g\bigl((1-\tau)^6-1\bigr)>0.
+\end{equation}
+The left side has a factor $\tau$.  For all five values of $b$, the quotient
+has globally positive Bernstein coefficients on
+$[0,11/(50p)]$; the smallest coefficient is $1/864$.  This again contradicts
+\eqref{eq:one-sided-per-lower}--\eqref{eq:one-sided-per-upper}.
+
+Therefore no one-sided critical Hall pair exists.
+
+\section{Completion of the proof}
+
+Let $A$ be a global maximizer.  If it is a boundary matrix and its Hall
+deficit is zero, inherited items (I3)--(I4) imply
+\[
+ H\ge\kappa>\g,
+\]
+contrary to \eqref{eq:budget}.  If its Hall deficit is positive, a critical
+pair exists.  The preceding sections exclude both the two-sided and
+one-sided possibilities.  Hence every global maximizer is entrywise positive.
+By inherited item (I1), it is $J_6/6$.  Its value is
+\[
+ \Phi(J_6/6)=2-\frac{6!}{6^6}=2-\frac5{324}.
+\]
+This proves Theorem~\ref{thm:main}.
+
+\section*{Certificate reproducibility}
+
+The file \texttt{dittert\_n6\_certificates.py} verifies all finite claims
+above.  It uses exact rational arithmetic for every coefficient and every
+comparison.  The two-sided verification consists of $98$ four-variable
+polynomials; the one-sided verification consists of five small-entropy and
+five large-entropy polynomials.  A successful run ends with
+\begin{verbatim}
+All exact n=6 Dittert certificates passed (98 + 10 polynomials).
+\end{verbatim}
+
+\end{document}
