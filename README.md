@@ -1,3 +1,17 @@
+# 📌 PINNED — Main PDF (6–15)
+
+**置顶主文件（单独 PDF）：**
+
+**[Dittert_Conjecture_6_15_MAIN.pdf](./Dittert_Conjecture_6_15_MAIN.pdf)**
+
+- Unified manuscript: *Dittert’s Conjecture in Dimensions Six through Fifteen*
+- Theorem range: **6 ≤ n ≤ 15**
+- Source: `dittert_6_15_submission/main.pdf`
+
+Full package: [`MAIN_dittert_6_15/`](./MAIN_dittert_6_15/) · [zip](./Dittert_Conjecture_6_15_submission.zip)
+
+---
+
 # Dittert conjecture — dimensions 6 through 15
 
 ## ⭐ PRIMARY (this is the main package)
