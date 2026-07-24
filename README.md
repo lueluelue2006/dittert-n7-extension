@@ -16,6 +16,7 @@ Both claim a route to Dittert for dimension 6. They share the same broad Hall / 
 |--------|------|----------------|
 | `n6/approach_A_fourvar/` | `dittert_n6_proof.tex` — pairwise smoothing → **four-variable** Bernstein family | `dittert_n6_certificates.py` (uses SymPy + NumPy; comparisons are exact `Fraction`) |
 | `n6/approach_B_penalized/` | `dittert_n6_extension_note.tex` — **penalized** core–entropy criterion → **bivariate** Bernstein | `dittert_n6_certificates.py` (stdlib + `Fraction` only) |
+| `n6/approach_C_latest/` | newer `dittert_n6_extension_note.tex` + certificates (upload from local `(1).tex` / `(3).py`) | `dittert_n6_certificates.py` |
 
 ### n=7
 
@@ -44,6 +45,9 @@ python3 dittert_n8_n15_certificates.py
 
 # n=6, approach B (stdlib only)
 python3 n6/approach_B_penalized/dittert_n6_certificates.py
+
+# n=6, approach C (latest)
+python3 n6/approach_C_latest/dittert_n6_certificates.py
 
 # n=6, approach A (needs sympy, numpy)
 python3 n6/approach_A_fourvar/dittert_n6_certificates.py
