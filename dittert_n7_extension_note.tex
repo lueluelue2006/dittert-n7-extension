@@ -1,0 +1,624 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1.05in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,array}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\allowdisplaybreaks
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{0.15em}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\per}{\operatorname{per}}
+\newcommand{\pcap}{\operatorname{Cap}}
+\newcommand{\e}{\mathrm e}
+\newcommand{\Rge}{\mathbb R_{\ge0}}
+
+\title{A Codimension-One Entropy Refinement for Dittert's Conjecture in Dimension Seven}
+\author{Extension note to the dimensions $8$--$15$ manuscript}
+\date{24 July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note gives a proposed extension of the Hall-deficit proof of Dittert's conjecture from dimensions $8$--$15$ to dimension $7$.  The new point is a geometric-mean lower bound for the cofactors of a selected column of a doubly stochastic matrix.  Applied twice, it strengthens the sharp permanent bound for a zero rectangle of codimension one: besides the sharp constant, the bound retains the entropy of both marginal distributions of the critical core.  The only two-sided Hall configurations not covered by the existing scalar method in dimension $7$ have codimension one.  Critical-core stationarity and a conditional product-energy estimate then reduce those configurations to three exact bivariate polynomial inequalities.  Their positivity on a rational square is certified by exact Bernstein subdivision.  The remaining Hall configurations are covered by the original second-order and one-sided arguments with sharpened constants.  No floating-point assertion is used.
+\end{abstract}
+
+\section{Statement and inherited notation}
+
+For a nonnegative $n\times n$ matrix $A$ whose entries sum to $n$, write $r_i$ and $c_j$ for its row and column sums and put
+\[
+ \Phi(A)=\prod_i r_i+\prod_jc_j-\per(A),
+ \qquad
+ \gamma_n=\frac{n!}{n^n}.
+\]
+We use the arbitrary-dimensional parts of the accompanying manuscript: positive global maximizers are uniform; a hypothetical boundary maximizer has deficits
+\[
+ P:=\prod_i r_i=1-\rho,
+ \qquad Q:=\prod_jc_j=1-\sigma,
+ \qquad H:=\per(A)=\gamma_n-\delta,
+\]
+with
+\[
+ 0\le \rho,\sigma,
+ \qquad \rho+\sigma\le\delta\le\gamma_n;
+ \tag{1.1}\label{eq:budget}
+\]
+and a critical Hall pair produces a dilation $S=A/(1-\tau)$ dominating a doubly stochastic matrix $B$ with a forced zero rectangle.
+
+We also use
+\[
+ v_k=\frac{k!}{k^k}\quad(k\ge1),\qquad v_0=1,
+\]
+and the sharp zero-rectangle bound
+\[
+ \per(B)\ge L^{\sharp}_{n,a,b}
+ =\frac{v_{n-a}v_{n-b}}{v_{n-a-b}}.
+ \tag{1.2}\label{eq:sharp}
+\]
+
+The purpose of the note is to prove the following extension.
+
+\begin{theorem}\label{thm:n7}
+For every nonnegative $7\times7$ matrix $A$ whose entries sum to $7$,
+\[
+ \Phi(A)\le 2-\frac{7!}{7^7}.
+\]
+Equality holds only at $A=J_7/7$.
+\end{theorem}
+
+The interior classification is already dimension-free.  It therefore suffices to exclude a boundary global maximizer when $n=7$.
+
+\section{The new permanent inequality}
+
+The missing information in the sharp bound \eqref{eq:sharp} is the nonuniformity of the mass that crosses the critical core.  The following cofactor inequality recovers it.
+
+\begin{lemma}[Geometric cofactor entropy]\label{lem:cofactor}
+Let $M$ be an $m\times m$ doubly stochastic matrix, let
+\[
+ \xi=(\xi_1,\ldots,\xi_m)
+\]
+be one selected column, and let
+\[
+ d_i=\per M(i\mid \xi)
+\]
+be the permanent of the submatrix obtained by deleting row $i$ and the selected column.  Then
+\[
+ \prod_{i=1}^m d_i^{\xi_i}
+ \ge
+ v_m\exp\!\left\{
+ \frac12\sum_{i=1}^m\left(\xi_i-\frac1m\right)^2
+ \right\}.
+ \tag{2.1}\label{eq:cofactor}
+\]
+The usual convention is used for zero weights, and the boundary cases follow by continuity.
+\end{lemma}
+
+\begin{proof}
+Write $Y$ for the other $m-1$ columns and, initially assuming $0\le\xi_i<1$, normalize its rows by
+\[
+ n_{ij}=\frac{y_{ij}}{1-\xi_i}.
+\]
+Let
+\[
+ L_i(x)=\sum_{j=1}^{m-1}n_{ij}x_j,
+ \qquad
+ p_i=\per N_{-i}.
+\]
+Then
+\[
+ d_i=\left(\prod_{k\ne i}(1-\xi_k)\right)p_i.
+ \tag{2.2}\label{eq:di-pi}
+\]
+
+For positive parameters $t_i$, consider
+\[
+ q_t(x)=\sum_{i=1}^m\xi_it_i\prod_{k\ne i}L_k(x).
+ \tag{2.3}\label{eq:qt}
+\]
+It is real stable, because it is obtained by differentiating in $z$ at $z=0$ the stable polynomial
+\[
+ \prod_{i=1}^m\bigl(L_i(x)+\xi_it_i z\bigr).
+\]
+Weighted AM--GM first gives
+\[
+ q_t(x)
+ \ge
+ \left(\prod_i t_i^{\xi_i}\right)
+ \prod_k L_k(x)^{1-\xi_k}.
+\]
+A second weighted AM--GM inequality gives
+\[
+ L_k(x)\ge\prod_jx_j^{n_{kj}}.
+\]
+Since $(1-\xi_k)n_{kj}=y_{kj}$ and every column of $Y$ sums to one,
+\[
+ q_t(x)\ge
+ \left(\prod_i t_i^{\xi_i}\right)x_1\cdots x_{m-1}.
+\]
+Thus
+\[
+ \pcap(q_t)\ge\prod_i t_i^{\xi_i}.
+\]
+Square-free coefficient extraction for stable polynomials yields
+\[
+ \sum_i\xi_i t_i p_i
+ \ge v_{m-1}\prod_i t_i^{\xi_i}.
+ \tag{2.4}\label{eq:weighted-pi}
+\]
+Putting $t_i=p_i^{-1}$, with the zero-weight terms omitted and then using continuity, gives
+\[
+ \prod_i p_i^{\xi_i}\ge v_{m-1}.
+ \tag{2.5}\label{eq:pi-gm}
+\]
+
+Taking the $\xi$-weighted geometric mean in \eqref{eq:di-pi},
+\[
+ \prod_i d_i^{\xi_i}
+ \ge
+ v_{m-1}\prod_k(1-\xi_k)^{1-\xi_k}.
+ \tag{2.6}\label{eq:cofactor-intermediate}
+\]
+For $h(t)=(1-t)\log(1-t)$ one has $h''(t)=1/(1-t)\ge1$.  Hence
+\[
+ \sum_kh(\xi_k)
+ \ge mh(1/m)+\frac12\sum_k(\xi_k-1/m)^2.
+\]
+Finally,
+\[
+ v_{m-1}\exp\{mh(1/m)\}=v_{m-1}\left(1-\frac1m\right)^{m-1}=v_m,
+\]
+and \eqref{eq:cofactor} follows.
+\end{proof}
+
+The codimension-one case of the critical zero rectangle now has a two-sided entropy correction.
+
+\begin{theorem}[Codimension-one block entropy]\label{thm:block-entropy}
+Let $B$ be an $n\times n$ doubly stochastic matrix with a zero block
+\[
+ B[R,C]=0,
+ \qquad |R|=a,
+ \qquad |C|=b,
+ \qquad a+b=n-1.
+\]
+Put $I=R^c$ and $J=C^c$.  The core $X=B[I,J]$ has total mass one.  Let $\xi$ and $\eta$ be its row and column marginals and put
+\[
+ s_I=\sum_{i\in I}\left(\xi_i-\frac1{b+1}\right)^2,
+ \qquad
+ s_J=\sum_{j\in J}\left(\eta_j-\frac1{a+1}\right)^2.
+\]
+Then
+\[
+ \per(B)\ge
+ v_{b+1}v_{a+1}\exp\!\left(\frac{s_I+s_J}{2}\right).
+ \tag{2.7}\label{eq:block-entropy}
+\]
+At $s_I=s_J=0$, the constant is exactly the sharp bound \eqref{eq:sharp} with $p=1$.
+\end{theorem}
+
+\begin{proof}
+Write $Y=B[I,C]$ and $Z=B[R,J]$.  Every perfect matching uses exactly one core edge.  If
+\[
+ d_i=\per Y_{-i},
+ \qquad e_j=\per Z_{-j},
+\]
+then
+\[
+ \per(B)=\sum_{i\in I,\,j\in J}x_{ij}d_i e_j.
+\]
+Weighted AM--GM, using the core entries $x_{ij}$ as weights, gives
+\[
+ \per(B)\ge
+ \prod_{i\in I}d_i^{\xi_i}
+ \prod_{j\in J}e_j^{\eta_j}.
+ \tag{2.8}\label{eq:block-amgm}
+\]
+The square matrix obtained by adjoining $\xi$ to $Y$ is doubly stochastic of order $b+1$.  Lemma~\ref{lem:cofactor} therefore bounds the first product in \eqref{eq:block-amgm} by $v_{b+1}\e^{s_I/2}$.  Likewise, adjoining $\eta^T$ as the last row of $Z$ and transposing bounds the second product by $v_{a+1}\e^{s_J/2}$.
+\end{proof}
+
+\section{Dimension-seven constants and the routine Hall pairs}
+
+For the rest of the proof let
+\[
+ n=7,
+ \qquad \gamma=\gamma_7=\frac{720}{117649},
+ \qquad \eta=\frac1{47}.
+\]
+Define $\alpha_0=0$ and, for $1\le k\le6$,
+\[
+ \alpha_k=
+ \begin{cases}
+ 14\left(\dfrac{k}{7}+\eta\right)
+       \left(1-\dfrac{k}{7}-\eta\right),&2k<7,\\[2mm]
+ \dfrac{2k(7-k)}7,&2k\ge7.
+ \end{cases}
+ \tag{3.1}\label{eq:alpha7}
+\]
+The relative-entropy subset proof from the main manuscript applies verbatim, because
+\[
+ \eta^2-\frac{\gamma}{14(1-\gamma)}
+ =\frac{23263}{1808073127}>0,
+ \qquad
+ \frac37+\eta<\frac12,
+ \tag{3.2}\label{eq:localization7}
+\]
+and $\alpha_k\le7/2$ for every $k$.
+
+Let $a=|I^c|$, $b=|J^c|$, and $p=7-a-b$.  For two-sided pairs with $p\ge2$, use
+\[
+ T=\frac5{24},
+ \qquad \lambda=\binom72-\binom73T=\frac{329}{24}.
+\]
+The Hall estimate gives $\tau<T$, since
+\[
+ T^2-\frac{7\gamma}{1-\gamma}
+ =\frac{20185}{67351104}>0.
+\]
+The same alternating-binomial argument gives
+\[
+ (1-t)^7\ge1-7t+\frac{329}{24}t^2
+ \qquad(0\le t\le5/24).
+\]
+Substitution in the second-order scalar margin, with
+\[
+ L=L^{\sharp}_{7,a,b},
+ \qquad c=\frac{\alpha_a+\alpha_b}{p^2},
+\]
+shows that all six pairs with $p\ge2$ have positive margin.  The smallest is the pair $(a,b)=(1,1)$:
+\[
+ \frac{217499955444827479495}
+ {21713873952987016007066496}>0.
+ \tag{3.3}\label{eq:pge2-min}
+\]
+
+It remains to discuss $p=1$.  Up to transposition, the pairs are
+\[
+ (a,b)=(1,5),(2,4),(3,3).
+ \tag{3.4}\label{eq:p1-pairs}
+\]
+Write
+\[
+ e=\sum_{i\in I^c}r_i-a,
+ \qquad
+ f=\sum_{j\in J^c}c_j-b,
+ \qquad
+ x=s_A(I^c,J^c).
+\]
+Then
+\[
+ \tau=e+f-x.
+ \tag{3.5}\label{eq:tau-ef}
+\]
+If $e\le0$ or $f\le0$, only the positive excess is needed in the Hall estimate.  With
+\[
+ T=\frac3{20},
+ \qquad \lambda=\binom72-\binom73T=\frac{63}{4},
+\]
+the six resulting second-order margins are positive.  Their minimum is
+\[
+ \frac{165035926385}{3897251304526692}>0.
+ \tag{3.6}\label{eq:signmixed-min}
+\]
+Thus the only new case is \eqref{eq:p1-pairs} with
+\[
+ e>0,
+ \qquad f>0.
+ \tag{3.7}\label{eq:positive-ef}
+\]
+The subset bounds imply separately
+\[
+ 0<e,f<\frac3{20}.
+ \tag{3.8}\label{eq:ef-box}
+\]
+
+\section{One-sided Hall cuts in dimension seven}
+
+For completeness, the one-sided part of the original proof also extends to $n=7$ once its two coarse numerical replacements are removed.
+
+Put
+\[
+ d_0^2=\frac{7\gamma}{2(1-\gamma)}.
+\]
+Then $d_0<3/20$, and every row and column sum is at least $17/20$.  Moreover
+\[
+ \frac{(1-\gamma)(17/20)^2}{2}>\frac13.
+ \tag{4.1}\label{eq:energy-coeff}
+\]
+Repeating the row-product energy proof therefore gives
+\[
+ \rho>\frac13\sum_i\left(1-\frac1{r_i}\right)^2.
+ \tag{4.2}\label{eq:row-energy7}
+\]
+The column analogue is identical.
+
+In the small-entropy regime, the exact certificate replacing the coefficient $2/5$ is
+\[
+ \frac13(1-\gamma)^2\gamma-\frac{49}{2}\kappa_7^2
+ =
+ \frac{22176489486262543850191055}
+ {20672701805255574480144334848}>0,
+ \tag{4.3}\label{eq:small7}
+\]
+where $\kappa_7=v_6G(6)=15625/2519424$.
+
+For the large-entropy regime, retain the exact dependence on $\tau$ instead of replacing $(1-\tau)^{7/2}$ by a fixed decimal.  It is enough to prove, for $0\le t\le3/20$,
+\[
+ \frac23(1-\gamma)^2(1-t)^6
+ -\gamma(7-21t+35t^2)^2>0.
+ \tag{4.4}\label{eq:large7-poly}
+\]
+Every Bernstein coefficient of the polynomial in \eqref{eq:large7-poly} on $[0,3/20]$ is positive; the minimum is
+\[
+ \frac{155130361249919329}
+ {1328763571296000000}>0.
+ \tag{4.5}\label{eq:large7}
+\]
+Indeed, the exact one-sided inequality before squaring is
+\[
+ (1-\gamma)\sqrt{\frac{2\gamma}{3}}
+ (1-\tau)^{5/2}
+ >
+ \gamma\frac{1-(1-\tau)^7}{\tau}.
+\]
+On this interval,
+\[
+ (1-\tau)^{5/2}\ge(1-\tau)^3,
+ \qquad
+ \frac{1-(1-\tau)^7}{\tau}
+ \le7-21\tau+35\tau^2,
+\]
+which reduces the claim to \eqref{eq:large7-poly}.  Consequently all one-sided Hall cuts are excluded.
+
+\section{The hard codimension-one configurations}
+
+We now assume \eqref{eq:p1-pairs}, \eqref{eq:positive-ef}, and \eqref{eq:ef-box}.  Put
+\[
+ R=I^c,
+ \quad C=J^c,
+ \quad m=|I|=7-a=b+1,
+ \quad \ell=|J|=7-b=a+1,
+ \quad d=\min\{a,b\}.
+\]
+
+\subsection{Core saturation and stationarity}
+
+Because $p=1$, both $B[I,J]$ and $S[I,J]$ have total mass one.  Since $B\le S$, one has entrywise saturation
+\[
+ B[I,J]=S[I,J]=\frac{A[I,J]}{1-\tau}.
+ \tag{5.1}\label{eq:core-saturation}
+\]
+Let $\xi$ and $\eta$ be the row and column marginals of this core and put
+\[
+ s=s_I+s_J.
+ \tag{5.2}\label{eq:s-total}
+\]
+
+For a permutation, the number of selected entries in $I\times J$ exceeds the number selected in $R\times C$ by exactly one.  Let $H_k$ be the total permanent weight of permutations using exactly $k$ entries of $R\times C$, so that
+\[
+ H=\sum_{k=0}^dH_k.
+\]
+Scale the critical core $A[I,J]$ by a parameter and globally renormalize to keep total mass seven.  Stationarity at the maximizer gives the exact identity
+\[
+ P\left(\sum_{i\in I}\frac{\xi_i}{r_i}-1\right)
+ +Q\left(\sum_{j\in J}\frac{\eta_j}{c_j}-1\right)
+ =\frac{\tau H+\sum_{k=1}^d kH_k}{1-\tau}.
+ \tag{5.3}\label{eq:core-stationarity}
+\]
+Indeed, differentiating the permanent contributes $\sum_k(k+1)H_k$, while global normalization contributes $-(1-\tau)\Phi(A)$.
+
+Let $H_0$ now denote the contribution of the permutations avoiding $R\times C$.  Theorem~\ref{thm:block-entropy}, \eqref{eq:core-saturation}, and $\tau\le e+f$ give
+\[
+ H_0\ge L(1-\tau)^7\e^{s/2}
+ \ge L(1-e-f)^7\e^{s/2},
+ \qquad
+ L=v_{b+1}v_{a+1}.
+ \tag{5.4}\label{eq:H0-lower}
+\]
+Since $\sum_{k\ge1}kH_k\le d(H-H_0)$, the right side of \eqref{eq:core-stationarity} is at most
+\[
+ \frac{(e+f+d)H-dH_0}{1-e-f}.
+ \tag{5.5}\label{eq:stationarity-upper}
+\]
+
+\subsection{Conditional product energy}
+
+Define the groupwise AM--GM envelopes
+\[
+ P_a(e)=\left(1+\frac ea\right)^a
+        \left(1-\frac e{m}\right)^m,
+ \qquad
+ P_b(f)=\left(1+\frac fb\right)^b
+        \left(1-\frac f{\ell}\right)^\ell.
+ \tag{5.6}\label{eq:PaPb}
+\]
+Then $P\le P_a(e)$ and $Q\le P_b(f)$.  Put
+\[
+ u_r=P_a(e)-P,
+ \qquad
+ u_c=P_b(f)-Q.
+\]
+
+\begin{lemma}[Conditional inverse-energy]\label{lem:conditional-energy}
+On the box \eqref{eq:ef-box},
+\[
+ \sum_{i\in I}\left(
+ \frac1{r_i}-\frac1m\sum_{h\in I}\frac1{r_h}
+ \right)^2\le3u_r,
+ \tag{5.7}\label{eq:conditional-row}
+\]
+and the analogous column inequality is bounded by $3u_c$.
+\end{lemma}
+
+\begin{proof}
+Every row and column sum is at least $17/20$.  Set $q=1-e/m$, so $q\ge17/20$.  For $r,q\ge17/20$ one has
+\[
+ \frac rq-1-\log\frac rq
+ \ge\frac{(17/20)^2}{2}
+       \left(\frac1r-\frac1q\right)^2.
+ \tag{5.8}\label{eq:group-scalar}
+\]
+This follows by putting $y=1-q/r$ and writing the left side as
+\[
+ \int_0^y\frac{t}{(1-t)^2}\,dt.
+\]
+The appropriate groupwise linear terms cancel.  Hence
+\[
+ \log\frac{P_a(e)}P
+ \ge\frac{(17/20)^2}{2}
+ \sum_{i\in I}\left(\frac1{r_i}-\frac1q\right)^2
+ \ge\frac{(17/20)^2}{2}V_I,
+\]
+where $V_I$ denotes the left side of \eqref{eq:conditional-row}.  Since
+\[
+ \begin{aligned}
+ P_a-P
+ &\ge P\log\frac{P_a}{P}\\
+ &\ge(1-\gamma)\log\frac{P_a}{P}\\
+ &>\frac13V_I
+ \end{aligned}
+\]
+by \eqref{eq:energy-coeff}, the result follows.  The column proof is the same.
+\end{proof}
+
+\subsection{Reduction to a scalar inequality}
+
+Put
+\[
+ t=e+f,
+ \qquad
+ D=2-P_a(e)-P_b(f),
+ \qquad
+ K=\gamma-D,
+ \qquad
+ u=\delta-D.
+ \tag{5.9}\label{eq:K-u}
+\]
+The joint budget \eqref{eq:budget} gives
+\[
+ u\ge u_r+u_c\ge0,
+ \qquad H=K-u.
+ \tag{5.10}\label{eq:u-budget}
+\]
+Also put
+\[
+ A_0=L(1-t)^7,
+ \qquad
+ E=\frac e{m-e},
+ \qquad
+ F=\frac f{\ell-f}.
+ \tag{5.11}\label{eq:A0EF}
+\]
+By the harmonic-mean inequality and Lemma~\ref{lem:conditional-energy}, the left side of \eqref{eq:core-stationarity} is at least
+\[
+ P_a(e)E+P_b(f)F-u_rE-u_cF-\sqrt{3su}.
+ \tag{5.12}\label{eq:stationarity-lower}
+\]
+On the other hand, \eqref{eq:stationarity-upper}, \eqref{eq:H0-lower}, and \eqref{eq:u-budget} give the upper bound
+\[
+ \frac{(t+d)K-dA_0}{1-t}
+ -\frac{(t+d)u+dA_0(\e^{s/2}-1)}{1-t}.
+ \tag{5.13}\label{eq:stationarity-upper2}
+\]
+Because
+\[
+ E,F\le\frac{t+d}{1-t}
+ \qquad\text{and}\qquad u_r+u_c\le u,
+\]
+the linear product-loss terms in \eqref{eq:stationarity-lower} are absorbed by the negative $u$ term in \eqref{eq:stationarity-upper2}.  Thus, with
+\[
+ \mathcal B=
+ P_a(e)E+P_b(f)F
+ -\frac{(t+d)K-dA_0}{1-t},
+ \tag{5.14}\label{eq:Bscalar}
+\]
+stationarity requires
+\[
+ \mathcal B\le\sqrt{3su}.
+ \tag{5.15}\label{eq:Benergy}
+\]
+In particular, if $\mathcal B>0$, then
+\[
+ su\ge\frac{\mathcal B^2}{3}.
+ \tag{5.16}\label{eq:su-lower}
+\]
+
+The permanent estimate \eqref{eq:H0-lower} simultaneously gives
+\[
+ u+A_0\e^{s/2}\le K.
+ \tag{5.17}\label{eq:per-budget}
+\]
+If $A_0>K$, this is already impossible.  Otherwise, using $\e^{s/2}\ge1+s/2$ and AM--GM,
+\[
+ su\le\frac{(K-A_0)^2}{2A_0}.
+ \tag{5.18}\label{eq:su-upper}
+\]
+Consequently, a contradiction follows whenever
+\[
+ \mathcal B>0
+ \qquad\text{and}\qquad
+ 2A_0\mathcal B^2>3(K-A_0)^2.
+ \tag{5.19}\label{eq:master-cert}
+\]
+
+\subsection{Exact Bernstein certificate}
+
+All quantities in \eqref{eq:master-cert} are rational functions of $e,f$.  Set
+\[
+ Q_0=(m-e)(\ell-f)(1-e-f),
+ \qquad
+ \widetilde{\mathcal B}=Q_0\mathcal B,
+\]
+and
+\[
+ \mathcal C
+ =2A_0\widetilde{\mathcal B}^{\,2}
+ -3(K-A_0)^2Q_0^2.
+ \tag{5.20}\label{eq:Cpoly}
+\]
+The functions $A_0-K$, $\widetilde{\mathcal B}$, and $\mathcal C$ are bivariate polynomials with rational coefficients.
+
+Exact Bernstein subdivision on
+\[
+ 0\le e,f\le\frac3{20}
+\]
+proves, for each pair in \eqref{eq:p1-pairs}, that every point satisfies one of the following alternatives:
+\[
+ K<0,
+ \qquad A_0-K>0,
+ \qquad
+ \widetilde{\mathcal B}>0\ \text{ and }\ \mathcal C>0.
+ \tag{5.21}\label{eq:bernstein-alternatives}
+\]
+The first alternative contradicts $H=K-u\ge0$; the second contradicts \eqref{eq:per-budget}; and the third is \eqref{eq:master-cert}.  The exact subdivision audit is
+\[
+\begin{array}{c|ccc}
+ (a,b)&\text{tree nodes}&A_0-K\text{ leaves}&
+ \widetilde{\mathcal B},\mathcal C\text{ leaves}\\ \hline
+ (1,5)&39&10&10\\
+ (2,4)&35&9&9\\
+ (3,3)&47&11&13
+\end{array}
+\tag{5.22}\label{eq:bernstein-table}
+\]
+A positive Bernstein coefficient lower-bounds the polynomial on its box, and every subdivision is the exact rational de Casteljau transformation.  Thus \eqref{eq:bernstein-alternatives} is a continuum certificate, not a mesh computation.
+
+This excludes the last three critical Hall configurations.
+
+\section{Completion}
+
+A hypothetical boundary maximizer has $\tau>0$.  Two-sided pairs with $p\ge2$ are excluded by \eqref{eq:pge2-min}; codimension-one pairs with a nonpositive excess are excluded by \eqref{eq:signmixed-min}; the remaining codimension-one pairs are excluded by Sections~5.1--5.4; and one-sided pairs are excluded by Section~4.  Hence no boundary global maximizer exists in dimension seven.  The dimension-free interior classification then implies Theorem~\ref{thm:n7}.
+
+\begin{remark}
+The conceptual gain is not merely a better numerical constant.  The sharp block bound records only the sizes $(a,b,p)$.  At $p=1$, the critical core is itself a probability coupling, and its two marginal deviations are precisely the variables that couple to the stationarity equations.  Theorem~\ref{thm:block-entropy} keeps those variables rather than discarding them.  That is why the formerly negative scalar margins become coercive after stationarity is imposed.
+\end{remark}
+
+\end{document}
