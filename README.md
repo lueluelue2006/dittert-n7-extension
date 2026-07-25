@@ -82,5 +82,5 @@ Includes:
 
 - This upload is the **final 6–15 main line** for public sharing.
 - **Author name and ORCID are filled** (Hongyuan Lu, `0009-0008-9446-9016`). Affiliation / funding / acknowledgements may still need completion before journal submission.
-- The compiled PDF may still show the previous anonymous title page until recompiled from the updated TeX.
+- Compiled PDF title page / metadata use author **Hongyuan Lu** and ORCID `0009-0008-9446-9016`.
 - Independent expert reading is still recommended before journal submission.
