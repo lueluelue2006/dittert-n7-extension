@@ -104,9 +104,12 @@ pdflatex -interaction=nonstopmode -halt-on-error main.tex
 
 The archived manuscript is A4, uses embedded Type 1 fonts, and is checked for undefined references, overfull/underfull boxes, and visual clipping before release.
 
-## Anonymous-review metadata
+## Author metadata
 
-The current source uses anonymous-review macros. Before a non-anonymous submission or accepted version, replace the author, affiliation, email, ORCID, funding, acknowledgements, contribution statement, repository URL, release tag, and archival DOI. `CITATION.cff` and `cover_letter_template.md` contain corresponding placeholders.
+- **Author:** Hongyuan Lu
+- **ORCID:** [0009-0008-9446-9016](https://orcid.org/0009-0008-9446-9016)
+
+Author name and ORCID are filled in the LaTeX macros and `CITATION.cff`. Affiliation, email, funding, acknowledgements, contribution statement, release tag, and archival DOI may still need to be completed before journal submission.
 
 ## Licensing
 

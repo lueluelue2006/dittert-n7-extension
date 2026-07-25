@@ -9,6 +9,14 @@
 - Status: **final post-audit package** (74+1-item independent audit resolved in manuscript + verifiers)
 - Source tree: [`MAIN_dittert_6_15/main.pdf`](./MAIN_dittert_6_15/main.pdf)
 
+## Author
+
+- **Hongyuan Lu**
+- ORCID: [0009-0008-9446-9016](https://orcid.org/0009-0008-9446-9016)
+
+Public draft mirror (seven release artifacts only):  
+[`lueluelue2006/dittert-conjecture-draft`](https://github.com/lueluelue2006/dittert-conjecture-draft)
+
 Full package: [`MAIN_dittert_6_15/`](./MAIN_dittert_6_15/) · [zip](./Dittert_Conjecture_6_15_final_submission.zip) · [zip (alias)](./Dittert_Conjecture_6_15_submission.zip)
 
 Audit matrix: [`AUDIT_RESOLUTION.md`](./AUDIT_RESOLUTION.md) · in-package [`MAIN_dittert_6_15/AUDIT_RESOLUTION.md`](./MAIN_dittert_6_15/AUDIT_RESOLUTION.md)
@@ -56,11 +64,6 @@ python3 run_all_certificates.py
 
 Recorded full run (package): ~78.6s, ordinary and `python -O` results identical, independent checkers and unit tests included.
 
-### Source chat
-
-Final revision package from ChatGPT conversation  
-`https://chatgpt.com/c/6a63bcb4-5054-83eb-8fd9-a5198d9c4222`
-
 ---
 
 ## DRAFTS ONLY — everything else
@@ -78,5 +81,6 @@ Includes:
 ## Status note
 
 - This upload is the **final 6–15 main line** for public sharing.
-- Author name / affiliation / ORCID / funding / acknowledgements may still be placeholders for anonymous or pre-submission use.
+- **Author name and ORCID are filled** (Hongyuan Lu, `0009-0008-9446-9016`). Affiliation / funding / acknowledgements may still need completion before journal submission.
+- The compiled PDF may still show the previous anonymous title page until recompiled from the updated TeX.
 - Independent expert reading is still recommended before journal submission.
