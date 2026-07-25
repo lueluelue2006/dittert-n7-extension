@@ -1,6 +1,6 @@
-# 📌 PINNED — Main PDF (6–15)
+# PINNED — Main PDF (6–15)
 
-**置顶主文件（单独 PDF）：**
+**Pinned main file (standalone PDF):**
 
 **[Dittert_Conjecture_6_15_MAIN.pdf](./Dittert_Conjecture_6_15_MAIN.pdf)**
 
@@ -14,7 +14,7 @@ Full package: [`MAIN_dittert_6_15/`](./MAIN_dittert_6_15/) · [zip](./Dittert_Co
 
 # Dittert conjecture — dimensions 6 through 15
 
-## ⭐ PRIMARY (this is the main package)
+## PRIMARY (this is the main package)
 
 **This repository’s primary materials are the unified manuscript for**
 
@@ -52,7 +52,7 @@ Integrated package from ChatGPT conversation
 
 ---
 
-## 📦 DRAFTS ONLY — everything else
+## DRAFTS ONLY — everything else
 
 **All other paths under `drafts/` are earlier drafts / intermediate dumps.**  
 They are **not** the primary version. Do **not** treat them as the final write-up.
@@ -71,6 +71,6 @@ Those remain for history / comparison only.
 ## Status note
 
 - Primary package is the **current main line** for public sharing and further work.  
+- The primary version is `MAIN_dittert_6_15` (unified manuscript for dimensions 6–15); everything under `drafts/` is draft/older material only.  
 - Author placeholder may still be “Author Name”; bibliography may still need manual check.  
-- Independent expert reading is still recommended before journal submission.  
-- **Chinese:** 主版本是 `MAIN_dittert_6_15`（6～15 统一稿）；`drafts/` 里**全部是草稿/旧版**。
+- Independent expert reading is still recommended before journal submission.
