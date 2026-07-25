@@ -1,34 +1,19 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[11pt]{article}
 
-\usepackage[a4paper,margin=27mm]{geometry}
-\usepackage{cmap}
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{lmodern}
-\IfFileExists{glyphtounicode.tex}{\input{glyphtounicode}\pdfgentounicode=1}{}
+\usepackage[margin=1.08in]{geometry}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
-\numberwithin{equation}{section}
-\usepackage{booktabs,longtable,array,tabularx}
-\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\usepackage{booktabs,longtable,array}
 \usepackage{graphicx}
 \usepackage{enumitem}
 \usepackage{microtype}
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage[hidelinks]{hyperref}
-
-% Anonymous-review defaults.  Replace these macros in the accepted version.
-\newcommand{\PaperAuthor}{Anonymous Author(s)}
-\newcommand{\PaperAffiliation}{Affiliation withheld for double-anonymous review}
-\newcommand{\PaperEmail}{Correspondence details withheld for review}
-\newcommand{\PaperORCID}{ORCID withheld for review}
-\newcommand{\PaperVersion}{Revision 2.0, 25 July 2026}
-
 \hypersetup{
-  pdftitle={Dittert's Conjecture in Dimensions Six through Fifteen: An Exact Computer-Assisted Proof},
-  pdfauthor={Anonymous submission},
+  pdftitle={Dittert's Conjecture in Dimensions Six through Fifteen},
+  pdfauthor={Author Name},
   pdfsubject={Permanent inequalities and Dittert's conjecture},
-  pdfkeywords={permanent, Dittert conjecture, doubly stochastic matrix, Hall condition, stable polynomial, exact Bernstein certificate}
+  pdfkeywords={permanent, Dittert conjecture, doubly stochastic matrix, Hall condition, stable polynomial, Bernstein certificate}
 }
 
 \allowdisplaybreaks
@@ -65,13 +50,9 @@
   commentstyle=\itshape
 }
 
-\title{Dittert's Conjecture in Dimensions Six through Fifteen:\\
-An Exact Computer-Assisted Proof}
-\author{\PaperAuthor\\[2pt]
-\small\PaperAffiliation\\
-\small\texttt{\PaperEmail}\\
-\small\PaperORCID}
-\date{\PaperVersion}
+\title{Dittert's Conjecture in Dimensions Six through Fifteen}
+\author{Author Name}
+\date{}
 
 \begin{document}
 \maketitle
@@ -96,10 +77,8 @@ and a pairwise smoothing reduction to finitely many four-variable rational
 polynomials.  Their positivity, together with the remaining scalar
 inequalities, is certified by exact rational Bernstein subdivision.  An
 independent pairwise-averaging argument proves that every entrywise positive
-global maximizer is uniform.  The finite part is verified by explicit rational certificate checkers whose
-success conditions remain active under every Python optimization mode.  The
-source, independent audit implementations, hashes, and machine-readable
-verification manifest are supplied with the paper.
+global maximizer is uniform.  The complete exact-arithmetic verification
+program is supplied with the paper.
 \end{abstract}
 
 \noindent\textbf{Keywords.}
@@ -126,15 +105,12 @@ Minc \cite{Minc1983} and later by Zhan \cite{Zhan2007}.
 
 Sinkhorn proved the case $n=2$ \cite{Sinkhorn1984}, and Hwang proved the case
 $n=3$ \cite{Hwang1987}; Hwang had earlier shown that an entrywise positive
-global maximizer must be uniform \cite{Hwang1986}.  Knopp and Sinkhorn studied permanent lower bounds for doubly stochastic
-matrices with a zero \cite{KnoppSinkhorn1982}, and Cheon and Wanless
+global maximizer must be uniform \cite{Hwang1986}.  Cheon and Wanless
 developed boundary-exclusion methods and other structural results
-\cite{CheonWanless2012}.  Udayan and Somasundaram proved that every
-$\Phi$-maximizing matrix on $K_4$ is fully indecomposable
-\cite{UdayanSomasundaram2024}.  Recent preprints of Pang and Kafidov claim
-the conjecture for $n\ge17$ and $n=16$, respectively
-\cite{Pang2026,Kafidov2026}.  These historical statements are not logical
-inputs to our proof.  The present paper proves the ten dimensions
+\cite{CheonWanless2012}.  Udayan and Somasundaram proved the case $n=4$
+\cite{UdayanSomasundaram2024}.  Pang proved all dimensions $n\ge17$
+\cite{Pang2026}, and Kafidov proved $n=16$ \cite{Kafidov2026}.  The present
+paper proves the ten dimensions
 \[
  6\le n\le15.
 \]
@@ -177,67 +153,19 @@ The finite positivity statements are verified by tensor-product Bernstein
 subdivision with exact rational coefficients.  This is a computer-assisted
 proof component, not a floating-point experiment: every accepted box has
 strictly positive Bernstein coefficients, and every subdivision is exact de
-Casteljau averaging.  The dimension-seven-through-fifteen checker uses only
-the Python standard library.  The dimension-six generator uses
-\texttt{sympy.Rational} only to expand the displayed rational formulas; the
-Bernstein transformation, subdivision, and every correctness decision use
-exact integers and \texttt{fractions.Fraction}.  Independent implementations
-reconstruct the $98$ four-variable certificates, the ten one-variable
-certificates, and the three dimension-seven trees.  The complete source code,
-a machine-readable manifest, and source hashes reproduce every certificate.
+Casteljau averaging.  The dimension-seven-through-fifteen program uses only
+the Python standard library; the dimension-six generator uses
+\texttt{sympy.Rational} for polynomial expansion and NumPy object arrays as
+containers, with all comparisons performed by \texttt{fractions.Fraction}.
+The complete source code reproduces every certificate.
 
 Two ingredients often taken from the literature are proved here rather than
 used as black boxes.  We reconstruct the derivative-capacity mechanism
 associated with Gurvits \cite{Gurvits2008}, deriving all permanent bounds
 needed below, and we give an independent proof of Hwang's positive-maximizer
-conclusion.  We make no claim here about the complete status of dimensions
-outside $6\le n\le15$: the cited $n=4$, $n=16$, and $n\ge17$ literature has
-different publication status and scope, and none of it is needed for our
-main theorem.
-
-\subsection*{Proof architecture and certificate scale}
-Table~\ref{tab:method-overview} records where analytic structure ends and
-finite exact verification begins.
-\begin{table}[ht]
-\centering
-\small
-\begin{tabularx}{\textwidth}{@{}c Y Y@{}}
-\toprule
-Dimensions & Principal analytic mechanism & Exact finite certificate \\
-\midrule
-$11$--$14$ & first-order Hall margins; one deficient-column refinement for $n=11$ & $35,42,49,56$ rational cases \\
-$15$ & thin--thick support dichotomy & two rational margins and six integer inequalities \\
-$8$--$10$ & second-order Hall margins and one-sided entropy & $12,16,20$ rational Hall cases plus scalar certificates \\
-$7$ & complementary-minor entropy and single-bridge stationarity & three bivariate Bernstein trees \\
-$6$ & full core-marginal entropy, core stationarity, and two-level smoothing & $98$ four-variable and ten univariate Bernstein certificates \\
-\bottomrule
-\end{tabularx}
-\caption{Dimension-by-dimension analytic mechanism and exact certificate size.}
-\label{tab:method-overview}
-\end{table}
-
-The logical dependency is acyclic.  Its boundary branch is
-\[
- \boxed{\text{stable capacity}}
- \Longrightarrow
- \boxed{\text{support/entropy permanent bounds}}
- \Longrightarrow
- \boxed{\text{Hall-core bounds}},
-\]
-\[
- \boxed{\text{Hall-core bounds}}
- \Longrightarrow
- \boxed{\text{boundary exclusion}}.
-\]
-The interior branch is
-\[
- \boxed{\text{pairwise flatness and averaging convergence}}
- \Longrightarrow
- \boxed{\text{positive maximizers converge to }U_n},
-\]
-with strict local maximality providing the backward-uniqueness step.
-The main theorem combines these two branches only in
-Section~\ref{sec:completion}.
+conclusion.  Combined with the results cited above, the theorem proved here
+leaves only dimension $5$ outside the established range discussed in this
+paper.
 
 \section{Notation and the main theorem}
 
@@ -266,9 +194,6 @@ and define
  \gamma_n=\per(U_n)=\frac{n!}{n^n}.
 \]
 A matrix is called \emph{positive} if every entry is strictly positive.  A matrix is \emph{doubly stochastic} if every row sum and every column sum equals one.
-Symbols introduced inside a dimension-specific subsection are local to that
-subsection; repeated letters such as $H$, $K$, and $q$ are always redefined
-before reuse.  The global notation above remains fixed throughout.
 
 \begin{theorem}[Main theorem]\label{thm:main}
 For every integer $n$ with $6\le n\le15$ and every $A\in K_n$,
@@ -293,17 +218,11 @@ A polynomial $p\in\mathbb R[x_1,\dots,x_m]$ is \emph{real stable} if
  p(z_1,\dots,z_m)\ne0
  \qquad(z_1,\dots,z_m\in\cH).
 \]
-For a homogeneous polynomial $p$ of degree $m$ in $m$ variables with
-nonnegative coefficients, define
+For a homogeneous polynomial $p$ of degree $m$ in $m$ variables with nonnegative coefficients, define
 \[
  \pcap(p)=\inf_{x_1,\dots,x_m>0}
  \frac{p(x_1,\dots,x_m)}{x_1\cdots x_m}.
 \]
-We also set $\pcap(0)=0$.  If a nonzero polynomial in this quotient is
-independent of some denominator variable $x_j$, then its capacity is zero:
-fix the remaining variables and let $x_j\to\infty$.  We shall use this
-observation to verify explicitly that every variable extracted below has
-positive degree.
 Set
 \[
  G(1)=1,
@@ -316,9 +235,10 @@ and
  \qquad v_0=1.
 \]
 The telescoping identity
-\begin{equation}\label{eq:telescoping}
+\[
  \prod_{k=1}^mG(k)=v_m
-\end{equation}
+ \tag{3.1}\label{eq:telescoping}
+\]
 will be used repeatedly.  The sequence $G(k)$ is decreasing.  Indeed,
 $G(k)^{-1}=(1+1/(k-1))^{k-1}$, and the function
 \[
@@ -347,9 +267,10 @@ The next one-variable estimate is the quantitative core of the capacity method.
 
 \begin{lemma}[One-variable capacity estimate]\label{lem:one-variable}
 Let $f$ be a nonzero univariate polynomial with nonnegative coefficients.  Suppose all zeros of $f$ are real and nonpositive, and let $d=\deg f\ge1$.  Then
-\begin{equation}\label{eq:one-variable}
+\[
  f'(0)\ge G(d)\inf_{t>0}\frac{f(t)}t.
-\end{equation}
+ \tag{3.2}\label{eq:one-variable}
+\]
 \end{lemma}
 
 \begin{proof}
@@ -392,18 +313,13 @@ and
  =\left.\frac{\partial p}{\partial x_m}\right|_{x_m=0}.
 \]
 If $d\ge1$, then
-\begin{equation}\label{eq:derivative-capacity}
+\[
  \pcap(q)\ge G(d)\pcap(p).
-\end{equation}
+ \tag{3.3}\label{eq:derivative-capacity}
+\]
 \end{theorem}
 
 \begin{proof}
-If $q=0$, then for every $x'>0$ the polynomial $f(t)=p(x',t)$ satisfies
-$f'(0)=0$.  Lemma~\ref{lem:one-variable} therefore gives
-$\inf_{t>0}f(t)/t=0$ for every $x'$, and hence $\pcap(p)=0$; the assertion
-follows from the convention $\pcap(0)=0$.  We may consequently assume
-$q\ne0$.
-
 Fix $x'=(x_1,\dots,x_{m-1})>0$ and set
 \[
  f(t)=p(x',t).
@@ -437,10 +353,11 @@ If $\pcap(p)=0$, the assertion is immediate.  Otherwise differentiate successive
 
 \begin{theorem}[Support-sensitive permanent bound]\label{thm:support-bound}
 Let $B=(b_{ij})$ be an $n\times n$ doubly stochastic matrix.  Order its columns arbitrarily, and let $d_j$ be the number of positive entries in the $j$th ordered column.  Then
-\begin{equation}\label{eq:support-bound}
+\[
  \per(B)\ge
  \prod_{j=1}^nG\bigl(\min\{j,d_j\}\bigr).
-\end{equation}
+ \tag{3.4}\label{eq:support-bound}
+\]
 \end{theorem}
 
 \begin{proof}
@@ -458,9 +375,10 @@ Multiplying over the rows and using the column sums,
  P_B(x)\ge x_1\cdots x_n.
 \]
 Equality holds at $x_1=\cdots=x_n=1$, and therefore
-\begin{equation}\label{eq:PB-capacity}
+\[
  \pcap(P_B)=1.
-\end{equation}
+ \tag{3.5}\label{eq:PB-capacity}
+\]
 
 Set $p_n=P_B$ and recursively
 \[
@@ -468,17 +386,11 @@ Set $p_n=P_B$ and recursively
  =\left.\frac{\partial p_j}{\partial x_j}\right|_{x_j=0}
  \qquad(j=n,n-1,\dots,1).
 \]
-At stage $j$, the polynomial has degree $j$ in $j$ variables.
-Differentiation in other variables cannot increase its degree in $x_j$, so
+At stage $j$, the polynomial has degree $j$ in $j$ variables.  Differentiation in other variables cannot increase its degree in $x_j$, so
 \[
  \deg_{x_j}p_j\le\min\{j,d_j\}.
 \]
-Every intermediate capacity is positive.  Therefore $p_j$ cannot be
-independent of $x_j$, for otherwise the denominator-variable observation
-above would give $\pcap(p_j)=0$.  Thus
-$1\le\deg_{x_j}p_j\le\min\{j,d_j\}$, and all hypotheses of
-Theorem~\ref{thm:derivative-capacity} are met.  Using the monotonicity of
-$G$ and \eqref{eq:PB-capacity},
+Using the monotonicity of $G$, apply Theorem~\ref{thm:derivative-capacity} at every stage and using \eqref{eq:PB-capacity},
 \[
  p_0\ge\prod_{j=1}^nG\bigl(\min\{j,d_j\}\bigr).
 \]
@@ -489,12 +401,13 @@ The scalar $p_0$ is the coefficient of $x_1\cdots x_n$ in $P_B$, namely $\per(B)
 
 \begin{corollary}[One zero]\label{cor:one-zero}
 If a doubly stochastic $B$ has at least one zero entry, then
-\begin{equation}\label{eq:kappa}
+\[
  \per(B)\ge\kappa_n,
  \qquad
  \kappa_n:=v_{n-1}G(n-1)
  =\frac{(n-2)!(n-2)^{n-2}}{(n-1)^{2n-4}}.
-\end{equation}
+ \tag{3.6}\label{eq:kappa}
+\]
 Moreover $\kappa_n>\gamma_n$ for every $n\ge3$.
 \end{corollary}
 
@@ -518,7 +431,7 @@ Bernoulli's inequality yields
 Multiplication by $1+1/m$ gives $1+1/m^3>1$.
 \end{proof}
 
-\begin{theorem}[Best-possible rectangular-zero-block bound]\label{thm:rectangular}
+\begin{theorem}[Sharp rectangular-zero-block bound]\label{thm:rectangular}
 Let $B$ be doubly stochastic and suppose that, after row and column permutations, it contains an $a\times b$ zero block, where
 \[
  a,b\ge1,
@@ -526,28 +439,19 @@ Let $B$ be doubly stochastic and suppose that, after row and column permutations
  p:=n-a-b\ge1.
 \]
 Then
-\begin{equation}\label{eq:sharp-block}
+\[
  \per(B)\ge
  L^{\sharp}_{n,a,b}:=
  \frac{v_{n-a}v_{n-b}}{v_p}.
-\end{equation}
-The constant is best possible; equality is attained by the block-constant
-matrix displayed in the proof.  No classification of all equality cases is
-asserted here.
+ \tag{3.7}\label{eq:sharp-block}
+\]
+The bound is sharp.
 \end{theorem}
 
 \begin{proof}
 Let $C$ be the $b$ columns in the zero block and let $R$ be its $a$ rows.  In $P_B$, every variable indexed by $C$ occurs only in the $n-a$ row factors indexed by $R^c$.
 
-Differentiate successively in the $b$ variables indexed by $C$, setting
-each differentiated variable to zero.  After $k$ such differentiations,
-every surviving product-rule term has differentiated $k$ distinct row
-factors: each row factor is linear and cannot be differentiated twice.
-Consequently, the degree of the next special variable is at most $n-a-k$.
-The current capacity remains positive, so that degree is also at least one;
-otherwise the current polynomial would omit a denominator variable and have
-zero capacity.  Theorem~\ref{thm:derivative-capacity} therefore supplies the
-factor
+Differentiate successively in the $b$ variables indexed by $C$, setting each differentiated variable to zero.  After $k$ such differentiations, every surviving product-rule term has differentiated $k$ distinct row factors: each row factor is linear and cannot be differentiated twice.  Consequently, the degree of the next special variable is at most $n-a-k$.  Theorem~\ref{thm:derivative-capacity} therefore supplies the factor
 \[
  \prod_{k=0}^{b-1}G(n-a-k)
  =\prod_{j=p+1}^{n-a}G(j)
@@ -555,7 +459,7 @@ factor
 \]
 A homogeneous stable polynomial of degree $n-b$ in $n-b$ variables remains.  Corollary~\ref{cor:squarefree} supplies the additional factor $v_{n-b}$.  Since $\pcap(P_B)=1$, \eqref{eq:sharp-block} follows.
 
-To prove best-possible attainment, consider
+For sharpness, consider
 \[
  B_0=
  \begin{pmatrix}
@@ -582,13 +486,15 @@ For the middle dimensions it is convenient to record a weaker consequence with a
 
 \begin{corollary}\label{cor:weak-block}
 Suppose $1\le a\le b$ and a doubly stochastic $B$ contains an $a\times b$ zero block.  Then
-\begin{equation}\label{eq:weak-block}
+\[
  \per(B)\ge L_{n,a,b}:=v_{n-a}G(n-b)^a.
-\end{equation}
+ \tag{3.8}\label{eq:weak-block}
+\]
 In particular, a $2\times2$ zero block gives
-\begin{equation}\label{eq:two-by-two}
+\[
  \per(B)\ge v_{n-2}G(n-2)^2.
-\end{equation}
+ \tag{3.9}\label{eq:two-by-two}
+\]
 \end{corollary}
 
 \begin{proof}
@@ -601,18 +507,14 @@ Let $B$ be doubly stochastic, and let $b=(b_1,\dots,b_n)$ be any one of its colu
  s(b)=\sum_{i=1}^n\left(b_i-\frac1n\right)^2.
 \]
 Then
-\begin{equation}\label{eq:entropy-permanent}
+\[
  \per(B)\ge\gamma_n\exp\left(\frac{s(b)}2\right).
-\end{equation}
+ \tag{3.10}\label{eq:entropy-permanent}
+\]
 \end{theorem}
 
 \begin{proof}
-It is enough first to consider $0<b_i<1$.  For a general doubly stochastic
-matrix, apply the positive-case argument to
-$B_\eps=(1-\eps)B+\eps U_n$.  The entropy expression is continuous under
-$0\log0=0$, and the permanent is polynomial in the entries, so the asserted
-inequality follows by letting $\eps\downarrow0$.  Take the selected column
-to be the last one and set
+It is enough first to consider $0<b_i<1$; the general case follows by continuity.  Take the selected column to be the last one and set
 \[
  L_i(x_1,\dots,x_{n-1})=\sum_{j<n}b_{ij}x_j.
 \]
@@ -640,10 +542,11 @@ so
  \pcap(q)\ge\prod_i(1-b_i)^{1-b_i}.
 \]
 Corollary~\ref{cor:squarefree} yields
-\begin{equation}\label{eq:entropy-intermediate}
+\[
  \per(B)\ge
  v_{n-1}\prod_i(1-b_i)^{1-b_i}.
-\end{equation}
+ \tag{3.11}\label{eq:entropy-intermediate}
+\]
 
 Let $h(t)=(1-t)\log(1-t)$.  Since $h''(t)=1/(1-t)\ge1$ on $[0,1)$,
 \[
@@ -659,6 +562,9 @@ Now $\exp(nh(1/n))=G(n)$ and $v_{n-1}G(n)=\gamma_n$.  Substitution into \eqref{e
 
 
 \subsection{Complement entropy and core-marginal refinements}
+\setcounter{equation}{11}
+\renewcommand{\theequation}{3.\arabic{equation}}
+\renewcommand{\theHequation}{capacityentropy.\arabic{equation}}
 
 The column-entropy estimate retains one column of a doubly stochastic
 matrix.  The lower-dimensional boundary arguments also require the dual
@@ -729,14 +635,10 @@ Consequently,
 \begin{proof}
 It is enough first to treat the positive case.  For a general $M$, apply
 the argument to $M_\eps=(1-\eps)M+\eps U_m$ and let $\eps\downarrow0$.
-All selected-column coordinates and complementary minors are positive for
-$\eps>0$.  If $q_i(0)=0$, then $q_i(\eps)=O(\eps)$, while
-$d_i(\eps)$ is a nonzero polynomial in $\eps$; hence
-$q_i(\eps)\log d_i(\eps)=O(\eps|\log\eps|)$.  If $q_i(0)>0$, then
-$d_i(0)>0$: otherwise the left side of the positive-$\eps$ inequality would
-tend to zero, whereas its right side tends to the strictly positive number
-$v_m\exp(\Psi_m(q(0)))$.  Thus every logarithmic term has the asserted
-limit, and the product inequality passes to $\eps=0$.
+Each complementary minor is then a positive polynomial in $\eps$; if its
+limiting exponent is zero, the corresponding logarithmic contribution is
+$O(\eps|\log\eps|)$ and tends to zero.  Thus the asserted product passes
+to the limit.
 
 Take the selected column to be the last one and write
 \[
@@ -878,11 +780,9 @@ Exactly as in the column-entropy proof, two weighted AM--GM inequalities give
 Differentiate next in the remaining $b-1$ variables indexed by $C$.
 Their successive degrees are at most
 \[
- m-1,m-2,\dots,p+1.
+ m-1,m-2,\dots,p+1,
 \]
-At every stage the current capacity is positive, so the variable being
-extracted has degree at least one.  Thus the derivative-capacity theorem is
-applicable at each step and supplies
+so Theorem~\ref{thm:derivative-capacity} supplies
 $v_{m-1}/v_p$.  Square-free coefficient extraction in the remaining
 $n-b$ variables supplies $v_{n-b}$.  Therefore
 \[
@@ -893,11 +793,11 @@ $n-b$ variables supplies $v_{n-b}$.  Therefore
 Since $v_{m-1}G(m)=v_m$, this is exactly
 \eqref{eq:distinguished-column}.
 
-For a general $B$, mix it with the block-constant attaining matrix from
-Theorem~\ref{thm:rectangular}.  This preserves the prescribed zero block and
-is positive on every allowed entry.  Let the mixing parameter tend to zero;
-the permanent is polynomial in the entries and the entropy term is continuous
-under the convention $0\log0=0$.
+For a general $B$, mix it with the block-constant extremizer from
+Theorem~\ref{thm:rectangular}.  This preserves the zero block and is
+positive on every allowed entry.  Let the mixing parameter tend to zero;
+all quantities in the asserted inequality are continuous under the
+convention $0\log0=0$.
 \end{proof}
 
 We shall use the distinguished-column estimate through the following
@@ -967,6 +867,8 @@ If $p=1$, apply Theorem~\ref{thm:single-bridge-entropy} and then
 $\exp x\ge1+x$.
 \end{proof}
 
+\renewcommand{\theequation}{\arabic{equation}}
+\renewcommand{\theHequation}{\arabic{equation}}
 
 
 \section{Positive global maximizers are uniform}\label{sec:positive}
@@ -976,19 +878,21 @@ This section gives an independent proof of the interior classification.  No perm
 \subsection{Flatness under pairwise averaging}
 
 Choose two columns $u,v$ of a positive matrix $A\in K_n$.  For $t\in\mathbb R$, replace them by
-\begin{equation}\label{eq:pair-path}
+\[
  u(t)=(1-t)u+tv,
  \qquad
  v(t)=tu+(1-t)v,
-\end{equation}
+ \tag{4.1}\label{eq:pair-path}
+\]
 and leave every other column fixed.  Denote the resulting matrix by $A(t)$.
 
 \begin{lemma}[Pairwise averaging is flat at a positive maximizer]\label{lem:flat-average}
 If $A$ is a positive global maximizer of $\Phi$, then
-\begin{equation}\label{eq:flat-path}
+\[
  \Phi(A(t))=\Phi(A)
  \qquad\text{for every }t\in\mathbb R.
-\end{equation}
+ \tag{4.2}\label{eq:flat-path}
+\]
 In particular, replacing two columns by their arithmetic mean preserves the global maximum value.  The same statement holds for two rows.
 \end{lemma}
 
@@ -1028,10 +932,11 @@ and
  C_2=\sum_jv_j^2.
 \]
 Then
-\begin{equation}\label{eq:hessian}
+\[
  \left.\frac{d^2}{dt^2}\Phi(U_n+tX)\right|_{t=0}
  =-(1-c_n)(R_2+C_2)-c_nQ,
-\end{equation}
+ \tag{4.3}\label{eq:hessian}
+\]
 where
 \[
  c_n=\frac{(n-2)!}{n^{n-2}}.
@@ -1048,10 +953,11 @@ The row sums of $U_n+tX$ are $1+tu_i$.  Since $\sum_i u_i=0$,
 The column-product contribution is similarly $-C_2$.
 
 For the permanent, direct differentiation gives
-\begin{equation}\label{eq:per-second}
+\[
  \left.\frac{d^2}{dt^2}\per(U_n+tX)\right|_{t=0}
  =c_n\sum_{\substack{i\ne k\\j\ne\ell}}x_{ij}x_{k\ell}.
-\end{equation}
+ \tag{4.4}\label{eq:per-second}
+\]
 Indeed, for fixed ordered pairs $i\ne k$ and $j\ne\ell$, there are $(n-2)!$ permutations satisfying $\sigma(i)=j$ and $\sigma(k)=\ell$, while the remaining $n-2$ entries contribute $n^{-(n-2)}$.
 
 Expanding the identity
@@ -1059,10 +965,11 @@ Expanding the identity
  0=\left(\sum_{i,j}x_{ij}\right)^2
 \]
 according to whether two entries have the same row, the same column, or neither, gives
-\begin{equation}\label{eq:cross-identity}
+\[
  \sum_{\substack{i\ne k\\j\ne\ell}}x_{ij}x_{k\ell}
  =Q-R_2-C_2.
-\end{equation}
+ \tag{4.5}\label{eq:cross-identity}
+\]
 Substituting \eqref{eq:cross-identity} into \eqref{eq:per-second} proves \eqref{eq:hessian}.  Since $0<c_n\le1$ and $Q>0$ for $X\ne0$, the right side is strictly negative.
 \end{proof}
 
@@ -1071,19 +978,7 @@ The matrix $U_n$ is a strict local maximizer of $\Phi$ on $K_n$.
 \end{corollary}
 
 \begin{proof}
-For a tangent vector $X=(x_{ij})$, put
-$u_i=\sum_jx_{ij}$ and $v_j=\sum_ix_{ij}$.  Since
-$\sum_{i,j}x_{ij}=0$, one has
-$\sum_i u_i=\sum_jv_j=0$.  Direct differentiation at $U_n$ gives
-\[
- D\Phi(U_n)[X]
- =\sum_i u_i+\sum_jv_j
- -\frac{(n-1)!}{n^{n-1}}\sum_{i,j}x_{ij}=0.
-\]
-The tangent space of the affine hull of $K_n$ is finite-dimensional.  By
-Lemma~\ref{lem:hessian}, the quadratic form given by the Hessian is uniformly
-negative on its unit sphere.  The vanishing linear term and Taylor's formula
-then give a relative neighborhood $\mathcal N$ of $U_n$ in $K_n$ such that
+The tangent space of the affine hull of $K_n$ is finite-dimensional.  By Lemma~\ref{lem:hessian}, the quadratic form given by the Hessian is uniformly negative on its unit sphere.  Taylor's formula then gives a relative neighborhood $\mathcal N$ of $U_n$ in $K_n$ such that
 \[
  A\in\mathcal N,\ A\ne U_n
  \quad\Longrightarrow\quad
@@ -1103,9 +998,10 @@ Let $\bar c=n^{-1}\sum_jc_j$, which is invariant, and define
  V=\sum_j\|c_j-\bar c\|^2.
 \]
 Averaging $c_s,c_t$ decreases $V$ by
-\begin{equation}\label{eq:variance-drop}
+\[
  \frac12\|c_s-c_t\|^2.
-\end{equation}
+ \tag{4.6}\label{eq:variance-drop}
+\]
 Thus $V$ decreases to a limit $L\ge0$.
 
 Assume $L>0$.  Take a convergent subsequence of the states at the beginnings of complete cycles.  The total decrease during each selected cycle tends to zero.  Since that decrease is a finite sum of the nonnegative quantities in \eqref{eq:variance-drop}, every pair difference at the moment it is averaged tends to zero.  Passing to the limiting cycle, every averaging operation makes no change.  Since every unordered pair occurs, all limiting vectors are equal, forcing $V=0$, a contradiction.  Hence $L=0$.
@@ -1119,9 +1015,10 @@ For every $n\ge2$, every positive global maximizer of $\Phi$ on $K_n$ is $U_n$.
 Let $A$ be a positive global maximizer.  Repeatedly average pairs of columns in a cyclic schedule containing every unordered pair.  By Lemma~\ref{lem:flat-average}, every matrix in the sequence is a positive global maximizer with the same value as $A$.  By Lemma~\ref{lem:averaging-convergence}, the sequence converges to a positive matrix $C$ with all columns equal.  Continuity shows that $C$ is also a global maximizer.
 
 Now cyclically average pairs of rows of $C$.  Every matrix remains a positive global maximizer, and the sequence converges to $U_n$: the equal columns of $C$ each have sum one, and row averaging preserves every column sum.  Therefore
-\begin{equation}\label{eq:U-global}
+\[
  \Phi(U_n)=\max_{K_n}\Phi.
-\end{equation}
+ \tag{4.7}\label{eq:U-global}
+\]
 
 Let $Y_m$ be the row-averaging sequence converging to $U_n$.  Corollary~\ref{cor:strict-local} implies that $Y_m=U_n$ for all sufficiently large $m$, because every $Y_m$ has the value $\Phi(U_n)$.
 
@@ -1137,21 +1034,23 @@ Theorem~\ref{thm:positive-maximizer} reproduces the positive-support conclusion 
 \section{Joint deficits, subset sums, and Hall dilation}\label{sec:hall}
 
 Let $A$ be a global maximizer of $\Phi$ on $K_n$.  Since $U_n$ is feasible,
-\begin{equation}\label{eq:near-max}
+\[
  \Phi(A)\ge \Phi(U_n)=2-\gamma_n.
-\end{equation}
+ \tag{5.1}\label{eq:near-max}
+\]
 Write
-\begin{equation}\label{eq:deficits}
+\[
  \prod_i r_i=1-\rho,
  \qquad
  \prod_jc_j=1-\sigma,
  \qquad
  \per(A)=\gamma_n-\delta.
-\end{equation}
+ \tag{5.2}\label{eq:deficits}
+\]
 
 \begin{lemma}[Joint deficit budget]\label{lem:joint-deficit}
 The quantities in \eqref{eq:deficits} satisfy
-\begin{equation}\label{eq:joint-budget}
+\[
  0\le\delta\le\gamma_n,
  \qquad
  \rho\ge0,
@@ -1159,7 +1058,8 @@ The quantities in \eqref{eq:deficits} satisfy
  \sigma\ge0,
  \qquad
  \rho+\sigma\le\delta.
-\end{equation}
+ \tag{5.3}\label{eq:joint-budget}
+\]
 In particular, all row sums and column sums of $A$ are positive.
 \end{lemma}
 
@@ -1192,15 +1092,17 @@ For a nonnegative matrix $S$ and index sets $I,J\subseteq[n]$, write
 
 \begin{lemma}[Hall domination]\label{lem:hall}
 A nonnegative $n\times n$ matrix $S$ dominates a doubly stochastic matrix entrywise if and only if
-\begin{equation}\label{eq:hall-condition}
+\[
  s_S(I,J)\ge |I|+|J|-n
-\end{equation}
+ \tag{5.4}\label{eq:hall-condition}
+\]
 for every $I,J\subseteq[n]$ with $|I|+|J|>n$.
 
 If equality holds in \eqref{eq:hall-condition} for some $I,J$, then every doubly stochastic $B\le S$ satisfies
-\begin{equation}\label{eq:forced-block}
+\[
  B[I^c,J^c]=0.
-\end{equation}
+ \tag{5.5}\label{eq:forced-block}
+\]
 \end{lemma}
 
 \begin{proof}
@@ -1215,9 +1117,10 @@ Let
  p=|I|+|J|-n>0.
 \]
 Every doubly stochastic $B$ satisfies
-\begin{equation}\label{eq:DS-cut-identity}
+\[
  s_B(I,J)-s_B(I^c,J^c)=p.
-\end{equation}
+ \tag{5.6}\label{eq:DS-cut-identity}
+\]
 If $s_S(I,J)=p$ and $B\le S$, then $s_B(I,J)\le p$.  Equation~\eqref{eq:DS-cut-identity} and nonnegativity give the reverse inequality, so equality holds and $s_B(I^c,J^c)=0$.
 \end{proof}
 
@@ -1228,49 +1131,48 @@ For $0<p,q<1$, let
  D(p\Vert q)=p\log\frac pq+(1-p)\log\frac{1-p}{1-q}.
 \]
 We shall use the integral identity
-\begin{equation}\label{eq:KL-integral}
- D(p\Vert q)=\int_p^q\frac{u-p}{u(1-u)}\,du.
-\end{equation}
-It follows by differentiating with respect to $q$.  In every subset-excess
-application below one has $q\ge p$.  On that oriented interval the integrand
-is nonnegative, and $u(1-u)\le1/4$ gives
 \[
- D(p\Vert q)\ge4\int_p^q(u-p)\,du=2(q-p)^2.
+ D(p\Vert q)=\int_p^q\frac{u-p}{u(1-u)}\,du.
+ \tag{5.7}\label{eq:KL-integral}
 \]
-The case $q<p$ follows by the same argument after reversing the limits (or
-by symmetry), so the binary Pinsker bound is
-\begin{equation}\label{eq:pinsker}
+It follows by differentiating with respect to $q$.  Since $u(1-u)\le1/4$, \eqref{eq:KL-integral} also gives the binary Pinsker bound
+\[
  D(p\Vert q)\ge2(p-q)^2.
-\end{equation}
+ \tag{5.8}\label{eq:pinsker}
+\]
 
 For $7\le n\le14$, define $\eta_n$ by
-\begin{equation}\label{eq:eta-table}
+\[
 \begin{array}{c|cccccccc}
  n&7&8&9&10&11&12&13&14\\ \hline
  \eta_n&1/47&1/80&1/135&1/230&1/350&1/650&1/1100&1/1800.
 \end{array}
-\end{equation}
+\tag{5.9}\label{eq:eta-table}
+\]
 For $0\le k\le n-1$, define
 \[
  \alpha_{n,0}=0
 \]
 and, for $k\ge1$,
-\begin{equation}\label{eq:alpha-mid}
+\[
  \alpha_{n,k}=
  \begin{cases}
   2n\left(\dfrac{k}{n}+\eta_n\right)
      \left(1-\dfrac{k}{n}-\eta_n\right),&2k<n,\\[3mm]
   \dfrac{2k(n-k)}n,&2k\ge n.
  \end{cases}
-\end{equation}
+ \tag{5.10}\label{eq:alpha-mid}
+\]
 The exact arithmetic in Appendix~\ref{app:certificates} verifies
-\begin{equation}\label{eq:eta-localization}
+\[
  \eta_n^2>\frac{\gamma_n}{2n(1-\gamma_n)}
-\end{equation}
+ \tag{5.11}\label{eq:eta-localization}
+\]
 and
-\begin{equation}\label{eq:eta-half}
+\[
  \frac{\lfloor(n-1)/2\rfloor}{n}+\eta_n<\frac12
-\end{equation}
+ \tag{5.12}\label{eq:eta-half}
+\]
 for $7\le n\le14$.
 
 \begin{lemma}[Subset excess, dimensions $7$ through $14$]\label{lem:subset-mid}
@@ -1280,20 +1182,22 @@ Let $7\le n\le14$.  If $E$ is a set of $k$ rows, $1\le k\le n-1$, and
  \qquad \eps>0,
 \]
 then
-\begin{equation}\label{eq:subset-mid}
+\[
  \eps^2\le\frac{\alpha_{n,k}\rho}{1-\delta}.
-\end{equation}
+ \tag{5.13}\label{eq:subset-mid}
+\]
 The analogous estimate holds for column subsets, with $\sigma$ in place of $\rho$.
 \end{lemma}
 
 \begin{proof}
 AM--GM applied separately on $E$ and $E^c$ gives
-\begin{equation}\label{eq:subset-AMGM}
+\[
  1-\rho
  \le
  \left(1+\frac{\eps}{k}\right)^k
  \left(1-\frac{\eps}{n-k}\right)^{n-k}.
-\end{equation}
+ \tag{5.14}\label{eq:subset-AMGM}
+\]
 Put
 \[
  p=\frac{k}{n},
@@ -1301,17 +1205,19 @@ Put
  q=\frac{k+\eps}{n}.
 \]
 Taking logarithms in \eqref{eq:subset-AMGM},
-\begin{equation}\label{eq:KL-upper}
+\[
  nD(p\Vert q)\le-\log(1-\rho)
  \le\frac{\rho}{1-\rho}
  \le\frac{\rho}{1-\delta}.
-\end{equation}
+ \tag{5.15}\label{eq:KL-upper}
+\]
 Pinsker's bound and Lemma~\ref{lem:joint-deficit} imply
-\begin{equation}\label{eq:q-localized}
+\[
  (q-p)^2
  \le\frac{\gamma_n}{2n(1-\gamma_n)}
  <\eta_n^2.
-\end{equation}
+ \tag{5.16}\label{eq:q-localized}
+\]
 
 If $p<1/2$, then \eqref{eq:eta-half} and \eqref{eq:q-localized} imply $q<p+\eta_n<1/2$.  Hence
 \[
@@ -1329,13 +1235,14 @@ If $p\ge1/2$, then $u(1-u)\le p(1-p)$ for $u\in[p,q]$, giving the same conclusio
 \end{proof}
 
 For $n=15$, a sharper singleton constant is needed.  Set
-\begin{equation}\label{eq:alpha15}
+\[
  \alpha_{15,0}=0,
  \qquad
  \alpha_{15,1}=\frac{195}{98},
  \qquad
  \alpha_{15,k}=\frac{15}{2}\quad(2\le k\le14).
-\end{equation}
+ \tag{5.17}\label{eq:alpha15}
+\]
 
 \begin{lemma}[Subset excess in dimension $15$]\label{lem:subset15}
 The conclusion of Lemma~\ref{lem:subset-mid} holds for $n=15$ with the constants in \eqref{eq:alpha15}.
@@ -1372,7 +1279,7 @@ Combining this with \eqref{eq:KL-upper} proves
 \subsection{The critical Hall deficit}
 
 Define
-\begin{equation}\label{eq:tau}
+\[
  \tau=
  \max\left\{
  0,
@@ -1381,32 +1288,37 @@ Define
  1-\frac{s_A(I,J)}{|I|+|J|-n}
  \right)
  \right\}.
-\end{equation}
+ \tag{5.18}\label{eq:tau}
+\]
 Assume $\tau>0$, and choose a critical pair $I,J$.  Put
-\begin{equation}\label{eq:abp}
+\[
  a=|I^c|,
  \qquad
  b=|J^c|,
  \qquad
  p=n-a-b\ge1.
-\end{equation}
+ \tag{5.19}\label{eq:abp}
+\]
 
 \begin{lemma}[Hall-deficit estimate]\label{lem:hall-deficit}
 With the constants $\alpha_{n,k}$ defined above,
-\begin{equation}\label{eq:tau-bound}
+\[
  \tau^2\le c_{n,a,b}\frac{\delta}{1-\delta},
  \qquad
  c_{n,a,b}=
  \frac{\alpha_{n,a}+\alpha_{n,b}}{p^2}.
-\end{equation}
+ \tag{5.20}\label{eq:tau-bound}
+\]
 Whenever the right side is less than one, the matrix
-\begin{equation}\label{eq:S-dilation}
+\[
  S=\frac{A}{1-\tau}
-\end{equation}
+ \tag{5.21}\label{eq:S-dilation}
+\]
 dominates a doubly stochastic matrix $B$, and every such $B$ satisfies
-\begin{equation}\label{eq:B-block}
+\[
  B[I^c,J^c]=0.
-\end{equation}
+ \tag{5.22}\label{eq:B-block}
+\]
 Every zero entry of $A$ is also a zero entry of $B$.
 \end{lemma}
 
@@ -1424,9 +1336,10 @@ Inclusion--exclusion gives
  s_A(I,J)=p-e-f+x.
 \]
 Criticality therefore implies
-\begin{equation}\label{eq:critical-excess}
+\[
  \tau p=e+f-x\le e_++f_+.
-\end{equation}
+ \tag{5.23}\label{eq:critical-excess}
+\]
 By the subset estimates,
 \[
  e_+^2\le\frac{\alpha_{n,a}\rho}{1-\delta},
@@ -1450,37 +1363,6 @@ If $\tau=0$, Lemma~\ref{lem:hall} gives a doubly stochastic $B\le A$.  Since bot
 \]
 contrary to Lemma~\ref{lem:joint-deficit}.  Hence every boundary maximizer must have $\tau>0$.
 
-\subsection{A common normalized block-variation identity}
-The stationarity identities used in Sections~\ref{sec:mid-high},
-\ref{sec:low}, \ref{sec:n7}, and \ref{sec:n6} are instances of the same
-calculation.  Let $E\subseteq[n]\times[n]$ be a set of entries of total mass
-$m_E$, let
-\[
- e_i=\sum_{j:(i,j)\in E}a_{ij},\qquad
- f_j=\sum_{i:(i,j)\in E}a_{ij},
-\]
-and, for a permutation $\sigma$, let
-$k_E(\sigma)=|\{i:(i,\sigma(i))\in E\}|$.  Multiply the entries in $E$ by
-$t$ and then multiply the whole matrix by
-\[
- \lambda(t)=\frac{n}{n+(t-1)m_E}
-\]
-so that the total mass remains $n$.  At a global maximizer, differentiation
-at $t=1$ gives
-\begin{equation}\label{eq:normalized-block-variation}
- 0=
- R\sum_i\frac{e_i}{r_i}
- +C\sum_j\frac{f_j}{c_j}
- -\sum_{\sigma\in S_n}k_E(\sigma)
-    \prod_i a_{i,\sigma(i)}
- -m_E\Phi(A),
-\end{equation}
-where $R=\prod_i r_i$ and $C=\prod_jc_j$.  Indeed, the first three terms
-are the derivative before normalization, while homogeneity of degree $n$
-and $n\lambda'(1)=-m_E$ give the last term.  Each later stationarity lemma
-specifies $E$, its row and column masses, and the matching count
-$k_E(\sigma)$; thus no normalization factor is implicit.
-
 \subsection{Scalar exclusion lemmas}
 
 \begin{lemma}[First-order scalar criterion]\label{lem:first-order}
@@ -1495,17 +1377,19 @@ Suppose
  0\le\tau<1.
 \]
 Then
-\begin{equation}\label{eq:first-margin}
+\[
  L(1-\tau)^n-(\gamma_n-\delta)
  \ge
  M_n^{(1)}(L,c),
-\end{equation}
+ \tag{5.24}\label{eq:first-margin}
+\]
 where
-\begin{equation}\label{eq:M1}
+\[
  M_n^{(1)}(L,c)
  =L-\gamma_n-
  \frac{n^2cL^2}{4(1-\gamma_n)}.
-\end{equation}
+ \tag{5.25}\label{eq:M1}
+\]
 In particular, $M_n^{(1)}(L,c)>0$ contradicts
 \[
  \per(A)=\gamma_n-\delta
@@ -1528,23 +1412,26 @@ Complete the square in $\sqrt\delta$.
 
 \begin{lemma}[Second-order scalar criterion]\label{lem:second-order}
 Suppose, in addition, that $0\le\tau\le T$ and
-\begin{equation}\label{eq:quadratic-binomial}
+\[
  (1-t)^n\ge1-nt+\lambda t^2
  \qquad(0\le t\le T).
-\end{equation}
+ \tag{5.26}\label{eq:quadratic-binomial}
+\]
 Then
-\begin{equation}\label{eq:second-margin}
+\[
  L(1-\tau)^n-(\gamma_n-\delta)
  \ge
  M_n^{(2)}(L,c),
-\end{equation}
+ \tag{5.27}\label{eq:second-margin}
+\]
 where
-\begin{equation}\label{eq:M2}
+\[
  M_n^{(2)}(L,c)
  =L-\gamma_n-
  \frac{n^2L^2}
  {4\left(\lambda L+(1-\gamma_n)/c\right)}.
-\end{equation}
+ \tag{5.28}\label{eq:M2}
+\]
 \end{lemma}
 
 \begin{proof}
@@ -1575,20 +1462,22 @@ For $11\le n\le14$, let
  \{(a,b):0\le a\le b,\ a+b\le n-1\}.
 \]
 Transposition permits the restriction $a\le b$.  For $(a,b)\in\mathcal P_n$, put
-\begin{equation}\label{eq:mid-c}
+\[
  p=n-a-b,
  \qquad
  c_{n,a,b}=
  \frac{\alpha_{n,a}+\alpha_{n,b}}{p^2},
-\end{equation}
+ \tag{6.1}\label{eq:mid-c}
+\]
 and
-\begin{equation}\label{eq:mid-L}
+\[
  \Lambda_{n,a,b}=
  \begin{cases}
   \kappa_n,&a=0,\\[1mm]
   v_{n-a}G(n-b)^a,&a\ge1.
  \end{cases}
-\end{equation}
+ \tag{6.2}\label{eq:mid-L}
+\]
 If $a=0$, the forced Hall block is empty, but $B$ inherits a zero from $A$, so Corollary~\ref{cor:one-zero} gives the first line.  If $a\ge1$, Corollary~\ref{cor:weak-block} gives the second.
 
 The constants in \eqref{eq:alpha-mid} satisfy $\alpha_{n,k}\le n/2$: in the first branch this is $2n x(1-x)\le n/2$, and in the second it is $2k(n-k)/n\le n/2$.  Hence $c_{n,a,b}\le n$.  Moreover
@@ -1611,17 +1500,25 @@ For the indicated sets of pairs,
 \]
 More precisely, the minimum values are as follows:
 \begin{equation}\label{eq:mid-margin-table}
+\resizebox{0.98\textwidth}{!}{$%
 \begin{array}{c|c|c}
- n&\text{minimizing pair}&\text{minimum (decimal for scale)}\\ \hline
- 11&(0,9)&1.919523\times10^{-7}\\
- 12&(0,11)&2.454520\times10^{-8}\\
- 13&(0,12)&3.656538\times10^{-8}\\
- 14&(0,13)&1.708143\times10^{-8}.
+ n&\text{minimizing pair}&\text{exact minimum}\\ \hline
+ 11&(0,9)&
+ \dfrac{1260916230510486033100687951530284366056569069}
+ {6568905011778983402353515625000000000000000000000000}\\[4mm]
+ 12&(0,11)&
+ \dfrac{1296568134644485856101383130605756547126510510475}
+ {52823701911706625804697555859966244866493587958274637824}\\[4mm]
+ 13&(0,12)&
+ \dfrac{2344634926829311765047551592181776557728012393742935099475}
+ {64121715613888291470979410224708337217950361958912179251651280896}\\[4mm]
+ 14&(0,13)&
+ \dfrac{4746695979316977001752598428103553549748722442212199016699590578325}
+ {277886267525954703535897576147309905022601205806915212282941432903903914488}.
 \end{array}
+$}
+\tag{6.3}
 \end{equation}
-The decimal values in this and later summary tables are only readability
-aids.  The proof compares the exact fractions recorded by the checker and in
-\texttt{verification\_manifest.json}.
 For $n=11$, the pair $(0,10)$ is excluded from this proposition and is handled separately below.
 \end{proposition}
 
@@ -1635,22 +1532,25 @@ All critical Hall pairs in dimensions $12,13,14$ are impossible.  In dimension $
 
 \begin{proof}
 For a critical pair, Lemma~\ref{lem:hall-deficit} gives $B$ and the bound \eqref{eq:tau-bound}; the appropriate permanent estimate is \eqref{eq:mid-L}.  Proposition~\ref{prop:mid-margins} and Lemma~\ref{lem:first-order} contradict \eqref{eq:per-comparison}, where
-\begin{equation}\label{eq:per-comparison}
+\[
  \per(A)=(1-\tau)^n\per(S)
  \ge(1-\tau)^n\per(B).
-\end{equation}
+ \tag{6.4}\label{eq:per-comparison}
+\]
 \end{proof}
 
 \subsection{The exceptional deficient column in dimension eleven}
 
 Assume $n=11$ and $(a,b)=(0,10)$.  Then $I=[11]$, while $J$ consists of one column, say column $j$, and
-\begin{equation}\label{eq:deficient-column}
+\[
  c_j=1-\tau.
-\end{equation}
+ \tag{6.5}\label{eq:deficient-column}
+\]
 The complementary set of ten columns has total sum $10+\tau$.  Lemma~\ref{lem:subset-mid} gives
-\begin{equation}\label{eq:n11-column}
+\[
  \tau^2\le\frac{\alpha_{11,10}\sigma}{1-\delta}.
-\end{equation}
+ \tag{6.6}\label{eq:n11-column}
+\]
 We obtain a second use of $\tau$ from stationarity.
 
 \begin{lemma}[Deficient-column stationarity]\label{lem:n11-stationarity}
@@ -1659,32 +1559,30 @@ Let $A$ be a global maximizer in dimension $11$.  Suppose its row sums are posit
  d=\max_i(r_i-1)_+,
 \]
 then
-\begin{equation}\label{eq:n11-d}
+\[
  d\ge(1-\gamma_{11})\tau.
-\end{equation}
+ \tag{6.7}\label{eq:n11-d}
+\]
 \end{lemma}
 
 \begin{proof}
-Apply the normalized block-variation identity
-\eqref{eq:normalized-block-variation} to the deficient column.  Here the
-block mass is $m_E=1-\tau$, its row masses are $a_{ij}$, its only nonzero
-column mass is $1-\tau$, and every permanent monomial uses exactly one
-entry of that column.  With
+Multiply the deficient column by a parameter $t$ and rescale the whole matrix so that the total sum remains $11$.  Let
 \[
  u=\sum_i\frac{a_{ij}}{r_i},
  \qquad
- K=\frac{\Phi(A)}{\prod_i r_i},
+ K=\frac{\Phi(A)}{\prod_i r_i}.
 \]
-identity \eqref{eq:normalized-block-variation} becomes
+Differentiating at $t=1$ gives
 \[
  \left(\prod_i r_i\right)u
  +\prod_jc_j-\per(A)
  -(1-\tau)\Phi(A)=0.
 \]
 Since $\prod_jc_j-\per(A)=\Phi(A)-\prod_i r_i$, this simplifies to
-\begin{equation}\label{eq:n11-u}
+\[
  u=1-K\tau.
-\end{equation}
+ \tag{6.8}\label{eq:n11-u}
+\]
 Now put $w_i=a_{ij}/r_i$.  Then $w_i\ge0$, $\sum_iw_i=u$, and
 \[
  (1-\tau)-u
@@ -1701,21 +1599,24 @@ Finally, $\Phi(A)\ge2-\gamma_{11}$ and $\prod_i r_i\le1$, so $K\ge2-\gamma_{11}$
 \end{proof}
 
 Applying Lemma~\ref{lem:subset-mid} to a singleton row attaining $d$ and using Lemma~\ref{lem:n11-stationarity},
-\begin{equation}\label{eq:n11-rho}
+\[
  \rho\ge
  (1-\delta)\frac{(1-\gamma_{11})^2}{\alpha_{11,1}}\tau^2.
-\end{equation}
+ \tag{6.9}\label{eq:n11-rho}
+\]
 Equation~\eqref{eq:n11-column} gives
-\begin{equation}\label{eq:n11-sigma}
+\[
  \sigma\ge
  (1-\delta)\frac1{\alpha_{11,10}}\tau^2.
-\end{equation}
+ \tag{6.10}\label{eq:n11-sigma}
+\]
 Together with $\rho+\sigma\le\delta$,
-\begin{equation}\label{eq:n11-cstar-bound}
+\[
  \tau^2\le c_*\frac{\delta}{1-\delta},
-\end{equation}
+ \tag{6.11}\label{eq:n11-cstar-bound}
+\]
 where
-\begin{equation}\label{eq:n11-cstar}
+\[
  c_*=
  \left(
  \frac{(1-\gamma_{11})^2}{\alpha_{11,1}}
@@ -1723,26 +1624,22 @@ where
  \right)^{-1}
  =\frac{1540632960668022501507138780}
  {1671236290061169784540151329}.
-\end{equation}
+ \tag{6.12}\label{eq:n11-cstar}
+\]
 Exact subtraction gives
-\begin{equation}\label{eq:n11-cstar-gap}
+\[
  \frac{93}{100}-c_*
  =\frac{1361678908886539811520195597}
  {167123629006116978454015132900}>0.
-\end{equation}
-Since $B$ inherits a zero, $\per(B)\ge\kappa_{11}$.  For fixed $L>0$,
-formula~\eqref{eq:M1} shows that $M_n^{(1)}(L,c)$ is strictly decreasing in
-$c$.  Hence the certified upper bound $c_*<93/100$ permits the larger,
-rationally convenient value $93/100$.  Finally,
-\begin{equation}\label{eq:n11-special-margin}
- M_{11}^{(1)}\left(\kappa_{11},\frac{93}{100}\right)>0,
- \qquad
+ \tag{6.13}\label{eq:n11-cstar-gap}
+\]
+Since $B$ inherits a zero, $\per(B)\ge\kappa_{11}$.  Finally,
+\[
  M_{11}^{(1)}\left(\kappa_{11},\frac{93}{100}\right)
- \approx1.250887\times10^{-7}.
-\end{equation}
-The exact numerator and denominator are recorded literally in the
-machine-readable verification manifest and checked by the standard-library
-verifier.
+ =\frac{82169554295122875121722420238561072941763350843}
+ {656890501177898340235351562500000000000000000000000000}>0.
+ \tag{6.14}\label{eq:n11-special-margin}
+\]
 Lemma~\ref{lem:first-order} gives a contradiction.  Therefore dimension $11$ has no boundary global maximizer.
 
 \subsection{Dimension fifteen: a thin--thick dichotomy}
@@ -1768,41 +1665,48 @@ For a thin pair, \eqref{eq:alpha15} gives
  =\frac{465}{49}.
 \]
 Since $p\ge1$,
-\begin{equation}\label{eq:n15-thin-tau}
+\[
  \tau^2\le\frac{465}{49}\frac{\delta}{1-\delta}.
-\end{equation}
+ \tag{6.15}\label{eq:n15-thin-tau}
+\]
 The matrix $B$ inherits a zero, so
-\begin{equation}\label{eq:mu1}
+\[
  \per(B)\ge\mu_1,
  \qquad
  \mu_1:=v_{14}G(14)
  =\frac{13!\,13^{13}}{14^{26}}.
-\end{equation}
+ \tag{6.16}\label{eq:mu1}
+\]
 
 For a thick pair, $a,b\ge2$, so $B$ contains a $2\times2$ zero block.  Thus
-\begin{equation}\label{eq:mu2}
+\[
  \per(B)\ge\mu_2,
  \qquad
  \mu_2:=v_{13}G(13)^2
  =\frac{13!\,12^{24}}{13^{37}}.
-\end{equation}
+ \tag{6.17}\label{eq:mu2}
+\]
 Also
-\begin{equation}\label{eq:n15-thick-tau}
+\[
  \tau^2\le15\frac{\delta}{1-\delta}.
-\end{equation}
+ \tag{6.18}\label{eq:n15-thick-tau}
+\]
 The exact comparisons
-\begin{equation}\label{eq:n15-gamma-bounds}
+\[
  \gamma_{15}<\frac1{300000},
  \qquad
  \gamma_{15}<\frac{29863}{10^{10}},
-\end{equation}
-\begin{equation}\label{eq:n15-mu1-bounds}
+ \tag{6.19}\label{eq:n15-gamma-bounds}
+\]
+\[
  \frac{29937}{10^{10}}<\mu_1<\frac3{10^6},
-\end{equation}
+ \tag{6.20}\label{eq:n15-mu1-bounds}
+\]
 and
-\begin{equation}\label{eq:n15-mu2-bounds}
+\[
  \frac{301}{10^8}<\mu_2<\frac4{10^6}
-\end{equation}
+ \tag{6.21}\label{eq:n15-mu2-bounds}
+\]
 are certified by the six positive integers listed in Appendix~\ref{app:certificates}.
 
 For the thin case,
@@ -1825,11 +1729,12 @@ The final strict inequality follows after clearing denominators; its integer gap
  58\,195\,000\,000\,000\,000>0.
 \]
 Therefore
-\begin{equation}\label{eq:n15-thin-margin}
+\[
  M_{15}^{(1)}\left(\mu_1,\frac{465}{49}\right)
  >\frac{74}{10^{10}}-\frac5{10^9}
  =\frac{24}{10^{10}}>0.
-\end{equation}
+ \tag{6.22}\label{eq:n15-thin-margin}
+\]
 
 For the thick case, $\gamma_{15}<299/10^8$, so
 \[
@@ -1847,11 +1752,12 @@ where the final cleared-denominator gap is
  149\,986\,000\,000\,000\,000>0.
 \]
 Hence
-\begin{equation}\label{eq:n15-thick-margin}
+\[
  M_{15}^{(1)}(\mu_2,15)
  >\frac2{10^8}-\frac{14}{10^9}
  =\frac6{10^9}>0.
-\end{equation}
+ \tag{6.23}\label{eq:n15-thick-margin}
+\]
 Both cases contradict Lemma~\ref{lem:first-order}.  Thus dimension $15$ has no boundary global maximizer.
 
 \begin{theorem}[Boundary exclusion for $11\le n\le15$]\label{thm:boundary-mid-high}
@@ -1865,32 +1771,36 @@ If $\tau=0$, the contradiction following Lemma~\ref{lem:hall-deficit} applies.  
 \section{Boundary exclusion in dimensions eight, nine, and ten}\label{sec:low}
 
 For $n\in\{8,9,10\}$, define
-\begin{equation}\label{eq:low-parameters}
+\[
 \begin{array}{c|ccc}
  n&8&9&10\\ \hline
  T_n&1/7&1/10&1/10\\
  \lambda_n&20&27&33.
 \end{array}
-\end{equation}
+\tag{7.1}\label{eq:low-parameters}
+\]
 As before, let $A$ be a hypothetical boundary global maximizer.  The constants $\alpha_{n,k}$ satisfy $\alpha_{n,k}\le n/2$, so Lemma~\ref{lem:hall-deficit} gives
-\begin{equation}\label{eq:low-tau-range}
+\[
  \tau^2\le\frac{n\gamma_n}{1-\gamma_n}<T_n^2.
-\end{equation}
+ \tag{7.2}\label{eq:low-tau-range}
+\]
 The exact positive gaps in \eqref{eq:low-tau-range} are
-\begin{equation}\label{eq:tau-range-gaps}
+\[
 \begin{array}{c|c}
  n&T_n^2-\dfrac{n\gamma_n}{1-\gamma_n}\\ \hline
  8&\dfrac{7277}{6407093}\\[2mm]
  9&\dfrac{746489}{477848900}\\[2mm]
  10&\dfrac{994933}{156193300}.
 \end{array}
-\end{equation}
+\tag{7.3}\label{eq:tau-range-gaps}
+\]
 
 \begin{lemma}[Quadratic binomial bounds]\label{lem:binomial-low}
 For $n\in\{8,9,10\}$ and $0\le t\le T_n$,
-\begin{equation}\label{eq:low-binomial}
+\[
  (1-t)^n\ge1-nt+\lambda_nt^2.
-\end{equation}
+ \tag{7.4}\label{eq:low-binomial}
+\]
 \end{lemma}
 
 \begin{proof}
@@ -1946,14 +1856,21 @@ one has
  M_n^{(2)}(L^{\sharp}_{n,a,b},c_{n,a,b})>0.
 \]
 The minimum occurs at $(a,b)=(1,1)$ and equals
-\begin{equation}\label{eq:low-two-sided-table}
+\[
 \begin{array}{c|c}
- n&\text{minimum (decimal for scale)}\\ \hline
- 8&1.379790\times10^{-5}\\
- 9&5.710428\times10^{-6}\\
- 10&1.982111\times10^{-6}.
+ n&\text{exact minimum}\\ \hline
+ 8&
+ \dfrac{4139711814785404757611563}
+ {300024713494271812137373270016}\\[4mm]
+ 9&
+ \dfrac{3087705658660821267020074863425}
+ {540713498338770121894081281002569728}\\[4mm]
+ 10&
+ \dfrac{36184754863040830496579778359572513127}
+ {18255668299923283084495152136002059873437500}.
 \end{array}
-\end{equation}
+\tag{7.5}\label{eq:low-two-sided-table}
+\]
 \end{proposition}
 
 \begin{proof}
@@ -1964,27 +1881,27 @@ Thus no two-sided critical pair can occur.
 
 \subsection{One-sided cuts and stationarity}
 
-It remains to consider a one-sided critical pair.  After transposition,
-assume $a=0$.  The case $b=0$ would give $I=J=[n]$ and Hall deficit zero,
-so a critical pair with $\tau>0$ necessarily has
-$1\le b\le n-1$.  Thus $I=[n]$ and $J$ is a set of
+It remains to consider a one-sided critical pair.  After transposition, assume $a=0$.  Then $I=[n]$ and $J$ is a set of
 \[
  p=n-b
 \]
 columns satisfying
-\begin{equation}\label{eq:one-sided-mass}
+\[
  \sum_{j\in J}c_j=p(1-\tau).
-\end{equation}
+ \tag{7.6}\label{eq:one-sided-mass}
+\]
 The corresponding columns of $S=A/(1-\tau)$ have total sum $p$.  Since $B\le S$ is doubly stochastic, those same $p$ columns of $B$ also have total sum $p$.  Hence entrywise saturation holds:
-\begin{equation}\label{eq:saturation}
+\[
  B[:,J]=S[:,J].
-\end{equation}
+ \tag{7.7}\label{eq:saturation}
+\]
 Define
-\begin{equation}\label{eq:beta}
+\[
  m_i=\sum_{j\in J}b_{ij},
  \qquad
  \beta_i=\frac{m_i}{p}.
-\end{equation}
+ \tag{7.8}\label{eq:beta}
+\]
 Then $\beta=(\beta_i)$ is a probability vector.
 
 \begin{lemma}[One-sided stationarity identity]\label{lem:one-sided-stationarity}
@@ -1997,30 +1914,34 @@ and
  D=1-\sum_i\frac{\beta_i}{r_i}.
 \]
 Then
-\begin{equation}\label{eq:D-lower}
+\[
  D=\frac{(K-1)\tau}{1-\tau}
  \ge\frac{(1-\gamma_n)\tau}{1-\tau}>0.
-\end{equation}
+ \tag{7.9}\label{eq:D-lower}
+\]
 \end{lemma}
 
 \begin{proof}
-Apply \eqref{eq:normalized-block-variation} to the $p$ columns in $J$.
-Their total mass is $m_E=p(1-\tau)$; the row masses are
-$\sum_{j\in J}a_{ij}$; each selected column has full column mass; and every
-permanent monomial uses exactly $p$ selected entries.  With
+Multiply all columns in $J$ by a parameter $t$, and then multiply the whole matrix by
 \[
- u=\sum_i\frac{\sum_{j\in J}a_{ij}}{r_i},
+ \lambda(t)=
+ \frac{n}{n+(t-1)p(1-\tau)}
 \]
-the general identity becomes
+so that the total entry sum remains $n$.  This is a two-sided feasible curve for $t$ near one.  Let
+\[
+ u=\sum_i\frac{\sum_{j\in J}a_{ij}}{r_i}.
+\]
+Before the global normalization, the derivative of the row-product term is $(\prod_i r_i)u$.  The product of column sums and the permanent each acquire a factor $t^p$, so their derivatives are $p\prod_jc_j$ and $p\per(A)$.  The derivative of the global factor $\lambda(t)^n$ is $-p(1-\tau)$.  Stationarity at $t=1$ therefore gives
 \[
  \left(\prod_i r_i\right)u
  +p\left(\prod_jc_j-\per(A)\right)
  -p(1-\tau)\Phi(A)=0.
 \]
 Using $\prod_jc_j-\per(A)=\Phi(A)-\prod_i r_i$,
-\begin{equation}\label{eq:one-sided-u}
+\[
  u=p-pK\tau.
-\end{equation}
+ \tag{7.10}\label{eq:one-sided-u}
+\]
 By saturation,
 \[
  \sum_{j\in J}a_{ij}=(1-\tau)m_i.
@@ -2039,33 +1960,31 @@ because $\prod_i r_i\le1$.
 \subsection{Row-product energy}
 
 Define
-\begin{equation}\label{eq:d0}
+\[
  d_0^2=\frac{n\gamma_n}{2(1-\gamma_n)}.
-\end{equation}
+ \tag{7.11}\label{eq:d0}
+\]
 For $n=8,9,10$, exact arithmetic gives $d_0<1/10$; the positive gaps are
-\begin{equation}\label{eq:d0-gaps}
+\[
 \begin{array}{c|c}
  n&\dfrac1{100}-d_0^2\\ \hline
  8&\dfrac{4757}{13075700}\\[2mm]
  9&\dfrac{2762489}{477848900}\\[2mm]
  10&\dfrac{1278433}{156193300}.
 \end{array}
-\end{equation}
+\tag{7.12}\label{eq:d0-gaps}
+\]
 
 \begin{lemma}[Row-product energy]\label{lem:row-energy}
 For $n\in\{8,9,10\}$, put
 \[
- y_i=1-\frac1{r_i},
- \qquad
- C_n=\frac{(1-\gamma_n)(1-d_0)^2}{2}.
+ y_i=1-\frac1{r_i}.
 \]
 Then
-\begin{equation}\label{eq:row-energy}
- \rho\ge C_n\sum_i y_i^2,
- \qquad C_n>\frac25.
-\end{equation}
-In particular, $\rho>\frac25\sum_i y_i^2$ whenever
-$(y_1,\dots,y_n)\ne0$.
+\[
+ \rho>\frac25\sum_i y_i^2.
+ \tag{7.13}\label{eq:row-energy}
+\]
 \end{lemma}
 
 \begin{proof}
@@ -2076,11 +1995,12 @@ First, every row sum satisfies $r_i\ge1-d_0$.  Indeed, if $r_i=1-d<1$, the compl
 \]
 
 For every $r\ge1-d_0$,
-\begin{equation}\label{eq:log-energy}
+\[
  r-1-\log r
  \ge\frac{(1-d_0)^2}{2}
  \left(1-\frac1r\right)^2.
-\end{equation}
+ \tag{7.14}\label{eq:log-energy}
+\]
 To see this, set $y=1-1/r$.  Then
 \[
  r-1-\log r=\int_0^y\frac{t}{(1-t)^2}\,dt.
@@ -2101,18 +2021,17 @@ Also
 \]
 For these dimensions, $\gamma_n<1/81$ and $d_0<1/10$, so
 \[
- C_n=\frac{(1-\gamma_n)(1-d_0)^2}{2}
+ \frac{(1-\gamma_n)(1-d_0)^2}{2}
  >\frac{80}{81}\cdot\frac{81}{100}\cdot\frac12
  =\frac25.
 \]
-This proves the non-strict $C_n$ bound.  If $y\ne0$, then
-$\sum_i y_i^2>0$ and the strict comparison with $2/5$ follows.
 \end{proof}
 
 Let
-\begin{equation}\label{eq:beta-s}
+\[
  s=\sum_i\left(\beta_i-\frac1n\right)^2.
-\end{equation}
+ \tag{7.15}\label{eq:beta-s}
+\]
 By the harmonic-mean inequality,
 \[
  \sum_i\frac1{r_i}\ge\frac{n^2}{\sum_i r_i}=n,
@@ -2124,38 +2043,42 @@ so $\sum_i y_i\le0$.  Therefore
  \sum_i\left(\beta_i-\frac1n\right)y_i
  \le\sqrt{s}\left(\sum_i y_i^2\right)^{1/2}.
 \]
-Since $D>0$, one has $s>0$ and $y\ne0$.  Thus the strict form of
-Lemma~\ref{lem:row-energy} applies, and \eqref{eq:D-lower} implies
-\begin{equation}\label{eq:rho-D-s}
+Since $D>0$, one has $s>0$.  Lemma~\ref{lem:row-energy} and \eqref{eq:D-lower} imply
+\[
  \rho>\frac25\frac{D^2}{s}
  \ge
  \frac25\frac{(1-\gamma_n)^2\tau^2}
  {(1-\tau)^2s}.
-\end{equation}
+ \tag{7.16}\label{eq:rho-D-s}
+\]
 
 The $p$ columns in $J$ are probability vectors whose average is $\beta$.  Convexity of squared Euclidean distance shows that at least one of them, say $b^{(j)}$, satisfies
 \[
  s(b^{(j)})\ge s.
 \]
 Theorem~\ref{thm:column-entropy} and Corollary~\ref{cor:one-zero} give
-\begin{equation}\label{eq:one-sided-per}
+\[
  \per(B)\ge
  \max\{\kappa_n,\gamma_n\e^{s/2}\}.
-\end{equation}
+ \tag{7.17}\label{eq:one-sided-per}
+\]
 Consequently,
-\begin{equation}\label{eq:one-sided-lower}
+\[
  \per(A)\ge
  (1-\tau)^n\max\{\kappa_n,\gamma_n\e^{s/2}\}.
-\end{equation}
+ \tag{7.18}\label{eq:one-sided-lower}
+\]
 On the other hand, $\delta\ge\rho$, and therefore
-\begin{equation}\label{eq:one-sided-upper}
+\[
  \per(A)=\gamma_n-\delta\le\gamma_n-\rho.
-\end{equation}
+ \tag{7.19}\label{eq:one-sided-upper}
+\]
 
 For a one-sided pair, \eqref{eq:tau-bound}, $p\ge1$, and $\alpha_{n,b}\le n/2$ give
-\begin{equation}\label{eq:one-sided-tau}
+\[
  \tau^2\le\frac{n\gamma_n}{2(1-\gamma_n)}=d_0^2<\frac1{100}.
-\end{equation}
+ \tag{7.20}\label{eq:one-sided-tau}
+\]
 
 \subsection{The two entropy regimes}
 
@@ -2166,9 +2089,10 @@ Set
 
 \begin{lemma}[Small entropy]\label{lem:small-entropy}
 If $s\le s_0$, then
-\begin{equation}\label{eq:small-contradiction}
+\[
  \rho+\kappa_n(1-\tau)^n>\gamma_n.
-\end{equation}
+ \tag{7.21}\label{eq:small-contradiction}
+\]
 \end{lemma}
 
 \begin{proof}
@@ -2192,26 +2116,35 @@ Since $\log x\le x-1$,
  s_0\le\frac{2(\kappa_n-\gamma_n)}{\gamma_n}.
 \]
 Thus the last expression is positive whenever
-\begin{equation}\label{eq:small-certificate-condition}
+\[
  \frac25(1-\gamma_n)^2\gamma_n
  -\frac{n^2}{2}\kappa_n^2>0.
-\end{equation}
+ \tag{7.22}\label{eq:small-certificate-condition}
+\]
 The exact positive values of the left side are
-\begin{equation}\label{eq:small-certificates}
+\[
 \begin{array}{c|c}
- n&\text{value (decimal for scale)}\\ \hline
- 8&7.682036\times10^{-4}\\
- 9&3.378893\times10^{-4}\\
- 10&1.383834\times10^{-4}.
+ n&\text{value in \eqref{eq:small-certificate-condition}}\\ \hline
+ 8&
+ \dfrac{165702517175104104520946768451687}
+ {215701290564174919711661340674228224}\\[4mm]
+ 9&
+ \dfrac{5586975164420125257678146526492250330079}
+ {16534930139652222569055999993919229392846848}\\[4mm]
+ 10&
+ \dfrac{55944735805258396002952464523577322487640863}
+ {404273588897859606879181224832534790039062500000}.
 \end{array}
-\end{equation}
+\tag{7.23}\label{eq:small-certificates}
+\]
 \end{proof}
 
 \begin{lemma}[Large entropy]\label{lem:large-entropy}
 If $s\ge s_0$, then
-\begin{equation}\label{eq:large-contradiction}
+\[
  \rho+\gamma_n(1-\tau)^n\e^{s/2}>\gamma_n.
-\end{equation}
+ \tag{7.24}\label{eq:large-contradiction}
+\]
 \end{lemma}
 
 \begin{proof}
@@ -2240,19 +2173,21 @@ Therefore the preceding expression is at least
  \right].
 \]
 The bracket is positive exactly when
-\begin{equation}\label{eq:large-certificate-condition}
+\[
  \frac45(1-\gamma_n)^2\left(\frac9{10}\right)^n
  -n^2\gamma_n>0.
-\end{equation}
+ \tag{7.25}\label{eq:large-certificate-condition}
+\]
 The exact positive values are
-\begin{equation}\label{eq:large-certificates}
+\[
 \begin{array}{c|c}
- n&\text{value (decimal for scale)}\\ \hline
- 8&1.889119\times10^{-1}\\
- 9&2.334869\times10^{-1}\\
- 10&2.424523\times10^{-1}.
+ n&\text{value in \eqref{eq:large-certificate-condition}}\\ \hline
+ 8&\dfrac{405685268407642329}{2147483648000000000}\\[3mm]
+ 9&\dfrac{17233957123121}{73811250000000}\\[3mm]
+ 10&\dfrac{7399058328856214668089}{30517578125000000000000}.
 \end{array}
-\end{equation}
+\tag{7.26}\label{eq:large-certificates}
+\]
 \end{proof}
 
 Equations \eqref{eq:one-sided-lower} and \eqref{eq:one-sided-upper} contradict Lemma~\ref{lem:small-entropy} when $s\le s_0$ and Lemma~\ref{lem:large-entropy} when $s\ge s_0$.  Thus one-sided critical pairs are impossible.
@@ -2283,42 +2218,47 @@ parameter is
  \eta_7=\frac1{47}.
 \]
 The two inequalities needed in Lemma~\ref{lem:subset-mid} are
-\begin{equation}\label{eq:n7-localization}
+\[
  \eta_7^2-\frac{\gamma}{14(1-\gamma)}
  =\frac{23263}{1808073127}>0,
  \qquad
  \frac12-\frac37-\eta_7=\frac{33}{658}>0.
-\end{equation}
+ \tag{8.1}\label{eq:n7-localization}
+\]
 Thus all subset-excess estimates of Section~\ref{sec:hall} apply in dimension
 seven.  In particular,
-\begin{equation}\label{eq:n7-alpha-max}
+\[
  \max_{1\le k\le6}\alpha_{7,k}
  =\alpha_{7,3}=\frac{53576}{15463}<\frac72.
-\end{equation}
+ \tag{8.2}\label{eq:n7-alpha-max}
+\]
 As before, the case $\tau=0$ is impossible, so fix a critical pair and use
 $a,b,p,e,f,x$ as in Lemma~\ref{lem:hall-deficit}.
 
 \subsection{Two-sided pairs with core size at least two}
 
 Put
-\begin{equation}\label{eq:n7-ordinary-parameters}
+\[
  T_7=\frac5{24},
  \qquad
  \lambda_7=\frac{329}{24}
  =\binom72-\binom73T_7.
-\end{equation}
+ \tag{8.3}\label{eq:n7-ordinary-parameters}
+\]
 The common Hall estimate and \eqref{eq:n7-alpha-max} imply
-\begin{equation}\label{eq:n7-ordinary-range}
+\[
  \tau^2\le\frac{7\gamma}{1-\gamma}<T_7^2,
  \qquad
  T_7^2-\frac{7\gamma}{1-\gamma}
  =\frac{20185}{67351104}>0.
-\end{equation}
+ \tag{8.4}\label{eq:n7-ordinary-range}
+\]
 The alternating binomial argument of Lemma~\ref{lem:binomial-low} gives
-\begin{equation}\label{eq:n7-ordinary-binomial}
+\[
  (1-t)^7\ge1-7t+\lambda_7t^2
  \qquad(0\le t\le T_7).
-\end{equation}
+ \tag{8.5}\label{eq:n7-ordinary-binomial}
+\]
 
 \begin{proposition}[Ordinary dimension-seven margins]\label{prop:n7-ordinary}
 For every $1\le a\le b$ with $p=7-a-b\ge2$,
@@ -2328,11 +2268,11 @@ For every $1\le a\le b$ with $p=7-a-b\ge2$,
 \]
 where \eqref{eq:M2} is evaluated with $\lambda=329/24$.
 There are six pairs, and the minimum is attained at $(a,b)=(1,1)$:
-\begin{equation}\label{eq:n7-ordinary-minimum}
+\[
  \frac{217499955444827479495}
- {21713873952987016007066496}>0
- \qquad(\approx1.001664\times10^{-5}).
-\end{equation}
+ {21713873952987016007066496}>0.
+ \tag{8.6}\label{eq:n7-ordinary-minimum}
+\]
 \end{proposition}
 
 \begin{proof}
@@ -2353,28 +2293,28 @@ numerical energy estimates.  Define
  d_7^2=\frac{7\gamma}{2(1-\gamma)}=\frac{2520}{116929}.
 \]
 Then
-\begin{equation}\label{eq:n7-d7-gap}
+\[
  \frac9{400}-d_7^2=\frac{44361}{46771600}>0,
-\end{equation}
+ \tag{8.7}\label{eq:n7-d7-gap}
+\]
 so every row sum and every column sum of $A$ is greater than $17/20$.
 
 \begin{lemma}[Dimension-seven product energy]\label{lem:n7-product-energy}
-With $y_i=1-r_i^{-1}$, put
+With $y_i=1-r_i^{-1}$,
 \[
- C_7=\frac{(1-\gamma)(17/20)^2}{2}.
+ \rho>\frac13\sum_i y_i^2.
+ \tag{8.8}\label{eq:n7-product-energy}
 \]
-Then
-\begin{equation}\label{eq:n7-product-energy}
- \rho\ge C_7\sum_i y_i^2,
- \qquad C_7>\frac13.
-\end{equation}
-Thus $\rho>\frac13\sum_i y_i^2$ unless all row sums equal one.  The
-transposed statement holds for the column sums.
+The transposed statement holds for the column sums.
 \end{lemma}
 
 \begin{proof}
-The proof of Lemma~\ref{lem:row-energy} gives the stated non-strict
-bound with coefficient $C_7$.  This coefficient exceeds $1/3$, since
+The proof of Lemma~\ref{lem:row-energy} gives
+\[
+ \rho\ge
+ \frac{(1-\gamma)(17/20)^2}{2}\sum_i y_i^2.
+\]
+The coefficient exceeds $1/3$, since
 \[
  \frac{(1-\gamma)(17/20)^2}{2}-\frac13
  =\frac{7258243}{282357600}>0.
@@ -2382,14 +2322,14 @@ bound with coefficient $C_7$.  This coefficient exceeds $1/3$, since
 \end{proof}
 
 Retain the notation $D,s,q=(1-\tau)^7$ from the one-sided analysis in
-Section~\ref{sec:low}.  Here $D>0$, so the reciprocal-deviation vector
-$y$ is nonzero and the strict $1/3$ form of
-Lemma~\ref{lem:n7-product-energy} applies.  Hence
-\begin{equation}\label{eq:n7-one-sided-energy}
+Section~\ref{sec:low}.  Lemmas~\ref{lem:one-sided-stationarity} and
+\ref{lem:n7-product-energy} give
+\[
  \rho>\frac{D^2}{3s}
  \ge
  \frac{(1-\gamma)^2\tau^2}{3(1-\tau)^2s}.
-\end{equation}
+ \tag{8.9}\label{eq:n7-one-sided-energy}
+\]
 Also $\tau<3/20$ by \eqref{eq:n7-d7-gap}.
 
 \begin{proposition}[One-sided exclusion in dimension seven]
@@ -2402,19 +2342,21 @@ seven.
 Set $s_0=2\log(\kappa_7/\gamma)$.  If $s\le s_0$, the proof of
 Lemma~\ref{lem:small-entropy}, with $1/3$ in place of $2/5$, reduces the
 contradiction to
-\begin{equation}\label{eq:n7-small-entropy-certificate}
+\[
  \frac13(1-\gamma)^2\gamma-\frac{49}{2}\kappa_7^2
  =
  \frac{22176489486262543850191055}
  {20672701805255574480144334848}>0.
-\end{equation}
+ \tag{8.10}\label{eq:n7-small-entropy-certificate}
+\]
 
 Suppose $s\ge s_0$.  From \eqref{eq:n7-one-sided-energy},
 $\e^{s/2}\ge1+s/2$, and AM--GM,
-\begin{equation}\label{eq:n7-large-start}
+\[
  \rho+\gamma q\e^{s/2}-\gamma
  >D\sqrt{\frac{2\gamma q}{3}}+\gamma(q-1).
-\end{equation}
+ \tag{8.11}\label{eq:n7-large-start}
+\]
 The stationarity bound gives
 \[
  D\sqrt q\ge
@@ -2425,24 +2367,18 @@ Moreover, for $0\le t\le3/20$,
  \frac{1-(1-t)^7}{t}
  \le7-21t+35t^2.
 \]
-The preceding estimates naturally reduce positivity to
+Consequently the right side of \eqref{eq:n7-large-start} is positive if
 \[
- \frac23(1-\gamma)^2(1-t)^5
- >\gamma\left(\frac{1-(1-t)^7}{t}\right)^2.
-\]
-Since $0\le t\le3/20$, one has $(1-t)^5\ge(1-t)^6$.  It is therefore
-sufficient to verify the stronger inequality obtained by replacing the
-left factor $(1-t)^5$ by the smaller $(1-t)^6$.  Together with the displayed
-quadratic upper bound, this gives the sufficient condition
-\begin{equation}\label{eq:n7-large-polynomial}
  W(t):=\frac23(1-\gamma)^2(1-t)^6
        -\gamma(7-21t+35t^2)^2>0.
-\end{equation}
+ \tag{8.12}\label{eq:n7-large-polynomial}
+\]
 The degree-six Bernstein coefficients of $W$ on $[0,3/20]$ are all positive;
 the smallest is
-\begin{equation}\label{eq:n7-large-bernstein-min}
+\[
  \frac{155130361249919329}{1328763571296000000}>0.
-\end{equation}
+ \tag{8.13}\label{eq:n7-large-bernstein-min}
+\]
 This exact coefficient calculation appears in the supplementary certificate.
 Thus both entropy regimes contradict the upper bound
 $\per(A)\le\gamma-\rho$, exactly as in Section~\ref{sec:low}.
@@ -2451,9 +2387,10 @@ $\per(A)\le\gamma-\rho$, exactly as in Section~\ref{sec:low}.
 \subsection{Single-bridge pairs: preliminary reductions}
 
 It remains to treat $p=1$.  By transposition assume $a\le b$, so
-\begin{equation}\label{eq:n7-single-types}
+\[
  (a,b)\in\{(1,5),(2,4),(3,3)\}.
-\end{equation}
+ \tag{8.14}\label{eq:n7-single-types}
+\]
 Recall
 \[
  e=\sum_{i\in I^c}r_i-a,
@@ -2463,9 +2400,10 @@ Recall
  x=s_A(I^c,J^c),
 \]
 so criticality gives
-\begin{equation}\label{eq:n7-tau-efx}
+\[
  \tau=e+f-x.
-\end{equation}
+ \tag{8.15}\label{eq:n7-tau-efx}
+\]
 
 If $e\le0$, then $\tau\le f_+$ and the proof of
 Lemma~\ref{lem:hall-deficit} gives the sharper estimate
@@ -2473,11 +2411,12 @@ Lemma~\ref{lem:hall-deficit} gives the sharper estimate
  \tau^2\le\alpha_{7,b}\frac{\delta}{1-\delta}.
 \]
 If $f\le0$, the analogous estimate uses $\alpha_{7,a}$.  Since
-\begin{equation}\label{eq:n7-mixed-range}
+\[
  \left(\frac3{20}\right)^2
  -\alpha_{7,3}\frac{\gamma}{1-\gamma}
  =\frac{842770143}{723229250800}>0,
-\end{equation}
+ \tag{8.16}\label{eq:n7-mixed-range}
+\]
 we may use the quadratic binomial bound with
 \[
  T=\frac3{20},
@@ -2490,10 +2429,10 @@ we may use the quadratic binomial bound with
 For the three pairs in \eqref{eq:n7-single-types}, all six applications of
 Lemma~\ref{lem:second-order} obtained from $e\le0$ or $f\le0$ have positive
 margin.  Their minimum is
-\begin{equation}\label{eq:n7-mixed-minimum}
- \frac{165035926385}{3897251304526692}>0
- \qquad(\approx4.234163\times10^{-5}),
-\end{equation}
+\[
+ \frac{165035926385}{3897251304526692}>0,
+ \tag{8.17}\label{eq:n7-mixed-minimum}
+\]
 attained for $(a,b)=(1,5)$ with $e\le0$.
 \end{proposition}
 
@@ -2504,15 +2443,17 @@ $\lambda=63/4$.  The supplementary script checks the six exact fractions.
 \end{proof}
 
 We may henceforth assume
-\begin{equation}\label{eq:n7-positive-excesses}
+\[
  e>0,
  \qquad
  f>0.
-\end{equation}
+ \tag{8.18}\label{eq:n7-positive-excesses}
+\]
 The subset estimates and \eqref{eq:n7-alpha-max} imply
-\begin{equation}\label{eq:n7-ef-box}
+\[
  0<e,f<\frac3{20}.
-\end{equation}
+ \tag{8.19}\label{eq:n7-ef-box}
+\]
 Put
 \[
  t=e+f,
@@ -2524,13 +2465,14 @@ Put
  d=\min\{a,b\}=a.
 \]
 Define the two group-product envelopes
-\begin{equation}\label{eq:n7-product-envelopes}
+\[
  P_a(e)=\left(1+\frac ea\right)^a
         \left(1-\frac e{7-a}\right)^{7-a},
  \qquad
  P_b(f)=\left(1+\frac fb\right)^b
         \left(1-\frac f{7-b}\right)^{7-b}.
-\end{equation}
+ \tag{8.20}\label{eq:n7-product-envelopes}
+\]
 If
 \[
  P=\prod_i r_i,
@@ -2544,19 +2486,21 @@ write
  u_c=P_b(f)-Q,
 \]
 and set
-\begin{equation}\label{eq:n7-DKu}
+\[
  D_0=2-P_a(e)-P_b(f),
  \qquad
  K=\gamma-D_0,
  \qquad
  u=\delta-D_0.
-\end{equation}
+ \tag{8.21}\label{eq:n7-DKu}
+\]
 Then
-\begin{equation}\label{eq:n7-u-budget}
+\[
  u\ge u_r+u_c\ge0,
  \qquad
  H=K-u.
-\end{equation}
+ \tag{8.22}\label{eq:n7-u-budget}
+\]
 
 \begin{lemma}[Conditional product energy]\label{lem:n7-conditional-energy}
 Let
@@ -2566,11 +2510,12 @@ Let
  \right)^2
 \]
 and define $V_J$ analogously from the columns indexed by $J$.  Then
-\begin{equation}\label{eq:n7-conditional-energy}
+\[
  V_I\le3u_r,
  \qquad
  V_J\le3u_c.
-\end{equation}
+ \tag{8.23}\label{eq:n7-conditional-energy}
+\]
 \end{lemma}
 
 \begin{proof}
@@ -2582,27 +2527,15 @@ $\sum_i(z_i/\mu-1)=0$,
  =\sum_i\left(\frac{z_i}{\mu}-1-
        \log\frac{z_i}{\mu}\right).
 \]
-For completeness, set $y=1-\mu/z_i$.  Then
+For $z_i,\mu\ge r_0$, the integral proof of
+\eqref{eq:log-energy}, with base point $\mu$, gives
 \[
- \frac{z_i}{\mu}-1-\log\frac{z_i}{\mu}
- =\int_0^y\frac{t}{(1-t)^2}\,dt,
- \qquad
- \frac1{z_i}-\frac1\mu=-\frac{y}{\mu}.
-\]
-If $y\ge0$, the integral is at least $y^2/2$, while
-$r_0^2/\mu^2\le1$.  If $y<0$, then on $[y,0]$,
-\[
- (1-t)^{-2}\ge(1-y)^{-2}
- =\left(\frac{z_i}{\mu}\right)^2
- \ge\frac{r_0^2}{\mu^2}.
-\]
-Both cases give
-\begin{equation}\label{eq:n7-group-log-energy}
  \frac{z_i}{\mu}-1-
  \log\frac{z_i}{\mu}
  \ge\frac{r_0^2}{2}
  \left(\frac1{z_i}-\frac1\mu\right)^2.
-\end{equation}
+ \tag{8.24}\label{eq:n7-group-log-energy}
+\]
 Applying this to the two row groups and using the fact that variance is
 minimized at the arithmetic mean of the reciprocals,
 \[
@@ -2620,93 +2553,92 @@ Lemma~\ref{lem:n7-product-energy}.  The column proof is identical.
 
 \subsection{Core stationarity and the entropy squeeze}
 
-Put $\theta=1-\tau$.  At a critical pair, the doubly stochastic matrix
-$B\le A/\theta$ has $B[I^c,J^c]=0$.  The doubly stochastic cut identity
-shows that $B[I,J]$ has total mass one.  Criticality and
-\eqref{eq:n7-tau-efx} show that $(A/\theta)[I,J]$ has the same total mass.
-Since the first matrix is entrywise dominated by the second, equality of
-their total masses forces termwise saturation:
-\begin{equation}\label{eq:n7-core-saturation}
- B[I,J]=\frac{A[I,J]}\theta.
-\end{equation}
+Let $q=1-\tau$.  At a critical pair, the doubly stochastic matrix
+$B\le A/q$ has $B[I^c,J^c]=0$.  Both $B[I,J]$ and $(A/q)[I,J]$ have total
+mass one, so the core is saturated:
+\[
+ B[I,J]=\frac{A[I,J]}q.
+ \tag{8.25}\label{eq:n7-core-saturation}
+\]
 Let $\xi$ and $\zeta$ be the row- and column-sum vectors of this core and
 put
-\begin{equation}\label{eq:n7-core-s}
+\[
  s_I=\sum_{i\in I}\left(\xi_i-\frac1m\right)^2,
  \qquad
  s_J=\sum_{j\in J}\left(\zeta_j-\frac1\ell\right)^2,
  \qquad
  s=s_I+s_J.
-\end{equation}
+ \tag{8.26}\label{eq:n7-core-s}
+\]
 For $k\ge0$, let $H_k$ be the contribution to $H$ of permutations using
 exactly $k$ entries of the block $I^c\times J^c$.  Put $H_0$ for the
 zero-use contribution.
 
 \begin{lemma}[Single-bridge stationarity]\label{lem:n7-core-stationarity}
 One has
-\begin{equation}\label{eq:n7-core-stationarity}
+\[
  P\left(\sum_{i\in I}\frac{\xi_i}{r_i}-1\right)
  +Q\left(\sum_{j\in J}\frac{\zeta_j}{c_j}-1\right)
  =\frac{\tau H+\sum_{k\ge1}kH_k}{1-\tau}.
-\end{equation}
+ \tag{8.27}\label{eq:n7-core-stationarity}
+\]
 Moreover,
-\begin{equation}\label{eq:n7-H0-entropy}
+\[
  H_0\ge
  L^{\sharp}_{7,a,b}(1-t)^7\e^{s/2}.
-\end{equation}
+ \tag{8.28}\label{eq:n7-H0-entropy}
+\]
 \end{lemma}
 
 \begin{proof}
-Apply the common identity \eqref{eq:normalized-block-variation} to the core
-$E=I\times J$.  Its total mass is $\theta$; by
-\eqref{eq:n7-core-saturation}, its row and column masses are
-$\theta\xi_i$ and $\theta\zeta_j$.  A permutation counted by $H_k$ uses
-exactly $k+1$ core entries.  Substitution in
-\eqref{eq:normalized-block-variation}, followed by division by $\theta$ and
-use of $\Phi=P+Q-H$, gives exactly
+Multiply the entries of $A[I,J]$ by a parameter and globally renormalize to
+keep the total entry sum equal to seven.  This is a two-sided feasible curve.
+Every permutation using $k$ entries of $I^c\times J^c$ uses exactly $k+1$
+core entries.  Differentiating $\Phi$ at the maximizing matrix gives
 \eqref{eq:n7-core-stationarity}.
 
-For the second assertion, every permanent term of $B$ avoids the prescribed
-zero block.  Entrywise domination $A\ge\theta B$ therefore maps each term of
-$\per(B)$ to an $H_0$ term with at least $\theta^7$ times its weight.  Thus,
-term by term,
+For the second assertion, Theorem~\ref{thm:single-bridge-entropy} and
+\eqref{eq:n7-core-saturation} give
 \[
- H_0\ge \theta^7\per(B)
- \ge L^{\sharp}_{7,a,b}\theta^7\e^{s/2},
+ H_0\ge q^7\per(B)
+ \ge L^{\sharp}_{7,a,b}q^7\e^{s/2}.
 \]
-where the last inequality is
-Theorem~\ref{thm:single-bridge-entropy}.  Finally
-$\theta=1-e-f+x\ge1-t$.
+Finally $q=1-e-f+x\ge1-t$.
 \end{proof}
 
 For brevity write
-\begin{equation}\label{eq:n7-A0}
+\[
  L=L^{\sharp}_{7,a,b},
  \qquad
  A_0=L(1-t)^7,
-\end{equation}
+ \tag{8.29}\label{eq:n7-A0}
+\]
 and define
-\begin{equation}\label{eq:n7-Bcal}
+\[
  \mathcal B=
  P_a(e)\frac{e}{m-e}
  +P_b(f)\frac{f}{\ell-f}
  -\frac{(t+d)K-dA_0}{1-t}.
-\end{equation}
+ \tag{8.30}\label{eq:n7-Bcal}
+\]
 
 \begin{lemma}[Stationarity--entropy squeeze]\label{lem:n7-squeeze}
 At a feasible single-bridge maximizer satisfying
 \eqref{eq:n7-positive-excesses}, one has
-\begin{equation}\label{eq:n7-entropy-lower}
+\[
  H\ge A_0\e^{s/2},
-\end{equation}
+ \tag{8.31}\label{eq:n7-entropy-lower}
+\]
 and, whenever $\mathcal B>0$,
-\begin{equation}\label{eq:n7-su-lower}
+\[
  su\ge\frac{\mathcal B^2}{3}.
-\end{equation}
+ \tag{8.32}\label{eq:n7-su-lower}
+\]
 On the other hand,
-\begin{equation}\label{eq:n7-su-upper}
+\[
  su\le\frac{(K-A_0)^2}{2A_0}.
-\end{equation}
+ \tag{8.33}\label{eq:n7-su-upper}
+\]
 \end{lemma}
 
 \begin{proof}
@@ -2722,11 +2654,12 @@ entries of $I^c\times J^c$,
  \sum_{k\ge1}kH_k\le d(H-H_0).
 \]
 The right side of \eqref{eq:n7-core-stationarity} is therefore at most
-\begin{equation}\label{eq:n7-stationarity-upper}
+\[
  \frac{(\tau+d)(K-u)-dA_0}{1-\tau}
  \le
  \frac{(t+d)(K-u)-dA_0}{1-t}.
-\end{equation}
+ \tag{8.34}\label{eq:n7-stationarity-upper}
+\]
 Indeed, the derivative of the first rational function with respect to
 $\tau$ is
 \[
@@ -2741,9 +2674,10 @@ Put
 \]
 and denote the common value in \eqref{eq:n7-core-stationarity} by $Z$.
 The harmonic-mean estimates and $P,Q\le1$ give
-\begin{equation}\label{eq:n7-error-upper}
+\[
  PE+QF-Z\le\sqrt{s_IV_I}+\sqrt{s_JV_J}.
-\end{equation}
+ \tag{8.35}\label{eq:n7-error-upper}
+\]
 On the other hand, \eqref{eq:n7-stationarity-upper} and
 $P=P_a-u_r$, $Q=P_b-u_c$ give
 \[
@@ -2774,55 +2708,27 @@ which is \eqref{eq:n7-su-upper}.
 
 \subsection{The exact two-variable certificate}
 
-\begin{lemma}[Exact Bernstein certificate principle]
-\label{lem:bernstein-certificate}
-Let $P$ be a rational polynomial on a rational box.  Express $P$ in the
-tensor-product Bernstein basis of its coordinatewise degree.  If every
-Bernstein coefficient is positive, then $P$ is positive on the box.
-Moreover, exact de Casteljau subdivision at a rational parameter replaces a
-parent box by finitely many child boxes whose union is the parent and whose
-Bernstein coefficients are exact rational affine combinations of the parent
-coefficients.  Consequently, a finite subdivision tree in which every leaf
-has positive Bernstein coefficients is an exact certificate that $P>0$ on
-the original box.
-\end{lemma}
-
-\begin{proof}
-Each tensor-product Bernstein basis function is nonnegative on the box and
-the basis functions sum to one, so the value of $P$ is a convex combination
-of its Bernstein coefficients.  The de Casteljau identities are polynomial
-identities and partition each coordinate interval exactly; iterating them
-therefore covers the original box without gaps or overlaps except along
-shared boundaries.  Rational subdivision points preserve exact rational
-arithmetic.
-\end{proof}
-
 All quantities in the preceding subsection are rational functions of $e,f$.
-The actual feasible set is contained in the larger closed square
+On the square
 \[
- \mathcal Q=\left[0,\frac3{20}\right]^2.
+ \mathcal Q=\left[0,\frac3{20}\right]^2
 \]
-We certify the entire square, so no separate semialgebraic description of
-the transportation-feasible subset is required.  On $\mathcal Q$ one has
+the denominator
 \[
- m-e>0,\qquad \ell-f>0,\qquad1-e-f\ge\frac7{10}>0,
+ \Delta=(m-e)(\ell-f)(1-e-f)
 \]
-and also $A_0=L(1-e-f)^7>0$.  Hence
-\[
- \Delta=(m-e)(\ell-f)(1-e-f)>0,
-\]
-so clearing denominators preserves every inequality direction.  Define the
-three rational-coefficient polynomials
+is positive.  Define the three rational-coefficient polynomials
 \[
  \mathcal G=A_0-K,
  \qquad
  \mathcal N=\Delta\mathcal B,
 \]
 and
-\begin{equation}\label{eq:n7-GNF}
+\[
  \mathcal F=2A_0\mathcal N^2
  -3(K-A_0)^2\Delta^2.
-\end{equation}
+ \tag{8.36}\label{eq:n7-GNF}
+\]
 If $\mathcal G>0$, then \eqref{eq:n7-entropy-lower} contradicts
 $H=K-u\le K$.  If $\mathcal N>0$ and $\mathcal F>0$, then
 \eqref{eq:n7-su-lower} and \eqref{eq:n7-su-upper} contradict each other.
@@ -2830,15 +2736,19 @@ Thus it remains only to certify the following finite polynomial alternative.
 
 \begin{proposition}[Exact single-bridge certificate]\label{prop:n7-bernstein}
 For each $(a,b)\in\{(1,5),(2,4),(3,3)\}$ and every $(e,f)\in\mathcal Q$,
-\begin{equation}\label{eq:n7-polynomial-alternative}
+\[
  \mathcal G(e,f)>0
  \quad\text{or}\quad
  \bigl(\mathcal N(e,f)>0\ \text{and}\ \mathcal F(e,f)>0\bigr).
-\end{equation}
+ \tag{8.37}\label{eq:n7-polynomial-alternative}
+\]
 \end{proposition}
 
 \begin{proof}
-Apply Lemma~\ref{lem:bernstein-certificate}.  Starting from $\mathcal Q$,
+The proof is an exact tensor-product Bernstein certificate.  On a rectangle,
+a polynomial is written in the Bernstein basis of its bidegree.  The basis
+functions are nonnegative and sum to one, so positivity of every coefficient
+certifies strict positivity on that rectangle.  Starting from $\mathcal Q$,
 the supplementary script subdivides the physically longer side at its
 midpoint whenever neither branch in
 \eqref{eq:n7-polynomial-alternative} is yet coefficientwise positive.  All
@@ -2847,7 +2757,7 @@ coefficients and all subdivision endpoints are instances of
 used.
 
 The resulting finite trees are
-\begin{equation}\label{eq:n7-bernstein-tree}
+\[
 \begin{array}{c|rrrr}
 (a,b)&\text{nodes}&\mathcal G\text{-leaves}&
  (\mathcal N,\mathcal F)\text{-leaves}&\text{maximum depth}\\ \hline
@@ -2855,7 +2765,8 @@ The resulting finite trees are
 (2,4)&35&9&9&6\\
 (3,3)&47&11&13&8.
 \end{array}
-\end{equation}
+ \tag{8.38}\label{eq:n7-bernstein-tree}
+\]
 The complete coefficient generation and de Casteljau subdivision are given
 in the supplementary certificate described in Appendix~\ref{app:code}.
 \end{proof}
@@ -2877,6 +2788,9 @@ contradiction.  Hence no boundary global maximizer exists.
 
 
 \section{Boundary exclusion in dimension six}\label{sec:n6}
+\setcounter{equation}{0}
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+\renewcommand{\theHequation}{n6.\arabic{equation}}
 
 We now treat the remaining dimension.  Throughout this section,
 \begin{equation}\label{eq:n6-gamma-kappa}
@@ -2902,8 +2816,8 @@ For every nonempty proper set $E$ of rows, if
 then
 \begin{equation}\label{eq:n6-localization}
  |e|^2\le\frac{15}{319}
- <\left(\frac7{32}\right)^2
- <\left(\frac{11}{50}\right)^2.
+ <\left(\frac{11}{50}\right)^2
+ <\left(\frac7{32}\right)^2.
 \end{equation}
 The same assertion holds for every column subset.  In particular,
 \begin{equation}\label{eq:n6-singleton-lower}
@@ -2963,13 +2877,9 @@ Consequently,
  \qquad
  \tau\le\frac tp.
 \end{equation}
-Put $\theta=1-\tau$.  The doubly stochastic cut identity and the forced
-zero block give $s_B(I,J)=p$.  Criticality gives
-$s_A(I,J)=p\theta$, so $B[I,J]\le(A/\theta)[I,J]$ and both sides have total
-mass $p$.  Hence entrywise domination and equality of total masses imply the
-termwise saturation
+The critical block is saturated:
 \[
- B[I,J]=\frac{A[I,J]}\theta.
+ B[I,J]=\frac{A[I,J]}{1-\tau}.
 \]
 Let $m=6-a$, $\ell=6-b$, and let $\xi,\eta$ be the normalized row and
 column marginals of this core, as in Proposition
@@ -3004,28 +2914,24 @@ Consequently,
 \end{lemma}
 
 \begin{proof}
-Apply \eqref{eq:normalized-block-variation} to the core $I\times J$.  Its
-mass is $p\theta$; its row and column masses are $p\theta\xi_i$ and
-$p\theta\eta_j$; and a monomial in $H_k$ uses exactly $p+k$ core entries.
-Substitution in the common identity, division by $p\theta$, and
-$\Phi=R+C-H$ give \eqref{eq:n6-core-stationarity} term by term.
+Multiply the core $A[I,J]$ by a parameter and globally renormalize so that
+the total entry sum remains six.  Its mass is $p(1-\tau)$.  Dividing the
+first variation by this mass, the row-product contribution is
+\[
+ R\left(\sum_{i\in I}\frac{\xi_i}{r_i}-1\right),
+\]
+and the column contribution is analogous.  A monomial in $H_k$ uses
+$p+k$ core entries, so after global normalization its divided derivative is
+$(p\tau+k)/(p(1-\tau))$.  Stationarity proves
+\eqref{eq:n6-core-stationarity}.
 
 Since $k\le d$,
 \[
  \sum_{k\ge1}kH_k\le d(H-H_0).
 \]
 Writing $z=p\tau$, the resulting upper bound is
-\[
- f(z)=\frac{(z+d)H-dH_0}{p-z}.
-\]
-Its derivative has numerator
-\[
- (p+d)H-dH_0\ge pH>0.
-\]
-Here $H>0$ because $A\ge\theta B$, $B$ is doubly stochastic, and hence
-$H\ge\theta^6\per(B)\ge\theta^6\gamma_6>0$.  Thus $f$ is strictly
-increasing.  Since $z=p\tau=t-x\le t$, substituting $t$ proves
-\eqref{eq:n6-stationarity-upper}.
+$((z+d)H-dH_0)/(p-z)$, an increasing function of $z$ because
+$(p+d)H-dH_0>0$.  Use $z\le t$.
 \end{proof}
 
 Let $L=L^{\sharp}_{6,a,b}$.  Define $c_\xi,c_\eta$ by
@@ -3042,11 +2948,8 @@ Put
 \begin{equation}\label{eq:n6-A0}
  A_0=L\left(1-\frac tp\right)^6.
 \end{equation}
-Every permanent term of $B$ avoids the forced zero block.  Since
-$A\ge\theta B$, termwise domination gives
-$H_0\ge\theta^6\per(B)$.  Proposition
-\ref{prop:core-marginal-entropy} and
-$\theta=1-\tau\ge1-t/p$ therefore give
+Because $A\ge(1-\tau)B$, Proposition
+\ref{prop:core-marginal-entropy} and \eqref{eq:n6-two-sided-domain} give
 \begin{equation}\label{eq:n6-H0-lower}
  H_0\ge A_0(1+c_\xi S_\xi+c_\eta S_\eta).
 \end{equation}
@@ -3071,25 +2974,20 @@ $F+\zeta G\ge0$ for every $\zeta\ge0$.
 
 \subsection{A two-level extremal reduction}
 
-For a group of $r$ nonnegative numbers $z_i$ with total $s$, a probability
-vector $w$, and constants $K,B_*,\lambda>0$, define on the closed product
-of simplices the genuine polynomial
+For a group of $q$ nonnegative numbers $z_i$ with total $s$, a probability
+vector $w$, and constants $K,B_*,\lambda>0$, define polynomially on the
+closed product of simplices
 \begin{equation}\label{eq:n6-side-functional}
  \mathcal T(z,w)=
- KB_*\prod_{i=1}^r z_i
- -K\sum_{i=1}^r w_i\prod_{j\ne i}z_j
- -\lambda\sum_{i=1}^r\left(w_i-\frac1r\right)^2.
+ K\prod_{i=1}^qz_i
+ \left(B_*-\sum_{i=1}^q\frac{w_i}{z_i}\right)
+ -\lambda\sum_{i=1}^q\left(w_i-\frac1q\right)^2.
 \end{equation}
-When every $z_i>0$, this is equal to
-\[
- K\prod_i z_i\left(B_*-\sum_i\frac{w_i}{z_i}\right)
- -\lambda\sum_i\left(w_i-\frac1r\right)^2.
-\]
 
 \begin{lemma}[Two-level side maximizer]\label{lem:n6-two-level}
-Suppose $s/r>25/32$ and $B_*>32/25$.  The maximum of
+Suppose $s/q>25/32$ and $B_*>32/25$.  The maximum of
 \eqref{eq:n6-side-functional} is attained in the following form.  For some
-$k\in\{1,\dots,r\}$,
+$k\in\{1,\dots,q\}$,
 \[
  w_i=\frac1k\ (1\le i\le k),
  \qquad
@@ -3102,91 +3000,60 @@ and the $z_i$ have two levels,
  z_i=\ell_0\ (i>k),
  \qquad h\ge\ell_0.
 \]
-For $k<r$ they can be parametrized by $0\le u\le1$ as
+For $k<q$ they can be parametrized by $0\le u\le1$ as
 \begin{equation}\label{eq:n6-two-level-param}
- h=\frac{s}{r}\left(1+u\frac{r-k}{k}\right),
+ h=\frac{s}{q}\left(1+u\frac{q-k}{k}\right),
  \qquad
- \ell_0=\frac{s}{r}(1-u).
+ \ell_0=\frac{s}{q}(1-u).
 \end{equation}
-For $k=r$, one has $h=s/r$.
+For $k=q$, one has $h=s/q$.
 \end{lemma}
 
 \begin{proof}
-Compactness gives a maximizer.  If some $z_i=0$, the first term in the
-polynomial form \eqref{eq:n6-side-functional} vanishes; the second and third
-terms are nonpositive.  By contrast, at
-$z_i=s/r$ and $w_i=1/r$ the value is
-\[
- K(s/r)^r(B_*-r/s)>0,
-\]
-because $r/s<32/25<B_*$.  Hence every maximizing $z_i$ is positive, the
+The maximum exists.  If one of the $z_i$ vanishes, the polynomial form of
+\eqref{eq:n6-side-functional} is nonpositive.  At the uniform point
+$z_i=s/q$, $w_i=1/q$, its value is
+$K(s/q)^q(B_*-q/s)>0$.  Thus every maximizing $z_i$ is positive, the
 maximum is positive, and at a maximizer
 $B_*-\sum_iw_i/z_i>0$.
 
-Among all maximizers choose one minimizing
+Choose among all maximizers one minimizing
 \[
  \mathcal V=\sum_i z_i^2+\sum_iw_i^2.
 \]
-Fix $i\ne j$ and preserve the two $z$- and $w$-sums by writing
+For two indices preserve their two $z$- and $w$-sums and write
 \[
  z_i=h+x,\quad z_j=h-x,
  \qquad
- w_i=\omega+y,\quad w_j=\omega-y.
+ w_i=q_0+y,\quad w_j=q_0-y.
 \]
-Set
-\[
- P_0=K\prod_{\nu\ne i,j}z_\nu>0,
- \qquad
- A=B_*-\sum_{\nu\ne i,j}\frac{w_\nu}{z_\nu}>0.
-\]
-Expanding the polynomial \eqref{eq:n6-side-functional}, all terms depending
-on $(x,y)$ are, up to an additive constant,
+Up to an additive constant, the pair-dependent part is
 \begin{equation}\label{eq:n6-pair-quadratic}
- -P_0A x^2+2P_0xy-2\lambda y^2.
+ -P_0A x^2+2P_0xy-2\lambda y^2,
 \end{equation}
-This explicit expansion is the reason for using the polynomial definition
-on the closed domain.
-
-Assume first that $w_i,w_j>0$.  Then $(x,y)$ lies in the relative interior
-of the feasible pair rectangle, so both stationarity equations apply:
+where $P_0>0$ and
 \[
- -2P_0Ax+2P_0y=0,
- \qquad
- 2P_0x-4\lambda y=0.
+ A=B_*-\sum_{r\ne i,j}\frac{w_r}{z_r}>0.
 \]
-Either $x=y=0$, or $y=Ax$ and $P_0=2\lambda A$.  In the latter case
-\eqref{eq:n6-pair-quadratic} is
-\[
- -\frac{P_0}{A}(Ax-y)^2.
-\]
-For $0\le\theta\le1$, replacing $(x,y)$ by $(\theta x,\theta y)$ keeps
-$z_i,z_j>0$ and $w_i,w_j\ge0$, preserves both pair sums, and remains on this
-flat line.  It therefore preserves the maximum, whereas
-\[
- \mathcal V(\theta)-\mathcal V(0)
- =2\theta^2(x^2+y^2)
-\]
-is strictly positive for $\theta>0$ unless $x=y=0$.  This contradicts the
-minimal choice of $\mathcal V$.  Thus all positive coordinates of $w$ are
+If both $w_i,w_j$ are positive, the pair variables are interior.  The
+stationarity equations imply either $x=y=0$, or
+$y=Ax$ and $P_0=2\lambda A$.  In the latter case
+\eqref{eq:n6-pair-quadratic} equals
+$-(P_0/A)(Ax-y)^2$, so the segment from $(x,y)$ to $(0,0)$ is flat.
+Averaging the pair would preserve the maximum and strictly decrease
+$\mathcal V$, a contradiction.  Hence all positive coordinates of $w$ are
 equal, and their corresponding $z_i$ are equal.
 
-If $w_i=w_j=0$, then $y=0$ and the pair-dependent polynomial is the strictly
-concave quadratic $-P_0Ax^2$.  Hence all inactive $z_i$ are equal.  Since
-$w$ is a probability vector, if its support has size $k$, every active
-coordinate equals $1/k$.
-
-It remains to order the two $z$-levels.  Suppose $k<r$, transfer a small
-amount of mass from one active $w$-coordinate to one inactive coordinate,
-and keep $z$ fixed.  This is a feasible right-sided perturbation.  Its
-directional derivative at zero is
+If both $w_i,w_j$ vanish, only $x$ varies and
+\eqref{eq:n6-pair-quadratic} is $-P_0Ax^2$; hence all inactive $z_i$ are
+equal.  Since $w$ is a probability vector, its $k$ positive coordinates
+are $1/k$.  Finally, moving an infinitesimal amount of $w$ from an active
+coordinate to an inactive one gives
 \[
  K\prod_i z_i\left(\frac1h-\frac1{\ell_0}\right)
- +\frac{2\lambda}{k}\le0.
+ +\frac{2\lambda}{k}\le0,
 \]
-If $h\le\ell_0$, the left side is strictly positive, a contradiction.
-Thus $h>\ell_0$ when $k<r$; for $k=r$ there is only one level.  Solving the
-fixed-total equation $kh+(r-k)\ell_0=s$ yields
-\eqref{eq:n6-two-level-param}, with $0\le u\le1$.
+so $h>\ell_0$ when $k<q$.  The parametrization follows from the fixed total.
 \end{proof}
 
 Set
@@ -3241,12 +3108,8 @@ column side is identical.
 
 \subsection{The exact four-variable certificate}
 
-For fixed $0\le t\le2E_0$, the enlarged constraints
-$-E_0\le e,f\le E_0$ and $e+f=t$ are equivalent to
-$e\in[t-E_0,E_0]$ and $f=t-e$.  Thus the following map covers that entire
-line segment exactly; adjoining the boundary $t=0$ only enlarges the actual
-feasible set, which has $t>0$.  Map this closed triangular domain to the
-unit square by
+Map the triangular domain \eqref{eq:n6-two-sided-domain} to the unit square
+by
 \begin{equation}\label{eq:n6-triangle-map}
  t=2E_0x,
  \qquad
@@ -3268,16 +3131,8 @@ and the two spread parameters $u,v\in[0,1]$, substitute
 \begin{equation}\label{eq:n6-certificate-poly}
  P_{a,b,k,k'}(x,z,u,v)=-(p-t)\mathcal U.
 \end{equation}
-On the enlarged parameter cube,
-\[
- p-t\ge p-\frac{11}{25}>0,
- \qquad A_0>0,
-\]
-and every row and column denominator is at least $25/32$.  Hence all
-rational expressions used to define $\mathcal U$ have positive denominators,
-and multiplication by $p-t$ reverses no inequality.  Thus this is a
-rational polynomial.  Lemma~\ref{lem:bernstein-certificate}, implemented by
-exact tensor-product Bernstein subdivision, proves
+This is a rational polynomial.  Exact tensor-product Bernstein subdivision
+proves
 \begin{equation}\label{eq:n6-certificate-positive}
  P_{a,b,k,k'}>0\qquad\text{on }[0,1]^4
 \end{equation}
@@ -3300,8 +3155,7 @@ Every terminal Bernstein coefficient is a strictly positive rational
 number.  The smallest terminal coefficient for the tightest type $(2,3)$ is
 \begin{equation}\label{eq:n6-smallest-fourvar}
  \frac{206812176444269171}
- {2388787200000000000000}>0
- \qquad(\approx8.657622\times10^{-5}).
+ {2388787200000000000000}>0.
 \end{equation}
 The supplementary script constructs every polynomial from
 \eqref{eq:n6-certificate-poly}, performs exact power-to-Bernstein conversion,
@@ -3316,11 +3170,7 @@ Thus no two-sided critical Hall pair can occur.
 
 \subsection{One-sided critical Hall pairs}
 
-After transposition, assume $I=[6]$.  As in Section~\ref{sec:low},
-$b=0$ would force zero Hall deficit, so $1\le b\le5$ and
-$|J|=p=6-b$.  The complementary $b$ columns have total mass $b+p\tau$;
-applying Lemma~\ref{lem:n6-localization} to that positive excess gives
-$(p\tau)^2\le15/319<E_0^2$.  Therefore
+After transposition, assume $I=[6]$ and $|J|=p=6-b$.  Then
 \begin{equation}\label{eq:n6-one-sided-mass}
  \sum_{j\in J}c_j=p(1-\tau),
  \qquad
@@ -3341,17 +3191,11 @@ Lemma~\ref{lem:one-sided-stationarity} gives
 \end{equation}
 
 \begin{lemma}[Dimension-six row energy]\label{lem:n6-row-energy}
-With $y_i=1-r_i^{-1}$, put
-\[
- C_6=\frac{(1-\gamma)(25/32)^2}{2}.
-\]
-Then
+With $y_i=1-r_i^{-1}$,
 \begin{equation}\label{eq:n6-row-energy}
- \rho\ge C_6\sum_i y_i^2,
- \qquad C_6>\frac3{10}.
+ \rho>\frac3{10}\sum_i y_i^2.
 \end{equation}
-In the present one-sided setting $D>0$, so $y\ne0$ and the comparison with
-$3/10$ is strict.  Consequently,
+Consequently,
 \begin{equation}\label{eq:n6-rho-D}
  \rho>\frac3{10}
  \frac{(1-\gamma)^2\tau^2}{(1-\tau)^2s}.
@@ -3372,13 +3216,12 @@ Since $1-\rho\ge1-\gamma$,
 \]
 The exact gap
 \begin{equation}\label{eq:n6-energy-gap}
- C_6-\frac3{10}
+ \frac{(1-\gamma)(25/32)^2}{2}-\frac3{10}
  =\frac{1547}{3317760}>0
 \end{equation}
-proves the stated coefficient comparison.  Since $D=\sum_i\beta_i y_i>0$,
-$y$ is nonzero.  The harmonic-mean inequality gives $\sum_i y_i\le0$;
-Cauchy--Schwarz together with \eqref{eq:n6-D} then proves
-\eqref{eq:n6-rho-D}.  In particular, $s>0$.
+proves \eqref{eq:n6-row-energy}.  The harmonic-mean inequality gives
+$\sum_i y_i\le0$, and Cauchy--Schwarz together with
+\eqref{eq:n6-D} proves \eqref{eq:n6-rho-D}.  In particular, $s>0$.
 \end{proof}
 
 Retain the exact complementary column-product loss.  Two-group AM--GM gives
@@ -3461,40 +3304,41 @@ $\tau>0$, a critical pair exists.  The preceding subsections exclude both
 its two-sided and one-sided forms.  Thus no boundary global maximizer exists.
 \end{proof}
 
+\renewcommand{\theequation}{\arabic{equation}}
+\renewcommand{\theHequation}{\arabic{equation}}
 
 
 \section{Proof of the main theorem and corollaries}\label{sec:completion}
 
 \begin{proof}[Proof of Theorem~\ref{thm:main}]
-Fix $6\le n\le15$.
-\begin{enumerate}[label=\textup{(\arabic*)},leftmargin=2.4em]
-\item Compactness of $K_n$ and continuity of $\Phi$ give a global maximizer
-$A$.
-\item Theorem~\ref{thm:boundary-six} for $n=6$,
-Theorem~\ref{thm:boundary-seven} for $n=7$,
-Theorem~\ref{thm:boundary-low} for $8\le n\le10$, and
-Theorem~\ref{thm:boundary-mid-high} for $11\le n\le15$ exclude every
-boundary maximizer.  Thus $A$ is positive.
-\item The positive-maximizer theorem, Theorem~\ref{thm:positive-maximizer},
-then gives $A=U_n$.
-\item At $U_n$ all row and column sums equal one and
-$\per(U_n)=n!/n^n$, so
+Fix $6\le n\le15$, and let $A$ be a global maximizer of $\Phi$ on $K_n$.  Theorem~\ref{thm:boundary-six} applies for $n=6$, Theorem~\ref{thm:boundary-seven} applies for $n=7$, Theorem~\ref{thm:boundary-low} applies for $8\le n\le10$, and Theorem~\ref{thm:boundary-mid-high} applies for $11\le n\le15$.  Hence $A$ is positive.  Theorem~\ref{thm:positive-maximizer} gives $A=U_n$.
+
+At $U_n$, all row sums and column sums are one, and
 \[
- \max_{A\in K_n}\Phi(A)=\Phi(U_n)=2-\frac{n!}{n^n}.
+ \per(U_n)=\frac{n!}{n^n}.
 \]
-Any matrix attaining this value is itself a global maximizer; repeating
-steps (2)--(3) proves that it is $U_n$.  This establishes both the value and
-uniqueness.
-\end{enumerate}
+Therefore
+\[
+ \max_{A\in K_n}\Phi(A)
+ =\Phi(U_n)
+ =2-\frac{n!}{n^n}.
+\]
+Any equality case is itself a global maximizer and is therefore $U_n$.
 \end{proof}
 
 \begin{corollary}[No boundary maximizers]\label{cor:no-boundary}
 For every $6\le n\le15$, every global maximizer of $\Phi$ lies in the relative interior of $K_n$.
 \end{corollary}
 
+\begin{corollary}[Sharp zero-block permanent inequality]\label{cor:sharp-block-restated}
+If a doubly stochastic $n\times n$ matrix has an $a\times b$ zero block with $a+b\le n-1$, then
+\[
+ \per(B)\ge\frac{v_{n-a}v_{n-b}}{v_{n-a-b}},
+\]
+and equality is attainable by a block-constant doubly stochastic matrix.
+\end{corollary}
 
-
-\section{Discussion, scope, and verification status}\label{sec:discussion}
+\section{Discussion and the remaining case}\label{sec:discussion}
 
 The proof has several logically separate modules.  Stable-polynomial
 capacity first yields the support-sensitive permanent inequality, the sharp
@@ -3535,57 +3379,14 @@ criterion, and all subdivision statistics are stated in the text.  No
 floating-point comparison, tolerance, random choice, or numerical optimizer
 is used.
 
-The theorem established here is exactly the range $6\le n\le15$.  We do not
-infer a complete classification of the remaining dimensions from the
-historical references: the cited $n=4$ paper establishes full
-indecomposability of maximizers, while the $n=16$ and $n\ge17$ claims are
-recent preprints as of the version date.  None of these external dimension
-claims is used in the proof above.
+Combined with the results cited in the introduction, the present theorem
+leaves only dimension $5$.  The dimension-six argument suggests that a
+future treatment of that case should retain still more of the transportation
+geometry of a critical Hall core, rather than seek a purely scalar permanent
+lower bound.
 
-\paragraph{Meaning of ``unconditional'' and verification status.}
-The proof does not assume any previously claimed dimension of Dittert's
-conjecture, nor any other unproved conjecture.  It does use standard results,
-among them compactness and continuity, weighted AM--GM, Cauchy--Schwarz,
-Bernoulli's inequality, convexity, the harmonic-mean inequality,
-max-flow/min-cut, Hurwitz's theorem, Gauss--Lucas, and finite-dimensional
-Taylor expansion.  The finite comparisons are exact rational computations;
-the author checkers and independent reconstructions are included, and no
-success condition is implemented by a Python \texttt{assert}.  A successful
-run therefore performs the same checks under ordinary and optimized Python
-execution.  This is an exact computer-assisted proof in the usual
-mathematical sense, but it is not a Lean, Coq, Isabelle, or other
-proof-assistant-kernel formalization.  Human refereeing of the analytic
-reductions remains essential.
-
-\section*{Declarations}
-\paragraph{Code availability.}
-All generators, exact checkers, independent audit implementations, tests,
-source hashes, and the machine-readable verification manifest are contained
-in the supplementary archive.  The accepted version should additionally
-cite an immutable public repository release and archival DOI; those external
-identifiers cannot be assigned inside an anonymous review package.
-
-\paragraph{Data availability.}
-No external data set is used.  Every finite datum required by the proof is
-generated from the displayed rational formulas and is included in the
-supplementary package.
-
-\paragraph{Funding and conflicts of interest.}
-No funding or conflict information is supplied in the anonymous version.
-The corresponding author must replace this sentence with the applicable
-journal declarations before acceptance.
-
-\paragraph{Author contributions.}
-The author(s) are responsible for the mathematical argument, the exact
-certificate software, and the final verification.  A journal-specific CRediT
-statement should be inserted when the author list is disclosed.
-
-\paragraph{Use of computational and language-assistance tools.}
-Computer algebra and exact Python programs were used for formula expansion,
-certificate generation, checking, and manuscript preparation.  Language and
-software-assistance tools were also used during revision.  All mathematical
-claims, source transformations, and final outputs were reviewed and accepted
-by the author(s), who retain full responsibility for the work.
+\paragraph{Verification status.}
+No analytic step in the proof is intentionally deferred to an external theorem of Gurvits or Hwang.  Standard results used explicitly are AM--GM, max-flow/min-cut, Hurwitz's theorem, Gauss--Lucas, and elementary Taylor expansion.  The finite comparisons are exact rational computations whose formulas are recorded below and whose complete source code is supplied as supplementary material.  They should nevertheless be independently checked by a human referee or formalized in a proof assistant before publication; the present manuscript is not a machine-checked formal proof.
 
 \appendix
 
@@ -3599,8 +3400,8 @@ For dimension six,
 \[
  \gamma_6=\frac5{324},\qquad
  \kappa_6=\frac{6144}{390625},\qquad
- \frac{15}{319}<\left(\frac7{32}\right)^2
- <\left(\frac{11}{50}\right)^2.
+ \frac{15}{319}<\left(\frac{11}{50}\right)^2
+ <\left(\frac7{32}\right)^2.
 \]
 The row-energy and large-entropy gaps are
 \[
@@ -3618,12 +3419,13 @@ small-entropy polynomials and five large-entropy quotients; the latter have
 minimum Bernstein coefficient $1/864$.
 
 For dimension seven, the localization and half-gap comparisons are
-\begin{equation}\label{eq:app-n7-localization}
+\[
  \eta_7^2-\frac{\gamma_7}{14(1-\gamma_7)}
  =\frac{23263}{1808073127},
  \qquad
  \frac12-\frac37-\eta_7=\frac{33}{658}.
-\end{equation}
+ \tag{A.1}\label{eq:app-n7-localization}
+\]
 The minimum ordinary two-sided margin is
 \[
  \frac{217499955444827479495}
@@ -3645,7 +3447,7 @@ The remaining exact margins are displayed in equations
 \eqref{eq:small-certificates}, and \eqref{eq:large-certificates}.
 
 For the localization constants in \eqref{eq:eta-table}, one has
-\begin{equation}\label{eq:localization-certificates}
+\[
 \begin{array}{c|c|c}
  n&\displaystyle
  \eta_n^2-\frac{\gamma_n}{2n(1-\gamma_n)}
@@ -3660,26 +3462,29 @@ For the localization constants in \eqref{eq:eta-table}, one has
  13&\dfrac{13072911571453}{366471344281458130000}&\dfrac{537}{14300}\\[3mm]
  14&\dfrac{71438752181}{2511343447066440000}&\dfrac{893}{12600}.
 \end{array}
-\end{equation}
+\tag{A.2}\label{eq:localization-certificates}
+\]
 Every entry is positive.
 
 The auxiliary comparison used for $11\le n\le14$ is
-\begin{equation}\label{eq:gamma11-small}
+\[
  \frac1{1000}-\gamma_{11}
  =\frac{22308624601}{25937424601000}>0.
-\end{equation}
+ \tag{A.3}\label{eq:gamma11-small}
+\]
 For $n=8,9,10$, the inequalities $\gamma_n<1/81$ follow from
-\begin{equation}\label{eq:gamma-low-small}
+\[
 \begin{array}{c|c}
  n&1/81-\gamma_n\\ \hline
  8&\dfrac{105557}{10616832}\\[2mm]
  9&\dfrac{54569}{4782969}\\[2mm]
  10&\dfrac{1516573}{126562500}.
 \end{array}
-\end{equation}
+\tag{A.4}\label{eq:gamma-low-small}
+\]
 
 For dimension $15$, the six inequalities in \eqref{eq:n15-gamma-bounds}--\eqref{eq:n15-mu2-bounds} are equivalent to the positivity of the following integers:
-\begin{equation}\label{eq:n15-integers}
+\[
 \begin{aligned}
 15^{15}-300000\cdot15!
  &=45\,591\,579\,980\,859\,375,\\
@@ -3694,59 +3499,40 @@ For dimension $15$, the six inequalities in \eqref{eq:n15-gamma-bounds}--\eqref{
 4\,13^{37}-10^6 13!12^{24}
  &=162\,574\,843\,672\,041\,436\,633\,515\,011\,954\,046\,933\,353\,332.
 \end{aligned}
-\end{equation}
+\tag{A.5}\label{eq:n15-integers}
+\]
 
 \section{Exact-arithmetic verification}\label{app:code}
 
-The supplementary package contains two author verifiers, three
-independent reconstruction checkers, exact unit tests, and one orchestration
-script.  The principal executable files are listed below.
+The supplementary package contains three executable files:
 \begin{center}
-\small
-\begin{tabularx}{\textwidth}{@{}>{\ttfamily}l Y@{}}
-\toprule
-\normalfont File & Purpose \\
-\midrule
-dittert\_n6\_certificates.py
- & dimension-six generator and exact certificates; \\
-dittert\_n7\_n15\_certificates.py
- & standard-library certificates for dimensions seven through fifteen; \\
-independent\_n6\_fast\_audit.py
- & independent reconstruction of all $98$ four-variable certificates; \\
-independent\_n6\_univariate\_audit.py
- & independent standard-library reconstruction of the ten one-variable certificates; \\
-independent\_n7\_certificate\_audit.py
- & independent symbolic and Bernstein reconstruction of the three single-bridge trees; \\
-run\_all\_certificates.py
- & environment-aware orchestration, hashing, manifest generation, and regression checks. \\
-\bottomrule
-\end{tabularx}
+\begin{tabular}{ll}
+\texttt{dittert\_n6\_certificates.py}
+ & dimension-six polynomial generation and certificates,\\
+\texttt{dittert\_n7\_n15\_certificates.py}
+ & dimensions six through fifteen,\\
+\texttt{run\_all\_certificates.py}
+ & a wrapper that runs both verifiers.
+\end{tabular}
 \end{center}
 Run
 \[
  \texttt{python3 run\_all\_certificates.py}.
 \]
-A successful full run ends with
+A successful run ends with
 \begin{center}
 \texttt{All Dittert certificates for dimensions 6 through 15 passed.}
 \end{center}
-It also writes the machine-readable files
-\begin{center}
-\path{verification_manifest.json}\quad and\quad
-\path{verification_output.txt}.
-\end{center}
-Success is printed only after every subprocess exits normally and all
-expected statistics have been checked.
 
-The dimension-seven-through-fifteen verifier requires Python~3.11 or newer
-and only the standard library.  It evaluates every localization, Hall-range,
+The dimension-seven-through-fifteen verifier requires only Python~3 and the
+standard library.  It evaluates every localization, Hall-range,
 first-order, and second-order margin as a \texttt{Fraction}; constructs the
 univariate and bivariate dimension-seven polynomials; performs exact
 power-to-Bernstein conversion and exact dyadic de Casteljau subdivision; and
 checks all reported tree statistics literally.
 
-The dimension-six verifier was tested with Python~3.11--3.13; the archived
-reference environment uses Python~3.13, SymPy~1.14, and NumPy~2.3.  SymPy is used only to expand the explicit rational polynomials,
+The dimension-six verifier was tested with Python~3.13, SymPy~1.14, and
+NumPy~2.3.  SymPy is used only to expand the explicit rational polynomials,
 and NumPy only stores object arrays.  Every generated coefficient is
 converted to \texttt{fractions.Fraction} before Bernstein conversion,
 subdivision, or comparison.  The program constructs all $98$ polynomials in
@@ -3754,41 +3540,8 @@ subdivision, or comparison.  The program constructs all $98$ polynomials in
 \eqref{eq:n6-two-sided-table}, and verifies the ten one-sided polynomials.
 The accompanying \texttt{requirements.txt} records the tested dependencies.
 
-\begin{table}[ht]
-\centering
-\small
-\begin{tabularx}{\textwidth}{@{}Y Y Y r@{}}
-\toprule
-Textual object & Author-code entry point & Enumeration & Count \\
-\midrule
-Dimension-six two-sided alternative, \eqref{eq:n6-certificate-poly}
- & \texttt{two\_sided\_family}, \texttt{verify\_two\_sided}
- & six Hall types and all row/column support pairs & $98$ \\
-Dimension-six one-sided bounds
- & \texttt{verify\_one\_sided}
- & $b=1,\ldots,5$, two entropy regimes & $10$ \\
-Dimension-seven single-bridge alternative, Proposition~\ref{prop:n7-bernstein}
- & \path{single_bridge_polynomials}, \path{certify_single_bridge}
- & $(a,b)=(1,5),(2,4),(3,3)$ & $3$ trees \\
-Dimensions $8$--$10$ second-order margins
- & \texttt{verify\_n8\_n10}
- & all admissible two-sided Hall types & $12+16+20$ \\
-Dimensions $11$--$14$ first-order margins
- & \texttt{verify\_n11\_n14}
- & all listed Hall types, with one $n=11$ refinement & $35+42+49+56$ \\
-Dimension $15$ thin--thick bounds
- & \texttt{verify\_n15}
- & two rational margins and six cleared-denominator tests & $8$ \\
-\bottomrule
-\end{tabularx}
-\caption{Map from the analytic reductions to the exact verification code.}
-\label{tab:formula-code-map}
-\end{table}
-
 Neither verifier contains a floating-point comparison, tolerance, random
-choice, numerical optimization routine, or validation implemented by a
-Python \texttt{assert}.  Ordinary and optimized Python execution therefore
-perform the same mathematical checks.  The Bernstein implication is
+choice, or numerical optimization routine.  The Bernstein implication is
 elementary: on a box, tensor-product Bernstein basis functions are
 nonnegative and sum to one, so a polynomial lies between the smallest and
 largest of its Bernstein coefficients.
@@ -3828,7 +3581,7 @@ Linear Algebra Appl. \textbf{95} (1987), 161--169.
 \bibitem{Kafidov2026}
 B. Kafidov,
 \emph{Dittert's conjecture in dimension 16 via a joint-deficit scaling lemma},
-arXiv:2607.19439, preprint, version cited 25 July 2026.
+arXiv:2607.19439, 2026.
 
 \bibitem{KnoppSinkhorn1982}
 P. Knopp and R. Sinkhorn,
@@ -3843,7 +3596,7 @@ Linear Multilinear Algebra \textbf{12} (1983), 227--263.
 \bibitem{Pang2026}
 Z. Pang,
 \emph{Proof of Dittert's conjecture for dimensions $n\ge17$},
-arXiv:2606.01531, preprint, version cited 25 July 2026.
+arXiv:2606.01531, 2026.
 
 \bibitem{Sinkhorn1984}
 R. Sinkhorn,
@@ -3853,8 +3606,7 @@ Linear Multilinear Algebra \textbf{16} (1984), 167--173.
 \bibitem{UdayanSomasundaram2024}
 D. K. Udayan and K. Somasundaram,
 \emph{Lih Wang's and Dittert's conjectures on permanents},
-Special Matrices \textbf{12} (2024), Article 20240006,\
-\url{https://doi.org/10.1515/spma-2024-0006}.
+Special Matrices \textbf{12} (2024), Article 20240006.
 
 \bibitem{Zhan2007}
 X. Zhan,

@@ -1,0 +1,41 @@
+name: exact-verification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  python-checks:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -r requirements.txt
+      - run: python -m unittest discover -s tests -v
+      - run: python dittert_n7_n15_certificates.py --json > /tmp/n7-normal.json
+      - run: python -O dittert_n7_n15_certificates.py --json > /tmp/n7-opt.json
+      - run: cmp /tmp/n7-normal.json /tmp/n7-opt.json
+      - run: python dittert_n6_certificates.py --json > /tmp/n6-normal.json
+      - run: python -O dittert_n6_certificates.py --json > /tmp/n6-opt.json
+      - run: cmp /tmp/n6-normal.json /tmp/n6-opt.json
+      - if: matrix.python-version == '3.13'
+        run: python run_all_certificates.py
+
+  latex:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended
+      - run: pdflatex -interaction=nonstopmode -halt-on-error main.tex
+      - run: pdflatex -interaction=nonstopmode -halt-on-error main.tex
+      - run: '! grep -E "Overfull|Underfull|undefined references|multiply defined" main.log'

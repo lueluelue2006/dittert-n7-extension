@@ -1,10 +1,8 @@
 # Drafts only
 
-All files in this directory are **earlier drafts / intermediate materials**.
+Everything under `drafts/` is **historical / intermediate**. It is **not** the primary 6–15 package.
 
-The **primary** package is at the repository root:
+Primary materials live at repository root and in `MAIN_dittert_6_15/`.
 
-- `MAIN_dittert_6_15/`
-- `Dittert_Conjecture_6_15_submission.zip`
-
-Do not use materials here as the main proof package.
+- `pre_audit_main_20260724/` — previous primary tree (pre 74+1 audit revision)
+- other folders — earlier n=6 / n=7 / n=8–15 experiments

@@ -1,0 +1,19 @@
+
+=== Running dittert_n6_certificates.py ===
+two-sided (1, 1): 25 polynomials, 165 Bernstein nodes, depth 6
+two-sided (1, 2): 20 polynomials, 276 Bernstein nodes, depth 7
+two-sided (1, 3): 15 polynomials, 483 Bernstein nodes, depth 14
+two-sided (2, 2): 16 polynomials, 416 Bernstein nodes, depth 13
+two-sided (1, 4): 10 polynomials, 352 Bernstein nodes, depth 14
+two-sided (2, 3): 12 polynomials, 558 Bernstein nodes, depth 15
+one-sided b=1: small depth 1, large polynomial has globally positive Bernstein coefficients
+one-sided b=2: small depth 2, large polynomial has globally positive Bernstein coefficients
+one-sided b=3: small depth 3, large polynomial has globally positive Bernstein coefficients
+one-sided b=4: small depth 4, large polynomial has globally positive Bernstein coefficients
+one-sided b=5: small depth 5, large polynomial has globally positive Bernstein coefficients
+All exact n=6 Dittert certificates passed (98 + 10 polynomials).
+
+=== Running dittert_n7_n15_certificates.py ===
+All exact rational and Bernstein certificates passed.
+
+All Dittert certificates for dimensions 6 through 15 passed.

@@ -1,76 +1,82 @@
-# PINNED — Main PDF (6–15)
+# PINNED — Final main PDF (dimensions 6–15)
 
 **Pinned main file (standalone PDF):**
 
 **[Dittert_Conjecture_6_15_MAIN.pdf](./Dittert_Conjecture_6_15_MAIN.pdf)**
 
-- Unified manuscript: *Dittert’s Conjecture in Dimensions Six through Fifteen*
+- Final unified manuscript: *Dittert’s Conjecture in Dimensions Six through Fifteen: An Exact Computer-Assisted Proof*
 - Theorem range: **6 ≤ n ≤ 15**
-- Source: `dittert_6_15_submission/main.pdf`
+- Status: **final post-audit package** (74+1-item independent audit resolved in manuscript + verifiers)
+- Source tree: [`MAIN_dittert_6_15/main.pdf`](./MAIN_dittert_6_15/main.pdf)
 
-Full package: [`MAIN_dittert_6_15/`](./MAIN_dittert_6_15/) · [zip](./Dittert_Conjecture_6_15_submission.zip)
+Full package: [`MAIN_dittert_6_15/`](./MAIN_dittert_6_15/) · [zip](./Dittert_Conjecture_6_15_final_submission.zip) · [zip (alias)](./Dittert_Conjecture_6_15_submission.zip)
+
+Audit matrix: [`AUDIT_RESOLUTION.md`](./AUDIT_RESOLUTION.md) · in-package [`MAIN_dittert_6_15/AUDIT_RESOLUTION.md`](./MAIN_dittert_6_15/AUDIT_RESOLUTION.md)
 
 ---
 
 # Dittert conjecture — dimensions 6 through 15
 
-## PRIMARY (this is the main package)
+## PRIMARY (final)
 
-**This repository’s primary materials are the unified manuscript for**
+This repository’s primary materials are the **final** unified package for
 
-> **Dittert’s Conjecture in Dimensions Six through Fifteen**  
+> **Dittert’s Conjecture in Dimensions Six through Fifteen: An Exact Computer-Assisted Proof**  
 > Main theorem: **\(6 \le n \le 15\)**.
 
 | Path | What it is |
 |------|------------|
-| **`MAIN_dittert_6_15/`** | Full submission tree (open this first) |
-| **`Dittert_Conjecture_6_15_submission.zip`** | Same package as zip |
-| `Dittert_Conjecture_6_15.pdf` | PDF copy at repo root |
-| `Dittert_Conjecture_6_15.tex` | TeX copy at repo root (if present) |
+| **`MAIN_dittert_6_15/`** | Full final submission tree (open this first) |
+| **`Dittert_Conjecture_6_15_final_submission.zip`** | Same package as zip |
+| `Dittert_Conjecture_6_15_submission.zip` | Alias of the final zip (keeps old path working) |
+| `Dittert_Conjecture_6_15_MAIN.pdf` / `Dittert_Conjecture_6_15.pdf` | Pinned PDF copies at repo root |
+| `Dittert_Conjecture_6_15.tex` | Final TeX copy at repo root |
+| `AUDIT_RESOLUTION.md` | 74+1 audit disposition matrix |
 
 ### Contents of `MAIN_dittert_6_15/`
 
-- `main.tex` / `main.pdf` — unified paper (~50 pages)
-- `dittert_n6_certificates.py` — exact n=6 certificates
-- `dittert_n7_n15_certificates.py` — exact n=7–15 certificates
-- `run_all_certificates.py` — run both
-- `verification_output.txt` — recorded run output
-- `requirements.txt`, `README.md`, `cover_letter_template.md`
+- `main.tex` / `main.pdf` — final paper (51 pages)
+- `dittert_n6_certificates.py` — exact n=6 author verifier
+- `dittert_n7_n15_certificates.py` — exact n=7–15 author verifier
+- `independent_n6_fast_audit.py`, `independent_n6_univariate_audit.py`, `independent_n7_certificate_audit.py` — independent rebuilds
+- `run_all_certificates.py` — full regression (author + independent + unit tests)
+- `tests/test_exact_certificates.py` — exact arithmetic unit tests
+- `verification_output.txt`, `verification_manifest.json`, `SHA256SUMS`
+- `.github/workflows/verify.yml`, `Makefile`, licenses, `CITATION.cff`
 
 ### Run certificates
 
 ```bash
 cd MAIN_dittert_6_15
+python3 -m pip install -r requirements.txt
 python3 run_all_certificates.py
+# expected: status: passed
 # expected: All Dittert certificates for dimensions 6 through 15 passed.
 ```
 
+Recorded full run (package): ~78.6s, ordinary and `python -O` results identical, independent checkers and unit tests included.
+
 ### Source chat
 
-Integrated package from ChatGPT conversation  
+Final revision package from ChatGPT conversation  
 `https://chatgpt.com/c/6a63bcb4-5054-83eb-8fd9-a5198d9c4222`
 
 ---
 
 ## DRAFTS ONLY — everything else
 
-**All other paths under `drafts/` are earlier drafts / intermediate dumps.**  
-They are **not** the primary version. Do **not** treat them as the final write-up.
+**All paths under `drafts/` are earlier drafts / intermediate dumps.**  
+They are **not** the primary version.
 
-That includes (examples):
+Includes:
 
-- earlier n=6 approaches A/B/C  
-- separate n=7 extension notes  
-- n=8–15-only manuscripts  
-- the older **7–15-only** submission zip/folder  
-
-Those remain for history / comparison only.
+- `drafts/pre_audit_main_20260724/` — previous primary before the final audit revision
+- earlier n=6 approaches, separate n=7 notes, n=8–15-only manuscripts, older 7–15-only submission
 
 ---
 
 ## Status note
 
-- Primary package is the **current main line** for public sharing and further work.  
-- The primary version is `MAIN_dittert_6_15` (unified manuscript for dimensions 6–15); everything under `drafts/` is draft/older material only.  
-- Author placeholder may still be “Author Name”; bibliography may still need manual check.  
+- This upload is the **final 6–15 main line** for public sharing.
+- Author name / affiliation / ORCID / funding / acknowledgements may still be placeholders for anonymous or pre-submission use.
 - Independent expert reading is still recommended before journal submission.

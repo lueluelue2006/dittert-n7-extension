@@ -1,0 +1,14 @@
+[project]
+name = "dittert-certificates-6-15"
+version = "2.0.0"
+description = "Exact rational certificate software for Dittert's conjecture in dimensions 6 through 15"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy==2.3.5",
+  "sympy==1.14.0",
+]
+
+[tool.dittert]
+certificate-version = "2.0.0"
+manuscript = "main.tex"
+manifest = "verification_manifest.json"

@@ -1,0 +1,569 @@
+{
+  "author_results": {
+    "n6": {
+      "certificate_version": "2.0.0",
+      "constants": {
+        "E_gap": "351/640000",
+        "gamma": "5/324",
+        "kappa": "6144/390625",
+        "large_entropy_gap": "33853/181398528",
+        "localization_gap": "271/326656",
+        "row_energy_gap": "1547/3317760"
+      },
+      "counts": {
+        "four_variable_polynomials": 98,
+        "univariate_polynomials": 10
+      },
+      "manuscript_sha256": "d3d77fee2f6c164b3a2ada4b37c66384a53688c03fbc03aee7effc15d281ba94",
+      "one_sided": {
+        "1": {
+          "large": {
+            "degree": 5,
+            "depth": 0,
+            "leaves": 1,
+            "minimum": "1/864",
+            "nodes": 1
+          },
+          "small": {
+            "degree": 8,
+            "depth": 1,
+            "leaves": 2,
+            "minimum": "995279/28125000000",
+            "nodes": 3
+          }
+        },
+        "2": {
+          "large": {
+            "degree": 5,
+            "depth": 0,
+            "leaves": 1,
+            "minimum": "1/864",
+            "nodes": 1
+          },
+          "small": {
+            "degree": 8,
+            "depth": 2,
+            "leaves": 3,
+            "minimum": "2374594200709185001/36771973056000000000000",
+            "nodes": 5
+          }
+        },
+        "3": {
+          "large": {
+            "degree": 5,
+            "depth": 0,
+            "leaves": 1,
+            "minimum": "1/864",
+            "nodes": 1
+          },
+          "small": {
+            "degree": 8,
+            "depth": 3,
+            "leaves": 4,
+            "minimum": "506999743896537994129/8618431185000000000000000",
+            "nodes": 7
+          }
+        },
+        "4": {
+          "large": {
+            "degree": 5,
+            "depth": 0,
+            "leaves": 1,
+            "minimum": "1/864",
+            "nodes": 1
+          },
+          "small": {
+            "degree": 8,
+            "depth": 4,
+            "leaves": 5,
+            "minimum": "1880953471440335502781485790459/40164800436633600000000000000000000",
+            "nodes": 9
+          }
+        },
+        "5": {
+          "large": {
+            "degree": 5,
+            "depth": 0,
+            "leaves": 1,
+            "minimum": "1/864",
+            "nodes": 1
+          },
+          "small": {
+            "degree": 8,
+            "depth": 5,
+            "leaves": 6,
+            "minimum": "60824972467849735194923936599/2510300027289600000000000000000000",
+            "nodes": 11
+          }
+        }
+      },
+      "status": "passed",
+      "two_sided": {
+        "1,1": {
+          "depth": 6,
+          "leaves": 95,
+          "minimum": "711760783/88593750000",
+          "multidegrees": [
+            [
+              7,
+              6,
+              0,
+              0
+            ],
+            [
+              7,
+              6,
+              0,
+              5
+            ],
+            [
+              7,
+              6,
+              5,
+              0
+            ],
+            [
+              7,
+              6,
+              5,
+              5
+            ]
+          ],
+          "nodes": 165,
+          "polynomials": 25
+        },
+        "1,2": {
+          "depth": 7,
+          "leaves": 148,
+          "minimum": "9468769/6480000000",
+          "multidegrees": [
+            [
+              7,
+              6,
+              0,
+              0
+            ],
+            [
+              7,
+              6,
+              0,
+              4
+            ],
+            [
+              7,
+              6,
+              5,
+              0
+            ],
+            [
+              7,
+              6,
+              5,
+              4
+            ]
+          ],
+          "nodes": 276,
+          "polynomials": 20
+        },
+        "1,3": {
+          "depth": 14,
+          "leaves": 249,
+          "minimum": "58951253/118125000000",
+          "multidegrees": [
+            [
+              7,
+              6,
+              0,
+              0
+            ],
+            [
+              7,
+              6,
+              0,
+              3
+            ],
+            [
+              7,
+              6,
+              5,
+              0
+            ],
+            [
+              7,
+              6,
+              5,
+              3
+            ]
+          ],
+          "nodes": 483,
+          "polynomials": 15
+        },
+        "1,4": {
+          "depth": 14,
+          "leaves": 181,
+          "minimum": "6542213/472500000000",
+          "multidegrees": [
+            [
+              7,
+              6,
+              0,
+              0
+            ],
+            [
+              7,
+              6,
+              0,
+              2
+            ],
+            [
+              7,
+              6,
+              5,
+              0
+            ],
+            [
+              7,
+              6,
+              5,
+              2
+            ]
+          ],
+          "nodes": 352,
+          "polynomials": 10
+        },
+        "2,2": {
+          "depth": 13,
+          "leaves": 216,
+          "minimum": "13905244249/32256000000000",
+          "multidegrees": [
+            [
+              7,
+              6,
+              0,
+              0
+            ],
+            [
+              7,
+              6,
+              0,
+              4
+            ],
+            [
+              7,
+              6,
+              4,
+              0
+            ],
+            [
+              7,
+              6,
+              4,
+              4
+            ]
+          ],
+          "nodes": 416,
+          "polynomials": 16
+        },
+        "2,3": {
+          "depth": 15,
+          "leaves": 285,
+          "minimum": "206812176444269171/2388787200000000000000",
+          "multidegrees": [
+            [
+              7,
+              6,
+              0,
+              0
+            ],
+            [
+              7,
+              6,
+              0,
+              3
+            ],
+            [
+              7,
+              6,
+              4,
+              0
+            ],
+            [
+              7,
+              6,
+              4,
+              3
+            ]
+          ],
+          "nodes": 558,
+          "polynomials": 12
+        }
+      }
+    },
+    "n7_n15": {
+      "certificate_version": "2.0.0",
+      "localization": {
+        "10": {
+          "half_gap": "11/115",
+          "localization_gap": "31109/41313127850"
+        },
+        "11": {
+          "half_gap": "82/1925",
+          "localization_gap": "63007753811/34945789841847500"
+        },
+        "12": {
+          "half_gap": "319/3900",
+          "localization_gap": "11651173/90828753405000"
+        },
+        "13": {
+          "half_gap": "537/14300",
+          "localization_gap": "13072911571453/366471344281458130000"
+        },
+        "14": {
+          "half_gap": "893/12600",
+          "localization_gap": "71438752181/2511343447066440000"
+        },
+        "7": {
+          "half_gap": "33/658",
+          "localization_gap": "23263/1808073127"
+        },
+        "8": {
+          "half_gap": "9/80",
+          "localization_gap": "4757/836844800"
+        },
+        "9": {
+          "half_gap": "13/270",
+          "localization_gap": "242489/87087962025"
+        }
+      },
+      "manuscript_sha256": "d3d77fee2f6c164b3a2ada4b37c66384a53688c03fbc03aee7effc15d281ba94",
+      "n11_n14": {
+        "11": {
+          "cases": 35,
+          "minimum": "1260916230510486033100687951530284366056569069/6568905011778983402353515625000000000000000000000000"
+        },
+        "11_special": {
+          "cstar_gap": "1361678908886539811520195597/167123629006116978454015132900",
+          "margin": "82169554295122875121722420238561072941763350843/656890501177898340235351562500000000000000000000000000"
+        },
+        "12": {
+          "cases": 42,
+          "minimum": "1296568134644485856101383130605756547126510510475/52823701911706625804697555859966244866493587958274637824"
+        },
+        "13": {
+          "cases": 49,
+          "minimum": "2344634926829311765047551592181776557728012393742935099475/64121715613888291470979410224708337217950361958912179251651280896"
+        },
+        "14": {
+          "cases": 56,
+          "minimum": "4746695979316977001752598428103553549748722442212199016699590578325/277886267525954703535897576147309905022601205806915212282941432903903914488"
+        }
+      },
+      "n15": {
+        "coarse_gaps": [
+          58195000000000000,
+          149986000000000000
+        ],
+        "integer_gaps": [
+          45591579980859375,
+          81568443603515625,
+          290584966207055614607247802368,
+          3939835293455120947239518208,
+          18198910159813162803331251792701065161767,
+          162574843672041436633515011954046933353332
+        ],
+        "thick_margin": "63429645430340668282196872894311697916976706007718554270064778550284048088388617933319028973541376/3693029341533257024549996410753592125285633553926582232246120370444607869526685543159813878074388916015625",
+        "thin_margin": "93713344067889437339457163890050246146212691912980360828364561109008039/34960636059289149791385973204315516624092004582151399011826949685248000000000000"
+      },
+      "n7": {
+        "large_entropy_minimum": "155130361249919329/1328763571296000000",
+        "mixed_cases": 6,
+        "mixed_minimum": "165035926385/3897251304526692",
+        "ordinary_cases": 6,
+        "ordinary_minimum": "217499955444827479495/21713873952987016007066496",
+        "single_bridge_trees": {
+          "1,5": {
+            "direct_leaves": 10,
+            "entropy_leaves": 10,
+            "max_depth": 8,
+            "minimum_direct": "1087802446881147235561/39969909374976000000000000",
+            "minimum_entropy": "654891060528988608651256643535471159231293796311587019522844433022107899153359/18099073275579638591780608244086435967040183336960000000000000000000000000000000000",
+            "nodes": 39
+          },
+          "2,4": {
+            "direct_leaves": 9,
+            "entropy_leaves": 9,
+            "max_depth": 6,
+            "minimum_direct": "13937330724652965717023/757947911110656000000000000",
+            "minimum_entropy": "29303328235322191066495714732785078066149732218589778047600126434258839/349687420844207575211818565056331776000000000000000000000000000000000000000",
+            "nodes": 35
+          },
+          "3,3": {
+            "direct_leaves": 11,
+            "entropy_leaves": 13,
+            "max_depth": 8,
+            "minimum_direct": "3584705060608841581751/41394061918789959680000000",
+            "minimum_entropy": "21251947556739312071796581896559289483948579058395600309/161832511256230162908049702288909713794058324246504730001408",
+            "nodes": 47
+          }
+        }
+      },
+      "n8_n10": {
+        "10": {
+          "cases": 20,
+          "large_entropy": "7399058328856214668089/30517578125000000000000",
+          "minimum": "36184754863040830496579778359572513127/18255668299923283084495152136002059873437500",
+          "small_entropy": "55944735805258396002952464523577322487640863/404273588897859606879181224832534790039062500000"
+        },
+        "8": {
+          "cases": 12,
+          "large_entropy": "405685268407642329/2147483648000000000",
+          "minimum": "4139711814785404757611563/300024713494271812137373270016",
+          "small_entropy": "165702517175104104520946768451687/215701290564174919711661340674228224"
+        },
+        "9": {
+          "cases": 16,
+          "large_entropy": "17233957123121/73811250000000",
+          "minimum": "3087705658660821267020074863425/540713498338770121894081281002569728",
+          "small_entropy": "5586975164420125257678146526492250330079/16534930139652222569055999993919229392846848"
+        }
+      },
+      "status": "passed"
+    }
+  },
+  "children_maxrss_kb": 157308,
+  "environment": {
+    "machine": "x86_64",
+    "numpy": "2.3.5",
+    "optimize_flag": 0,
+    "platform": "Linux-6.12.13-x86_64-with-glibc2.41",
+    "processor": "",
+    "python": "3.13.5 (main, May  5 2026, 21:05:52) [GCC 14.2.0]",
+    "python_executable": "/opt/pyvenv/bin/python3",
+    "python_implementation": "CPython",
+    "sympy": "1.14.0",
+    "timezone": "UTC"
+  },
+  "generated_at_utc": "2026-07-25T02:46:42.617013+00:00",
+  "independent_checkers_run": true,
+  "manuscript_sha256": "d3d77fee2f6c164b3a2ada4b37c66384a53688c03fbc03aee7effc15d281ba94",
+  "ordinary_and_optimized_results_identical": true,
+  "schema_version": "1.0.0",
+  "source_hashes": {
+    "Makefile": "6bd6d986da5e6a149fa5a33576a3deeafe8b1d65e4750cc4bfd1c82d11eb6974",
+    "README.md": "34ed8584940d0e1efcecb872ae5a1b8077f342be9a48950db39e584c1d5808d5",
+    "dittert_n6_certificates.py": "c0a5bad161a3b2d1abefdb9e34a718d71a683fdf07ab88173c4d01b75021e967",
+    "dittert_n7_n15_certificates.py": "3f2cfff0ca4933aa2f50d6f5e51772bdef3977466392b0e97624fef7384925da",
+    "independent_n6_fast_audit.py": "81ae9715a6bb9f9152e27e0ba52784235e95beb58dd7e12783f42c897644bc0b",
+    "independent_n6_univariate_audit.py": "359674d548351063eec921ff511233524be119c1c83129a7dae3f00f497335c3",
+    "independent_n7_certificate_audit.py": "3b5ca88702c5153d5f4bc71c4dbcda723746d70bc09503abcfbe7420be1f90eb",
+    "main.tex": "d3d77fee2f6c164b3a2ada4b37c66384a53688c03fbc03aee7effc15d281ba94",
+    "pyproject.toml": "2a08d863e33051db7ad5a4978cf471d2566b51608415704140982f88129fd095",
+    "requirements.txt": "11c495c6fd22a834f03652c1be83034c9a747b39e16b60ffae0249f92e6e4a09",
+    "run_all_certificates.py": "7e892db17f09b53499cc5c4c294ac8a8e75bd4f983df04855655e14ecece1543",
+    "tests/test_exact_certificates.py": "55f70a38edfb8a6ddc1912f849a3d81132d6a24c223eeb67c4a145cfcd9cd76a"
+  },
+  "stages": [
+    {
+      "command": [
+        "/opt/pyvenv/bin/python3",
+        "/mnt/data/dittert_work/final/dittert_n6_certificates.py",
+        "--json"
+      ],
+      "elapsed_seconds": 23.643358,
+      "name": "author n=6 (ordinary mode)",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "5f277034ea1465f6255fc24148d43030b4e5ecd96efcd69a0d9c39e9d91cde00"
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python3",
+        "/mnt/data/dittert_work/final/dittert_n7_n15_certificates.py",
+        "--json"
+      ],
+      "elapsed_seconds": 3.352948,
+      "name": "author n=7--15 (ordinary mode)",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "23ac6f2b3154884febf5cd7c7273511d7d75691f231d6c0ab1c0718357d0fb81"
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python3",
+        "-O",
+        "/mnt/data/dittert_work/final/dittert_n6_certificates.py",
+        "--json"
+      ],
+      "elapsed_seconds": 23.82132,
+      "name": "author n=6 (optimized mode)",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "5f277034ea1465f6255fc24148d43030b4e5ecd96efcd69a0d9c39e9d91cde00"
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python3",
+        "-O",
+        "/mnt/data/dittert_work/final/dittert_n7_n15_certificates.py",
+        "--json"
+      ],
+      "elapsed_seconds": 3.427395,
+      "name": "author n=7--15 (optimized mode)",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "23ac6f2b3154884febf5cd7c7273511d7d75691f231d6c0ab1c0718357d0fb81"
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python3",
+        "/mnt/data/dittert_work/final/independent_n6_fast_audit.py"
+      ],
+      "elapsed_seconds": 16.008718,
+      "name": "independent checker: independent_n6_fast_audit.py",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "d4aaf6ac015fc27732f54fff195f2f1b627153ee9d39e36d326e4bd5e2d137fa"
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python3",
+        "/mnt/data/dittert_work/final/independent_n6_univariate_audit.py"
+      ],
+      "elapsed_seconds": 0.496433,
+      "name": "independent checker: independent_n6_univariate_audit.py",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "f12ac5201255c004bf0ddac2c8b2f986b4dd400bade2a79f4e4ec2e30bbc43bc"
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python3",
+        "/mnt/data/dittert_work/final/independent_n7_certificate_audit.py"
+      ],
+      "elapsed_seconds": 5.414194,
+      "name": "independent checker: independent_n7_certificate_audit.py",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "c025acb1fc4b0f14610dc43901b0877ac1c119fe02f1133297d2bf16c1b34f57"
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "elapsed_seconds": 2.260416,
+      "name": "exact arithmetic unit tests",
+      "returncode": 0,
+      "stderr_sha256": "5fa1a08b409025c40bfb39d1c53261ea2b0e9b4e9da73ab6980c2d329c21f38a",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "status": "passed",
+  "total_elapsed_seconds": 78.601376,
+  "unit_tests_run": true
+}

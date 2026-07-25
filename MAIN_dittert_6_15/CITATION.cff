@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "Please cite the manuscript and the exact certificate archive. Replace anonymous metadata before public release."
+title: "Dittert's Conjecture in Dimensions Six through Fifteen: An Exact Computer-Assisted Proof"
+type: article
+version: 2.0.0
+date-released: 2026-07-25
+authors:
+  - family-names: "Authors"
+    given-names: "Anonymous"
+abstract: "An exact computer-assisted proof of Dittert's conjecture in dimensions 6 through 15, with exact rational Bernstein certificates."
+keywords:
+  - permanent
+  - Dittert conjecture
+  - doubly stochastic matrix
+  - stable polynomial
+  - Hall condition
+  - Bernstein certificate
+license: CC-BY-4.0
+# Add the following fields before public release:
+# repository-code: "https://..."
+# doi: "10...."

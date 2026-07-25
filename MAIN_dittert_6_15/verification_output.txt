@@ -1,19 +1,85 @@
+Dittert dimensions 6--15 exact verification record
+Generated UTC: 2026-07-25T02:46:42.617423+00:00
 
-=== Running dittert_n6_certificates.py ===
-two-sided (1, 1): 25 polynomials, 165 Bernstein nodes, depth 6
-two-sided (1, 2): 20 polynomials, 276 Bernstein nodes, depth 7
-two-sided (1, 3): 15 polynomials, 483 Bernstein nodes, depth 14
-two-sided (2, 2): 16 polynomials, 416 Bernstein nodes, depth 13
-two-sided (1, 4): 10 polynomials, 352 Bernstein nodes, depth 14
-two-sided (2, 3): 12 polynomials, 558 Bernstein nodes, depth 15
-one-sided b=1: small depth 1, large polynomial has globally positive Bernstein coefficients
-one-sided b=2: small depth 2, large polynomial has globally positive Bernstein coefficients
-one-sided b=3: small depth 3, large polynomial has globally positive Bernstein coefficients
-one-sided b=4: small depth 4, large polynomial has globally positive Bernstein coefficients
-one-sided b=5: small depth 5, large polynomial has globally positive Bernstein coefficients
-All exact n=6 Dittert certificates passed (98 + 10 polynomials).
+== Environment ==
+python: 3.13.5 (main, May  5 2026, 21:05:52) [GCC 14.2.0]
+python_executable: /opt/pyvenv/bin/python3
+python_implementation: CPython
+optimize_flag: 0
+platform: Linux-6.12.13-x86_64-with-glibc2.41
+machine: x86_64
+processor: 
+numpy: 2.3.5
+sympy: 1.14.0
+timezone: UTC
 
-=== Running dittert_n7_n15_certificates.py ===
-All exact rational and Bernstein certificates passed.
+== Source SHA-256 ==
+6bd6d986da5e6a149fa5a33576a3deeafe8b1d65e4750cc4bfd1c82d11eb6974  Makefile
+34ed8584940d0e1efcecb872ae5a1b8077f342be9a48950db39e584c1d5808d5  README.md
+c0a5bad161a3b2d1abefdb9e34a718d71a683fdf07ab88173c4d01b75021e967  dittert_n6_certificates.py
+3f2cfff0ca4933aa2f50d6f5e51772bdef3977466392b0e97624fef7384925da  dittert_n7_n15_certificates.py
+81ae9715a6bb9f9152e27e0ba52784235e95beb58dd7e12783f42c897644bc0b  independent_n6_fast_audit.py
+359674d548351063eec921ff511233524be119c1c83129a7dae3f00f497335c3  independent_n6_univariate_audit.py
+3b5ca88702c5153d5f4bc71c4dbcda723746d70bc09503abcfbe7420be1f90eb  independent_n7_certificate_audit.py
+d3d77fee2f6c164b3a2ada4b37c66384a53688c03fbc03aee7effc15d281ba94  main.tex
+2a08d863e33051db7ad5a4978cf471d2566b51608415704140982f88129fd095  pyproject.toml
+11c495c6fd22a834f03652c1be83034c9a747b39e16b60ffae0249f92e6e4a09  requirements.txt
+7e892db17f09b53499cc5c4c294ac8a8e75bd4f983df04855655e14ecece1543  run_all_certificates.py
+55f70a38edfb8a6ddc1912f849a3d81132d6a24c223eeb67c4a145cfcd9cd76a  tests/test_exact_certificates.py
 
+== Exact certificate statistics ==
+Author-verifier statistics:
+  n=6: 98 four-variable polynomials and 10 univariate polynomials.
+    type (1,1): polynomials=25, nodes=165, depth=6, minimum=711760783/88593750000
+    type (1,2): polynomials=20, nodes=276, depth=7, minimum=9468769/6480000000
+    type (1,3): polynomials=15, nodes=483, depth=14, minimum=58951253/118125000000
+    type (1,4): polynomials=10, nodes=352, depth=14, minimum=6542213/472500000000
+    type (2,2): polynomials=16, nodes=416, depth=13, minimum=13905244249/32256000000000
+    type (2,3): polynomials=12, nodes=558, depth=15, minimum=206812176444269171/2388787200000000000000
+  n=7: ordinary=6, mixed=6.
+    bridge (1,5): nodes=39, leaves=10+10, depth=8
+    bridge (2,4): nodes=35, leaves=9+9, depth=6
+    bridge (3,3): nodes=47, leaves=11+13, depth=8
+  n=10: 20 second-order Hall cases.
+  n=8: 12 second-order Hall cases.
+  n=9: 16 second-order Hall cases.
+  n=11: 35 first-order Hall cases.
+  n=12: 42 first-order Hall cases.
+  n=13: 49 first-order Hall cases.
+  n=14: 56 first-order Hall cases.
+  n=15: two rational margins, six integer gaps, and two coarse gaps.
+
+== Stages ==
+author n=6 (ordinary mode): exit=0 elapsed=23.643358s stdout_sha256=5f277034ea1465f6255fc24148d43030b4e5ecd96efcd69a0d9c39e9d91cde00
+author n=7--15 (ordinary mode): exit=0 elapsed=3.352948s stdout_sha256=23ac6f2b3154884febf5cd7c7273511d7d75691f231d6c0ab1c0718357d0fb81
+author n=6 (optimized mode): exit=0 elapsed=23.821320s stdout_sha256=5f277034ea1465f6255fc24148d43030b4e5ecd96efcd69a0d9c39e9d91cde00
+author n=7--15 (optimized mode): exit=0 elapsed=3.427395s stdout_sha256=23ac6f2b3154884febf5cd7c7273511d7d75691f231d6c0ab1c0718357d0fb81
+independent checker: independent_n6_fast_audit.py: exit=0 elapsed=16.008718s stdout_sha256=d4aaf6ac015fc27732f54fff195f2f1b627153ee9d39e36d326e4bd5e2d137fa
+  independent exact tree matched (1, 1) (25, 165, 6)
+  independent exact tree matched (1, 2) (20, 276, 7)
+  independent exact tree matched (1, 3) (15, 483, 14)
+  independent exact tree matched (2, 2) (16, 416, 13)
+  independent exact tree matched (1, 4) (10, 352, 14)
+  independent exact tree matched (2, 3) (12, 558, 15)
+  ALL 98 N=6 FOUR-VARIABLE CERTIFICATES INDEPENDENTLY MATCHED
+independent checker: independent_n6_univariate_audit.py: exit=0 elapsed=0.496433s stdout_sha256=f12ac5201255c004bf0ddac2c8b2f986b4dd400bade2a79f4e4ec2e30bbc43bc
+  independent n=6 one-sided b=1: small=(3, 2, 1), large=(1, 1, 0)
+  independent n=6 one-sided b=2: small=(5, 3, 2), large=(1, 1, 0)
+  independent n=6 one-sided b=3: small=(7, 4, 3), large=(1, 1, 0)
+  independent n=6 one-sided b=4: small=(9, 5, 4), large=(1, 1, 0)
+  independent n=6 one-sided b=5: small=(11, 6, 5), large=(1, 1, 0)
+  ALL 10 N=6 UNIVARIATE CERTIFICATES INDEPENDENTLY MATCHED
+independent checker: independent_n7_certificate_audit.py: exit=0 elapsed=5.414194s stdout_sha256=c025acb1fc4b0f14610dc43901b0877ac1c119fe02f1133297d2bf16c1b34f57
+  symbolic polynomials matched 1 5 [7, 8, 23] [7, 8, 23]
+  symbolic polynomials matched 2 4 [7, 8, 23] [7, 8, 23]
+  symbolic polynomials matched 3 3 [7, 8, 23] [7, 8, 23]
+  independent tree matched (1, 5) (39, 10, 10, 8)
+  independent tree matched (2, 4) (35, 9, 9, 6)
+  independent tree matched (3, 3) (47, 11, 13, 8)
+  ALL N7 INDEPENDENT CHECKS PASSED
+exact arithmetic unit tests: exit=0 elapsed=2.260416s stdout_sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+total_elapsed_seconds: 78.601376
+children_maxrss_kb: 157308
+status: passed
 All Dittert certificates for dimensions 6 through 15 passed.
